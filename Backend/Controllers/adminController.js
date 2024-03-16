@@ -1,4 +1,4 @@
-import { loginAdminService, registerAdminService } from '../Services/adminService.js';
+import { getAllLeavesList, getAllStudentsList, loginAdminService, registerAdminService } from '../Services/adminService.js';
 import {statusCode} from '../Utils/http.js';
 
 const registerAdmin = (req,res) => {
@@ -41,7 +41,37 @@ const loginAdmin = (req,res) => {
     }
 }
 
+const getAllStudents = (req,res) => {
+    getAllStudentsList()
+        .then((data) => {
+            return res
+                    .status(statusCode.found)
+                    .send({message: 'List Received', StudentsList: data})
+        })
+        .catch((err) => {
+            return res
+                    .status(statusCode.notFound)
+                    .send({message: err.message})
+        })
+}
+
+const getAllLeaves = (req,res) => {
+    getAllLeavesList()
+        .then((data) => {
+            return res 
+                    .status(statusCode.found)
+                    .send({message: 'Leaves List Received',LeavesList: data})
+        })
+        .catch((err) => {
+            return res
+                    .status(statusCode.badRequest)
+                    .send({message: err.message})
+        })
+}
+
 export{
     registerAdmin,
     loginAdmin,
+    getAllStudents,
+    getAllLeaves,
 }

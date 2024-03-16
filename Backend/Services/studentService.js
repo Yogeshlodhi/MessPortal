@@ -57,7 +57,17 @@ const studentLogin = async (loginData) => {
     }
 }
 
+const studentByRoll = async (rollNo) => {
+    try {
+        const student = studentModel.findById(rollNo);
+        return student;
+    } catch (error) {
+        throw {message: error.message}
+    }
+}
+
 export {
     studentRegister,
-    studentLogin
+    studentLogin,
+    studentByRoll,
 }

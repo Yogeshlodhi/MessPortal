@@ -1,4 +1,6 @@
 import adminModel from "../Models/adminModel.js"
+import LeaveModel from "../Models/leaveApplicationModel.js"
+import studentModel from "../Models/studentModel.js"
 import {createToken, hashPassword} from '../Utils/createToken.js'
 import bcrypt from 'bcryptjs'
 
@@ -47,7 +49,27 @@ const loginAdminService = async (loginData) => {
     }
 }
 
+const getAllStudentsList = async () => {
+    try {
+        const students = await studentModel.find();
+        return students;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const getAllLeavesList = async () => {
+    try {
+        const leaves = await LeaveModel.find();
+        return leaves;
+    } catch (error) {
+        throw {message: error.message}
+    }
+}
+
 export{
     registerAdminService,
-    loginAdminService
+    loginAdminService,
+    getAllStudentsList,
+    getAllLeavesList,
 }

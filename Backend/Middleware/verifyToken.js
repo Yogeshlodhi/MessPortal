@@ -8,7 +8,6 @@ const verifyToken = async (req,res,next) => {
         try {
             let tokenValue = token.split(' ')[1];
             const decoded = jwt.verify(tokenValue,process.env.JWT_SECRET);
-            console.log(decoded)
             req.user = await studentModel.findById(decoded.data).select('-password');
             if(!req.user){
                 res

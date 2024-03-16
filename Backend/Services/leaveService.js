@@ -5,10 +5,20 @@ const applyLeaveService = async (leaveData) => {
         const leaveApplication = await LeaveModel.create(leaveData)
         return leaveApplication ? leaveApplication : null;
     } catch (error) {
-        throw {message: error.message};
+        throw { message: error.message };
+    }
+}
+
+const getAllLeavesService = async (studentData) => {
+    try {
+        const list = await LeaveModel.find({ studentRoll: studentData._id })
+        return list;
+    } catch (error) {
+        throw {message : error.message};
     }
 }
 
 export {
     applyLeaveService,
+    getAllLeavesService,
 }
