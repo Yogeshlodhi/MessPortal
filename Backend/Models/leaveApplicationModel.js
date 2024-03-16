@@ -3,11 +3,6 @@ import mongoose, { Schema } from 'mongoose';
 const {ObjectId} = mongoose.Schema.Types
 
 const leaveApplicationSchema = new Schema({
-    studentName: {
-        type: ObjectId,
-        ref: 'Students',
-        required: true,
-    },
     studentRoll: {
         type: ObjectId,
         ref: 'Students',

@@ -5,6 +5,7 @@ import userRoutes from './Routes/studentRoutes.js';
 import adminRoutes from './Routes/adminRoutes.js';
 import { errorHandler } from './Middleware/errorMiddleware.js';
 import cors from 'cors';
+import { applyLeave } from './Controllers/leaveController.js';
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 app.use('/api/student',userRoutes);
+app.use('/api/student/leaveApplication',applyLeave);
 app.use('/api/admin',adminRoutes);
 
 app.use(errorHandler);

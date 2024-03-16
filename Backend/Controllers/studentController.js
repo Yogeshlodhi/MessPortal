@@ -43,7 +43,14 @@ const loginStudent = (req,res) => {
         })
 }
 
+const getProfile = (req,res) => {
+    return res
+            .status(statusCode.found)
+            .send({message: 'Student Profile Found', student: req.user})
+}
+
 export {
     registerStudent,
     loginStudent,
+    getProfile,
 }

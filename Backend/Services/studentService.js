@@ -21,9 +21,10 @@ const studentRegister = async (registrationData) => {
             }
         )
         let jwtToken = createToken(student._id);
+        const {password, ...studentDataWithoutPassword} = student.toObject();
         if (student) {
             return {
-                student,
+                ...studentDataWithoutPassword,
                 token: jwtToken,
             };
         } else {
@@ -37,15 +38,20 @@ const studentRegister = async (registrationData) => {
 
 const studentLogin = async (loginData) => {
     let student = await studentModel.findOne({ emailId: loginData.emailId })
-
+    
     if (!student) {
         throw { message: "Student Not Found, Please Sign Up" };
     }
     const isPasswordValid = await bcrypt.compare(loginData.password, student.password);
     
+    let jwtToken = createToken(student._id);
+    console.log(jwtToken);
     if (student && isPasswordValid) {
         const { password, ...studentDataWithoutPassword } = student.toObject();
-        return studentDataWithoutPassword;
+        return {
+            ...studentDataWithoutPassword,
+            token: jwtToken
+        };
     } else {
         throw {message: "Invalid Credentials"}
     }

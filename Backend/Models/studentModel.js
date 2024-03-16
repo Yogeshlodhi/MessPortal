@@ -20,7 +20,7 @@ const studentSchema = new Schema(
         },
         number: {
             type: String,
-        }
+        },
     },
     {
         timestamps: true,
