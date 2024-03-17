@@ -1,10 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLoginMutation } from '../Slices/adminsApiSlice';
 import { setCredentials } from '../Slices/authSlice';
 import { Box, Button, Container, FormControl, FormLabel, Heading, Input, Text } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Login() {
+    const navigate = useNavigate();
+    const [emailId, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [login, {isLoading, error}] = useLoginMutation();
+
+    const { adminInfo } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if(adminInfo) navigate('/');
+    },[navigate, adminInfo])
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await login({emailId, password}).unwrap();
+            dispatch(setCredentials({...res}));
+            navigate('/');
+        } catch (err) {
+            console.log(err.data?.message || err.error);
+        }
+    }
+
     return (
         <Box display={'flex'} flexDirection={'column'} boxSizing='border-box' height={'95vh'}>
             <Box
@@ -50,11 +74,19 @@ function Login() {
                                 type='email'
                                 borderRadius={'2rem'}
                                 placeholder='yogesh_2101cb61@iitp.ac.in'
+                                value={emailId}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </FormControl>
                         <FormControl mt={6} isRequired>
                             <FormLabel>Password</FormLabel>
-                            <Input type='password' borderRadius={'2rem'} placeholder='************' />
+                            <Input 
+                                type='password' 
+                                borderRadius={'2rem'} 
+                                placeholder='************' 
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </FormControl>
                         <Box textAlign={'left'} mt={2}>
                             <Link to={'#'}>Forgot Password</Link>
@@ -68,6 +100,7 @@ function Login() {
                         background={'#185A97'}
                         color={'white'}
                         _hover={{background: '#25659F'}}
+                        onClick={submitHandler}
                     >
                         Continue
                     </Button>
