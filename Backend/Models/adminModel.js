@@ -19,6 +19,7 @@ const adminSchema = new Schema({
     },
     adminType: {
         type: String,
+        required: true,
         enum: ["Warden", "Mess Secretary", "Mess Owner", "Other"],
     }
 }, {
