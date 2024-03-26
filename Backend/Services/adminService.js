@@ -34,10 +34,14 @@ const registerAdminService = async (registerData) => {
 
 
 const loginAdminService = async (loginData) => {
+    // if(!loginData){
+    //     return {message: "Required Fields Can't be Empty"}
+        
+    // }
     let admin = await adminModel.findOne({emailId: loginData.emailId})
 
     if(!admin){
-        throw {message: "Admin Does Not Exist, Please Login"}
+        throw {message: "Admin Does Not Exist, Please Register"}
     }
 
     const isPasswordValid = await bcrypt.compare(loginData.password,admin.password);

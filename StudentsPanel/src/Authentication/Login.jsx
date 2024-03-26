@@ -1,52 +1,48 @@
 import React, { useEffect, useState } from 'react'
-import { useLoginMutation } from '../Slices/adminsApiSlice';
-import { setCredentials } from '../Slices/authSlice';
-import { Box, Button, Container, FormControl, FormLabel, Heading, Input, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Text, useToast } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import { useDispatch, useSelector } from 'react-redux';
+import { useLoginMutation } from '../Slices/studentsApiSlice'
+import { setCredentials } from '../Slices/authSlice';
 
 function Login() {
-    const navigate = useNavigate();
-    const [emailId, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [login, { isLoading, error }] = useLoginMutation();
-    const toast = useToast();
+    const [show, setShow] = useState(false)
+    const handleClick = () => setShow(!show)
 
-    const { adminInfo } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (adminInfo) navigate('/');
-    }, [navigate, adminInfo])
+    const [login, { isLoading, isError, isSuccess }] = useLoginMutation();
+    const { StudentInfo } = useSelector((state) => state.auth);
 
-    const submitHandler = async (e) => {
-        e.preventDefault();
-        if (!emailId || !password) {
-            return toast(
-                {
-                    title: 'Required Fields Must Be Filled',
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                }
-            )
-        }
-        try {
-            const res = await login({ emailId, password }).unwrap();
-            dispatch(setCredentials({ ...res }));
+    const [emailId, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        if(StudentInfo){
             navigate('/');
-        } catch (err) {
-            toast(
-                {
-                    title: err.data?.message,
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                }
-            )
-            console.log(err.data?.message || err.error);
+        }
+    },[navigate, StudentInfo])
+
+    const SubmitHandler = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await login({ emailId, password });
+            const redirectedData = response.data.data;
+            if (redirectedData) {
+                dispatch(setCredentials(redirectedData));
+                navigate('/');
+            } else {
+                console.log('Redirected response data is missing or incomplete.');
+            }
+        } catch (error) {
+            console.log(error?.data?.message || error?.error);
         }
     }
+    
+    
+    
 
     return (
         <Box display={'flex'} flexDirection={'column'} boxSizing='border-box' height={'95vh'}>
@@ -84,31 +80,56 @@ function Login() {
                     textAlign={'center'}
                     margin={'auto'}
                 >
-                    <Heading color={'#25659F'}>Welcome Back</Heading>
-                    <Text mt={2}>Enter Your Credentials To Proceed</Text>
+                    <Heading color={'#25659F'} mb={'2rem'}>Welcome Back!</Heading>
                     <Box className="inputs">
                         <FormControl mt={6} isRequired>
-                            <FormLabel>Email Id</FormLabel>
+                            <FormLabel>Institute Email Id</FormLabel>
                             <Input
                                 type='email'
                                 borderRadius={'2rem'}
                                 placeholder='yogesh_2101cb61@iitp.ac.in'
+                                color={'#474745'}
                                 value={emailId}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </FormControl>
-                        <FormControl mt={6} isRequired>
+                        {/* <FormControl mt={6} isRequired>
                             <FormLabel>Password</FormLabel>
                             <Input
                                 type='password'
                                 borderRadius={'2rem'}
                                 placeholder='************'
+                            // value={password}
+                            // onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </FormControl> */}
+                        <FormControl mt={3} isRequired>
+                            <FormLabel>Password</FormLabel>
+                        </FormControl>
+                        <InputGroup size='md'>
+                            <Input
+                                pr='4.5rem'
+                                type={show ? 'text' : 'password'}
+                                placeholder='************'
+                                borderRadius={'2rem'}
+                                color={'#474745'}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                        </FormControl>
-                        <Box textAlign={'left'} mt={2}>
-                            <Link to={'#'}>Forgot Password</Link>
+                            <InputRightElement width='4.5rem'>
+                                <Button h='1.75rem' borderRadius={'2rem'} size='sm' onClick={handleClick}>
+                                    {show ? 'Hide' : 'Show'}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        <Box
+                            textAlign={'left'} mt={2}
+                            _hover={{ color: 'red' }}
+                            transition={'0.3s ease-in'}
+                        >
+                            <Link
+                                to={'#'}
+                            >Forgot Password</Link>
                         </Box>
                     </Box>
                     <Button
@@ -119,7 +140,7 @@ function Login() {
                         background={'#185A97'}
                         color={'white'}
                         _hover={{ background: '#25659F' }}
-                        onClick={submitHandler}
+                        onClick={SubmitHandler}
                     >
                         Continue
                     </Button>

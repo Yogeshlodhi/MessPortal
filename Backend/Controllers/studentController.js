@@ -28,12 +28,13 @@ const registerStudent = (req, res) => {
 
 const loginStudent = (req, res) => {
     const loginData = req.body;
-    console.log(loginData)
+    // console.log("Login Data : ",loginData)
 
     studentLogin(loginData)
         .then((data) => {
             return res
-                .status(statusCode.found)
+                // .status(statusCode.found)
+                .status(statusCode.ok)
                 .send({ message: "Student Logged In", data: data })
         })
         .catch((err) => {

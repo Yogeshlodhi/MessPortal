@@ -39,6 +39,11 @@ const loginAdmin = (req,res) => {
                         .send({message: err.message})
             })
     }
+    // else{
+    //     return res
+    //                 .status(statusCode.notAcceptable)
+    //                 .send({message: err.message})
+    // }
 }
 
 const getAllStudents = (req,res) => {
