@@ -5,10 +5,12 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Sidebar from "./Components/Sidebar";
 import Header from "./Components/Header";
 import Dashboard from "./Pages/Dashboard";
+import LeaveApplication from './Pages/LeaveApplication'
+import Feedback from "./Pages/Feedback";
+import Menu from "./Pages/Menu";
+import Announcements from "./Pages/Announcements";
 
 function App() {
-
-  // const isAuthenticated = false;
   const isAuthenticated = localStorage.getItem('StudentInfo') ? true : false;
 
   return (
@@ -18,17 +20,32 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="*" element={
           isAuthenticated ? (
-            <Box display="flex" >
-              <Box flex={1} >
-              {/* <Box flex={1} background={'red'} maxHeight={'100vh'}> */}
+            <Box 
+              display="flex" 
+              maxHeight={'90vh'}
+              height={'80vh'}
+            >
+              <Box flex={1}>
                 <Sidebar />
               </Box>
-              <Box flex={7}>
+              <Box 
+                flex={7} 
+                display={'flex'} 
+                flexDirection={'column'}
+                background={'green'}
+                height={'100vh'}
+              >
                 <Header/>
-                <Box background="blue" maxHeight="100vh">
+                <Box 
+                  overflowY={'scroll'}
+                  height={'90%'}
+                >
                   <Routes>
                     <Route index element={<Dashboard/>} />
-                    <Route path="/option2" element={<h1>Option 2 Route</h1>} />
+                    <Route path="/apply-leave" element={<LeaveApplication/>} />
+                    <Route path="/feedback" element={<Feedback/>} />
+                    <Route path="/menu" element={<Menu/>} />
+                    <Route path="/announcements" element={<Announcements/>} />
                   </Routes>
                 </Box>
               </Box>

@@ -6,7 +6,15 @@ import { Link } from 'react-router-dom';
 
 function Header() {
     return (
-        <Box display={'flex'} alignItems={'center'} justifyContent={'flex-end'} minHeight={'3.5rem'} mr={4}>
+        <Box 
+            display={'flex'} 
+            alignItems={'center'} 
+            justifyContent={'flex-end'} 
+            height={'10%'}
+            background={'white'}
+            width={'100%'}
+            pr={4}
+        >
             <Popover placement='top-start'>
                 <PopoverTrigger>
                     <WrapItem cursor={'pointer'}>
