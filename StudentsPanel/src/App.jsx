@@ -9,6 +9,7 @@ import LeaveApplication from './Pages/LeaveApplication'
 import Feedback from "./Pages/Feedback";
 import Menu from "./Pages/Menu";
 import Announcements from "./Pages/Announcements";
+import Profile from "./Pages/Profile";
 
 function App() {
   const isAuthenticated = localStorage.getItem('StudentInfo') ? true : false;
@@ -32,7 +33,6 @@ function App() {
                 flex={7} 
                 display={'flex'} 
                 flexDirection={'column'}
-                background={'green'}
                 height={'100vh'}
               >
                 <Header/>
@@ -42,10 +42,12 @@ function App() {
                 >
                   <Routes>
                     <Route index element={<Dashboard/>} />
+                    <Route path="/dashboard" element={<Dashboard/>} />
                     <Route path="/apply-leave" element={<LeaveApplication/>} />
                     <Route path="/feedback" element={<Feedback/>} />
                     <Route path="/menu" element={<Menu/>} />
                     <Route path="/announcements" element={<Announcements/>} />
+                    <Route path="/profile" element={<Profile/>} />
                   </Routes>
                 </Box>
               </Box>

@@ -32,7 +32,7 @@ function Login() {
             const redirectedData = response.data.data;
             if (redirectedData) {
                 dispatch(setCredentials(redirectedData));
-                navigate('/');
+                navigate('/dashboard');
             } else {
                 console.log('Redirected response data is missing or incomplete.');
             }
@@ -41,9 +41,6 @@ function Login() {
         }
     }
     
-    
-    
-
     return (
         <Box display={'flex'} flexDirection={'column'} boxSizing='border-box' height={'95vh'}>
             <Box

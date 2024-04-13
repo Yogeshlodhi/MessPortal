@@ -13,9 +13,12 @@ function Sidebar() {
       backgroundColor='#2C3E50'
       color='#FFFFFF'
       height='100vh'
+      paddingRight={'1rem'}
     >
       <Heading
         minHeight={'3.5rem'}
+        padding={'1rem'}
+        textAlign={'center'}
       >
         Mess Portal
       </Heading>
