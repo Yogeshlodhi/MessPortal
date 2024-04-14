@@ -10,6 +10,7 @@ import Feedback from "./Pages/Feedback";
 import Menu from "./Pages/Menu";
 import Announcements from "./Pages/Announcements";
 import Profile from "./Pages/Profile";
+import Complaints from "./Pages/Complaints";
 
 function App() {
   const isAuthenticated = localStorage.getItem('StudentInfo') ? true : false;
@@ -34,6 +35,7 @@ function App() {
                 display={'flex'} 
                 flexDirection={'column'}
                 height={'100vh'}
+                overflowX={'hidden'}
               >
                 <Header/>
                 <Box 
@@ -48,6 +50,7 @@ function App() {
                     <Route path="/menu" element={<Menu/>} />
                     <Route path="/announcements" element={<Announcements/>} />
                     <Route path="/profile" element={<Profile/>} />
+                    <Route path="/complaints" element={<Complaints/>} />
                   </Routes>
                 </Box>
               </Box>

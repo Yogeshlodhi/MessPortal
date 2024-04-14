@@ -5,6 +5,7 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { Link } from 'react-router-dom';
 
 function Sidebar() {
@@ -102,6 +103,21 @@ function Sidebar() {
             style={{ color: '#FFFFFF', textDecoration: 'none', fontSize: '1.5rem' }}
           >
             Announcements
+          </Link>
+        </Box>
+        <Box
+          display='flex'
+          alignItems='center'
+          marginBottom='15px'
+          justifyContent='center'
+          padding={'0.5rem'}
+        >
+          <ThumbDownOffAltIcon style={{ marginRight: '10px' }} />
+          <Link
+            to="/complaints"
+            style={{ color: '#FFFFFF', textDecoration: 'none', fontSize: '1.5rem' }}
+          >
+            Complaints
           </Link>
         </Box>
       </Box>
