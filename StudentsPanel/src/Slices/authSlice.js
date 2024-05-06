@@ -1,8 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit';
 
+
+const student = localStorage.getItem('StudentInfo');
+
 const initialState = {
     // JSON.parse ==> converts to actual object, rather than just a string
-    studentInfo: localStorage.getItem('StudentInfo') ? JSON.parse(localStorage.getItem('StudentInfo')) : null
+    studentInfo: student ? JSON.parse(student) : null,
+    // isError: false,
+    // isSuccess: false,
+    // isLoading: false,
+    // message: '',
 }
 
 const authSlice = createSlice({

@@ -1,4 +1,4 @@
-import { studentByRoll, studentLogin, studentRegister } from '../Services/studentService.js';
+import { feedbackAndSuggestion, studentLogin, studentRegister } from '../Services/studentService.js';
 import { statusCode } from '../Utils/http.js';
 
 const registerStudent = (req, res) => {
@@ -50,18 +50,20 @@ const getProfile = (req, res) => {
         .send({ message: 'Student Profile Found', student: req.user })
 }
 
-const getStudentByRoll = (req, res) => {
-    const roll = req.params.id;
-    studentByRoll(roll)
+
+const submitFeedback = (req, res) => {
+    let feedbackData = req.body;
+    const studentId = req.user.id;
+    feedbackAndSuggestion(feedbackData, studentId)
         .then((data) => {
             return res
-                    .status(statusCode.found)
-                    .send({message: 'Student Found', StudentProfile: data})
+                    .status(statusCode.ok)
+                    .send({message: 'FeedBack Submitted', data: data})
         })
         .catch((err) => {
             return res
-                    .status(statusCode.notFound)
-                    .send({message: err.message})
+                    .status(statusCode.badRequest)
+                    .send({message: 'Bad Request', error: err.message})
         })
 }
 
@@ -69,5 +71,5 @@ export {
     registerStudent,
     loginStudent,
     getProfile,
-    getStudentByRoll,
+    submitFeedback
 }

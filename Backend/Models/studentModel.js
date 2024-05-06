@@ -21,6 +21,14 @@ const studentSchema = new Schema(
         number: {
             type: String,
         },
+        bankAccount: {
+            type: String,
+            minlength: 10,
+            maxlength: 20
+        },
+        ifsc: {
+            type: String,
+        }
     },
     {
         timestamps: true,

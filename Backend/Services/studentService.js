@@ -1,4 +1,5 @@
 import studentModel from "../Models/studentModel.js";
+import feedbackModel from '../Models/feedbackSuggestion.js'
 import { createToken, hashPassword } from "../Utils/createToken.js";
 import bcrypt from 'bcryptjs';
 
@@ -18,6 +19,8 @@ const studentRegister = async (registrationData) => {
                 studentRoll: registrationData.studentRoll,
                 number: registrationData.number,
                 password: hashedPassword,
+                bankAccount: registrationData.bankAccount,
+                ifsc: registrationData.ifsc
             }
         )
         let jwtToken = createToken(student._id);
@@ -47,7 +50,7 @@ const studentLogin = async (loginData) => {
     let jwtToken = createToken(student._id);
     console.log(jwtToken);
     if (student && isPasswordValid) {
-        const { password, ...studentDataWithoutPassword } = student.toObject();
+        const { password, bankAccount, ifsc, ...studentDataWithoutPassword } = student.toObject();
         return {
             ...studentDataWithoutPassword,
             token: jwtToken
@@ -57,17 +60,27 @@ const studentLogin = async (loginData) => {
     }
 }
 
-const studentByRoll = async (rollNo) => {
+
+const feedbackAndSuggestion = async (feedbackData, studentId) => {
     try {
-        const student = studentModel.findById(rollNo);
-        return student;
-    } catch (error) {
+        const student = await studentModel.findById(studentId)
+        const newFeedback = new feedbackModel({
+          student: student.studentName,
+          studentRoll: student.studentRoll,
+          ...feedbackData,
+        });
+    
+        const savedFeedback = await newFeedback.save();
+        return savedFeedback;
+      } catch (error) {
+        console.error(error);
         throw {message: error.message}
-    }
+      }
 }
 
 export {
     studentRegister,
     studentLogin,
     studentByRoll,
+    feedbackAndSuggestion
 }

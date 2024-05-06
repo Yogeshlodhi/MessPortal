@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Text, Spinner, useToast } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ function Login() {
     const dispatch = useDispatch();
 
     const [login, { isLoading, isError, isSuccess }] = useLoginMutation();
+
     const { StudentInfo } = useSelector((state) => state.auth);
 
     const [emailId, setEmail] = useState('');
@@ -90,16 +91,6 @@ function Login() {
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </FormControl>
-                        {/* <FormControl mt={6} isRequired>
-                            <FormLabel>Password</FormLabel>
-                            <Input
-                                type='password'
-                                borderRadius={'2rem'}
-                                placeholder='************'
-                            // value={password}
-                            // onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </FormControl> */}
                         <FormControl mt={3} isRequired>
                             <FormLabel>Password</FormLabel>
                         </FormControl>
@@ -139,7 +130,7 @@ function Login() {
                         _hover={{ background: '#25659F' }}
                         onClick={SubmitHandler}
                     >
-                        Continue
+                        {isLoading ? <Spinner size="sm" color="white" /> : "Continue"}
                     </Button>
                 </Container>
             </Box>

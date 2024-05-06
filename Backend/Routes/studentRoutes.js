@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { getProfile, getStudentByRoll, loginStudent, registerStudent } from "../Controllers/studentController.js";
+import { 
+    getProfile, 
+    loginStudent, 
+    registerStudent, 
+    submitFeedback,
+} from "../Controllers/studentController.js";
 import verifyToken from "../Middleware/verifyToken.js";
 import { getAllLeaves } from "../Controllers/leaveController.js";
 
@@ -12,9 +17,9 @@ router
 
 router.get('/leaves',verifyToken, getAllLeaves);
 
-router.get('/:id',verifyToken, getStudentByRoll);
-
 router.post('/login', loginStudent);
+
+router.post('/submitFeedback', verifyToken, submitFeedback);
 
 
 export default router;
