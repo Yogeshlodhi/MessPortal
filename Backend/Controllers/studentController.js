@@ -1,4 +1,4 @@
-import { feedbackAndSuggestion, studentLogin, studentRegister } from '../Services/studentService.js';
+import { complaintService, feedbackAndSuggestion, studentLogin, studentRegister } from '../Services/studentService.js';
 import { statusCode } from '../Utils/http.js';
 
 const registerStudent = (req, res) => {
@@ -50,7 +50,6 @@ const getProfile = (req, res) => {
         .send({ message: 'Student Profile Found', student: req.user })
 }
 
-
 const submitFeedback = (req, res) => {
     let feedbackData = req.body;
     const studentId = req.user.id;
@@ -67,9 +66,27 @@ const submitFeedback = (req, res) => {
         })
 }
 
+const addComplaint = (req, res) => {
+    const complaintData = req.body;
+    const studentId = req.user.id;
+
+    complaintService(complaintData, studentId)
+        .then((data) => {
+            return res
+                    .status(statusCode.created)
+                    .send({message: "Complaint Raised", data: data})
+        })
+        .catch((err) => {
+            return res
+                    .status(statusCode.badRequest)
+                    .send({message: err.message})
+        })
+}
+
 export {
     registerStudent,
     loginStudent,
     getProfile,
-    submitFeedback
+    submitFeedback,
+    addComplaint
 }

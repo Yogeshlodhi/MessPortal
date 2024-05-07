@@ -1,5 +1,7 @@
 import adminModel from "../Models/adminModel.js"
+import announcementModel from "../Models/announcementModel.js"
 import LeaveModel from "../Models/leaveApplicationModel.js"
+import menuModel from "../Models/menuModel.js"
 import studentModel from "../Models/studentModel.js"
 import {createToken, hashPassword} from '../Utils/createToken.js'
 import bcrypt from 'bcryptjs'
@@ -32,12 +34,7 @@ const registerAdminService = async (registerData) => {
     }
 }
 
-
 const loginAdminService = async (loginData) => {
-    // if(!loginData){
-    //     return {message: "Required Fields Can't be Empty"}
-        
-    // }
     let admin = await adminModel.findOne({emailId: loginData.emailId})
 
     if(!admin){
@@ -71,9 +68,38 @@ const getAllLeavesList = async () => {
     }
 }
 
+const uploadMenuService = async (menuData) => {
+    try{
+        let menu = await menuModel.create(menuData);
+        if(!menu){
+            throw {message: "Unexpected Error Occured"}
+        }
+        return menu;
+    }catch(err){
+        console.log(err);
+        throw {message : 'Could Not Upload the Menu', error: err}
+    }
+}
+
+const announcementService = async (announcementData) => {
+    try{
+        let announce = await announcementModel.create(announcementData);
+        if(!announce){
+            throw {message: "Could Not Create Announcement"};
+        }
+        return announce;
+    }catch(err){
+        console.log(err);
+        throw {message : err.message}
+    }
+}
+
+
 export{
     registerAdminService,
     loginAdminService,
     getAllStudentsList,
     getAllLeavesList,
+    uploadMenuService,
+    announcementService,
 }

@@ -2,6 +2,7 @@ import studentModel from "../Models/studentModel.js";
 import feedbackModel from '../Models/feedbackSuggestion.js'
 import { createToken, hashPassword } from "../Utils/createToken.js";
 import bcrypt from 'bcryptjs';
+import complaintModel from "../Models/complaintModel.js";
 
 const studentRegister = async (registrationData) => {
 
@@ -60,7 +61,6 @@ const studentLogin = async (loginData) => {
     }
 }
 
-
 const feedbackAndSuggestion = async (feedbackData, studentId) => {
     try {
         const student = await studentModel.findById(studentId)
@@ -78,9 +78,25 @@ const feedbackAndSuggestion = async (feedbackData, studentId) => {
       }
 }
 
+const complaintService = async (complaint, studentId) => {
+    try{
+        let student = await studentModel.findById(studentId);
+        let Complaint = new complaintModel({
+            ...complaint,
+            student: student.studentName,
+            roll: student.studentRoll
+        })
+        const savedComplaint = await Complaint.save();
+        
+        return savedComplaint;
+    }catch(err){
+        throw {message: err.message}
+    }
+}
+
 export {
     studentRegister,
     studentLogin,
-    studentByRoll,
-    feedbackAndSuggestion
+    feedbackAndSuggestion,
+    complaintService,
 }

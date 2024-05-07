@@ -1,4 +1,4 @@
-import { getAllLeavesList, getAllStudentsList, loginAdminService, registerAdminService } from '../Services/adminService.js';
+import { announcementService, getAllLeavesList, getAllStudentsList, loginAdminService, registerAdminService, uploadMenuService } from '../Services/adminService.js';
 import {statusCode} from '../Utils/http.js';
 
 const registerAdmin = (req,res) => {
@@ -39,11 +39,11 @@ const loginAdmin = (req,res) => {
                         .send({message: err.message})
             })
     }
-    // else{
-    //     return res
-    //                 .status(statusCode.notAcceptable)
-    //                 .send({message: err.message})
-    // }
+    else{
+        return res
+                  .status(statusCode.incorrectCredential)
+                  .send({message: err.message})
+    }
 }
 
 const getAllStudents = (req,res) => {
@@ -74,9 +74,44 @@ const getAllLeaves = (req,res) => {
         })
 }
 
+const uploadMenu = (req, res) => {
+    const menuData = req.body;
+    uploadMenuService(menuData)
+        .then((data) => {
+            return res
+                     .status(statusCode.ok)
+                     .send({message: "Menu Uploaded", data: data})
+        })
+        .catch((err) => {
+            return res.status(statusCode.badRequest).send({message: err.message})
+        })
+}
+
+const addAnnouncement = (req, res) => {
+    const announcementData = req.body;
+    announcementService(announcementData)
+        .then((data) => {
+            if(!data){
+            return res
+                    .status(statusCode.badRequest)
+                    .send({message: "Unexpected Error Occurred"})  
+            }
+            return res
+                    .status(statusCode.created)
+                    .send({message: "Announcement Created", data: data})
+        })
+        .catch((err) => {
+            return res
+                    .status(statusCode.badRequest)
+                    .send({message: err.message})
+        })
+}
+
 export{
     registerAdmin,
     loginAdmin,
     getAllStudents,
     getAllLeaves,
+    uploadMenu,
+    addAnnouncement,
 }

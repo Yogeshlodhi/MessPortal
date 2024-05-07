@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { 
+    addComplaint,
     getProfile, 
     loginStudent, 
     registerStudent, 
@@ -20,6 +21,9 @@ router.get('/leaves',verifyToken, getAllLeaves);
 router.post('/login', loginStudent);
 
 router.post('/submitFeedback', verifyToken, submitFeedback);
+router.post('/raise_complaint', verifyToken, addComplaint)
+
+// router.get('/menu', )
 
 
 export default router;
