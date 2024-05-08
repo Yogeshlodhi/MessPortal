@@ -13,7 +13,7 @@ import Profile from "./Pages/Profile";
 import Complaints from "./Pages/Complaints";
 
 function App() {
-  const isAuthenticated = localStorage.getItem('StudentInfo') ? true : false;
+  const isAuthenticated = localStorage.getItem('student') ? true : false;
 
   return (
     <Router>

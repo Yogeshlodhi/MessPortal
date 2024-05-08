@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
     const navigate = useNavigate();
-    const student = JSON.parse(localStorage.getItem('StudentInfo'))
+    const student = JSON.parse(localStorage.getItem('student'))
     const logoutStudent = () => {
         localStorage.clear();
         navigate('/login');
@@ -25,13 +25,13 @@ function Header() {
             <Popover placement='top-start'>
                 <PopoverTrigger>
                     <WrapItem cursor={'pointer'}>
-                        <Avatar name={student.studentName} src='https://bit.ly/tioluwani-kolawole' />
+                        <Avatar name={student.data.studentName} src='https://bit.ly/tioluwani-kolawole' />
                     </WrapItem>
                 </PopoverTrigger>
                 <PopoverContent width={'12rem'}>
                     <Link to={'/profile'}>
                         <PopoverHeader display={'flex'} justifyContent={'space-between'}>
-                            {student.studentName}
+                            {student.data.studentName}
                             <KeyboardTabIcon/>
                         </PopoverHeader>
                     </Link>

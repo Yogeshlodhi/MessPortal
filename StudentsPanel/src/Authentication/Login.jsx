@@ -130,6 +130,7 @@ function Login() {
                         _hover={{ background: '#25659F' }}
                         onClick={SubmitHandler}
                     >
+                        {/* Submit */}
                         {isLoading ? <Spinner size="sm" color="white" /> : "Continue"}
                     </Button>
                 </Container>

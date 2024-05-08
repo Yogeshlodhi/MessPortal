@@ -68,8 +68,9 @@
   "scripts": {
     "start": "node Backend/index.js",
     "server": "nodemon Backend/index.js",
-    "client": "npm run dev --prefix StudentsPanel",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "stud": "npm run dev --prefix StudentsPanel",
+    "admin": "npm run dev --prefix AdminPanel",
+    "dev": "concurrently \"npm run server\" \"npm run stud\" \"npm run admin\""
   },
   "author": "",
   "license": "ISC",
