@@ -1,16 +1,42 @@
-import { Avatar, Box, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverHeader, PopoverTrigger, WrapItem } from '@chakra-ui/react'
-import React from 'react'
+import { Avatar, Box, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverHeader, PopoverTrigger, Spinner, WrapItem } from '@chakra-ui/react'
+import React, { useEffect } from 'react'
 import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout, reset } from '../Features/Auth/authSlice';
 
 function Header() {
     const navigate = useNavigate();
-    const student = JSON.parse(localStorage.getItem('student'))
+    const dispatch = useDispatch();
+    
+
+    const {student, isLoading} = useSelector((state) => state.auth)
+
     const logoutStudent = () => {
-        localStorage.clear();
+        dispatch(logout());
+        dispatch(reset());
         navigate('/login');
     }
+    
+    useEffect(() => {
+        if(!student){
+            navigate('/login')
+        }
+    }, [navigate, student])
+
+    if(isLoading){
+        return (
+            <Spinner
+                thickness='4px'
+                speed='0.65s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+            />
+        )
+    }
+
     return (
         <Box 
             display={'flex'} 
@@ -22,16 +48,17 @@ function Header() {
             pr={4}
             backgroundColor={'#E4e4e4'}
         >
-            <Popover placement='top-start'>
+            {student &&
+                <Popover placement='top-start'>
                 <PopoverTrigger>
                     <WrapItem cursor={'pointer'}>
-                        <Avatar name={student.data.studentName} src='https://bit.ly/tioluwani-kolawole' />
+                        <Avatar name={student.studentName} src='https://bit.ly/tioluwani-kolawole' />
                     </WrapItem>
                 </PopoverTrigger>
                 <PopoverContent width={'12rem'}>
                     <Link to={'/profile'}>
                         <PopoverHeader display={'flex'} justifyContent={'space-between'}>
-                            {student.data.studentName}
+                            {student.studentName}
                             <KeyboardTabIcon/>
                         </PopoverHeader>
                     </Link>
@@ -46,6 +73,8 @@ function Header() {
                     </Box>
                 </PopoverContent>
             </Popover>
+           }
+            
         </Box>
     )
 }

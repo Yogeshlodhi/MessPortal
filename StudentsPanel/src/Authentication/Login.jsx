@@ -3,43 +3,80 @@ import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGr
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useLoginMutation } from '../Slices/studentsApiSlice'
-import { setCredentials } from '../Slices/authSlice';
+import { login, reset } from '../Features/Auth/authSlice';
+import {InfinitySpin} from 'react-loader-spinner'
+
 
 function Login() {
+    
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
+
+    const toast = useToast();
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [login, { isLoading, isError, isSuccess }] = useLoginMutation();
+    const [formData, setFormData] = useState({
+        emailId: '',
+        password: ''
+    })
 
-    const { StudentInfo } = useSelector((state) => state.auth);
+    const {emailId, password} = formData;
 
-    const [emailId, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
+    const {student, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth);
+    
     useEffect(() => {
-        if(StudentInfo){
-            navigate('/');
+        if(isError){
+            toast({
+                title: message,
+                duration: 3000,
+                status: 'error'
+            })
         }
-    },[navigate, StudentInfo])
-
+        if(isSuccess || student){
+            navigate('/')
+            if(isSuccess){
+                toast({
+                    title: 'Successfully Logged In',
+                    duration: 3000,
+                    status: 'success',
+                    position: 'top',
+                    isClosable: true
+                })
+            }
+        }
+        dispatch(reset());
+    }, [student, navigate, dispatch])
+    // }, [student, isError, isSuccess, message, navigate, dispatch])
+    
+    const onChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name] : e.target.value
+        }))
+    }
+    
     const SubmitHandler = async (e) => {
         e.preventDefault();
-        try {
-            const response = await login({ emailId, password });
-            const redirectedData = response.data.data;
-            if (redirectedData) {
-                dispatch(setCredentials(redirectedData));
-                navigate('/dashboard');
-            } else {
-                console.log('Redirected response data is missing or incomplete.');
-            }
-        } catch (error) {
-            console.log(error?.data?.message || error?.error);
+        const loginData = {
+            emailId,
+            password
         }
+        dispatch(login(loginData))
+    }
+
+    if(isLoading){
+        return (
+            <Box marginTop={'20%'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDir={'column'}>
+                <InfinitySpin
+                    visible={true}
+                    color="#2C3E50"
+                    ariaLabel="infinity-spin-loading"
+                />
+                <Heading textAlign={'center'}>Logging You In.....</Heading>
+            </Box>
+        )
     }
     
     return (
@@ -88,7 +125,8 @@ function Login() {
                                 placeholder='yogesh_2101cb61@iitp.ac.in'
                                 color={'#474745'}
                                 value={emailId}
-                                onChange={(e) => setEmail(e.target.value)}
+                                name='emailId'
+                                onChange={onChange}
                             />
                         </FormControl>
                         <FormControl mt={3} isRequired>
@@ -102,7 +140,8 @@ function Login() {
                                 borderRadius={'2rem'}
                                 color={'#474745'}
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                name='password'
+                                onChange={onChange}
                             />
                             <InputRightElement width='4.5rem'>
                                 <Button h='1.75rem' borderRadius={'2rem'} size='sm' onClick={handleClick}>

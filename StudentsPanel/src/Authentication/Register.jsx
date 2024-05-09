@@ -5,14 +5,9 @@ import { Link } from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { register, reset } from '../Features/Auth/authSlice';
+import { InfinitySpin } from 'react-loader-spinner';
 
 function Register() {
-
-    // const [email, setEmail] = useState('');
-    // const [name, setName] = useState('');
-    // const [roll, setRoll] = useState('');
-    // const [phone, setPhone] = useState('');
-    // const [password, setPassword] = useState('');
     
     const [formData, setFormData] = useState({
         studentName: '',
@@ -34,12 +29,11 @@ function Register() {
 
     useEffect(() => {
         if(isError){
-            toast(
-                {
+            toast({
                 duration: '3000',
-                status: 'error'
-                }
-            )
+                status: 'error',
+                title: message
+            })
         }
         
         if(isSuccess || student){
@@ -57,9 +51,17 @@ function Register() {
     }
     
     if(isLoading){
-        return <h1>Loading....</h1>
+        return (
+            <Box marginTop={'20%'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDir={'column'}>
+                <InfinitySpin
+                    visible={true}
+                    color="#2C3E50"
+                    ariaLabel="infinity-spin-loading"
+                />
+                <Heading textAlign={'center'}>Please Wait While We Create Your Account.....</Heading>
+            </Box>
+        )
     }
-
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -94,7 +96,7 @@ function Register() {
                 >
                     <Text>Already Registered?</Text>
                     <Box color='#25659F'>
-                        <Link to='/login'>Sign In Now</Link>
+                        <Link to='/login'>Sign In</Link>
                     </Box>
                 </Box>
             </Box>
@@ -131,7 +133,7 @@ function Register() {
                                 type='text' 
                                 color={'#474745'} 
                                 borderRadius={'2rem'} 
-                                placeholder='Yogesh' 
+                                placeholder='Yogesh Kumar' 
                                 id='name'
                                 name='studentName'
                                 value={studentName}
@@ -144,7 +146,7 @@ function Register() {
                                 type='text' 
                                 borderRadius={'2rem'} 
                                 color={'#474745'} 
-                                placeholder='Kumar' 
+                                placeholder='2101CB61' 
                                 id='roll'
                                 name='studentRoll'
                                 value={studentRoll}
@@ -157,7 +159,7 @@ function Register() {
                                 type='text' 
                                 borderRadius={'2rem'} 
                                 color={'#474745'} 
-                                placeholder='Kumar' 
+                                placeholder='9999999999' 
                                 id='phone'
                                 name='number'
                                 value={number}
