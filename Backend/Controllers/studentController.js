@@ -1,4 +1,4 @@
-import { complaintService, feedbackAndSuggestion, studentLogin, studentRegister } from '../Services/studentService.js';
+import { complaintService, feedbackAndSuggestion, getAnnouncementsService, studentLogin, studentRegister } from '../Services/studentService.js';
 import { statusCode } from '../Utils/http.js';
 
 const registerStudent = (req, res) => {
@@ -80,10 +80,25 @@ const addComplaint = (req, res) => {
         })
 }
 
+const getAnnouncements = (req, res) => {
+    getAnnouncementsService()
+        .then((data) => {
+            return res
+                     .status(statusCode.ok)
+                     .send({message: 'Announcements Received', data: data})
+        })
+        .catch((err) => {
+            return res
+            .status(statusCode.badRequest)
+            .send({message: err.message})
+        })
+}
+
 export {
     registerStudent,
     loginStudent,
     getProfile,
     submitFeedback,
-    addComplaint
+    addComplaint,
+    getAnnouncements
 }

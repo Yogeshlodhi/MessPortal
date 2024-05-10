@@ -3,6 +3,8 @@ import { statusCode } from '../Utils/http.js'
 
 const applyLeave = (req, res) => {
     const leaveData = req.body;
+    const roll = req.user
+    console.log(roll)
     if (
         !leaveData.startDate ||
         !leaveData.endDate ||
@@ -13,7 +15,7 @@ const applyLeave = (req, res) => {
             .status(statusCode.incorrectCredential)
             .send({ message: 'Fill in all Credentials' })
     }
-    applyLeaveService(leaveData)
+    applyLeaveService(leaveData, roll)
         .then((data) => {
             return res
                 .status(statusCode.created)
@@ -28,7 +30,6 @@ const applyLeave = (req, res) => {
 
 const getAllLeaves = (req, res) => {
     const student = req.user;
-    // console.log(req.body)
     getAllLeavesService(student)
         .then((data) => {
             return res

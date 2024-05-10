@@ -7,7 +7,6 @@ const apply = async (data, token) => {
             Authorization: `Bearer ${token}`
         }
     }
-
     const response = await axios.post(`${API_URL}/leaveApplication`, data, config);
     return response.data;
 }

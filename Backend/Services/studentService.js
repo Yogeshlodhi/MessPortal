@@ -3,6 +3,7 @@ import feedbackModel from '../Models/feedbackSuggestion.js'
 import { createToken, hashPassword } from "../Utils/createToken.js";
 import bcrypt from 'bcryptjs';
 import complaintModel from "../Models/complaintModel.js";
+import announcementModel from "../Models/announcementModel.js";
 
 const studentRegister = async (registrationData) => {
 
@@ -94,9 +95,19 @@ const complaintService = async (complaint, studentId) => {
     }
 }
 
+const getAnnouncementsService = async () => {
+    try {
+        let announcements = await announcementModel.find({});
+        return announcements;
+    } catch (error) {
+        throw {message: error.message}
+    }
+}
+
 export {
     studentRegister,
     studentLogin,
     feedbackAndSuggestion,
     complaintService,
+    getAnnouncementsService
 }

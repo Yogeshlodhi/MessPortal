@@ -1,77 +1,8 @@
-// import {
-//   Table,
-//   Thead,
-//   Tbody,
-//   Tr,
-//   Td,
-//   TableContainer,
-//   Box,
-// } from '@chakra-ui/react'
-// import React, { useState } from 'react'
-
-// const Announcements = () => {
-//   const rowData = [
-//     {
-//       id: 1,
-//       title: "Row 1",
-//       details: "Details for Row 1 Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, rerum."
-//     },
-//     {
-//       id: 2,
-//       title: "Row 2",
-//       details: "Details for Row 2 Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, rerum."
-//     },
-//     {
-//       id: 3,
-//       title: "Row 3",
-//       details: "Details for Row 3 Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, rerum."
-//     }
-//   ];
-
-//   const [openRowId, setOpenRowId] = useState(null);
-//   const toggleRow = (id) => {
-//     setOpenRowId(openRowId === id ? null : id);
-//   };
-
-//   return (
-//     <Box padding={'2rem'}>
-//       <TableContainer>
-//         <Table variant='striped' colorScheme='teal'>
-//           <Thead>
-//             <Tr textAlign={'center'} justifyContent={'center'}>
-//               Announcements
-//             </Tr>
-//           </Thead>
-//           <Tbody background={'red'}>
-//             {rowData.map((row) => (
-//               <Box width={'100%'}>
-//                 <Box key={row.id} background={'green'}>
-//                   <Tr onClick={() => toggleRow(row.id)} cursor={'pointer'}>
-//                     <Td>{row.details}</Td>
-//                   </Tr>
-//                 </Box>
-//                 {openRowId === row.id && (
-//                   <Box>
-//                     <Box>
-//                       {row.details}
-//                     </Box>
-//                   </Box>
-//                 )}
-//               </Box>
-//             ))}
-//           </Tbody>
-
-//         </Table>
-//       </TableContainer>
-//     </Box>
-//   )
-// }
-
-// export default Announcements
-
-
-import { Table, Thead, Tbody, Tr, Td, TableContainer, Box, Collapse } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { Table, Thead, Tbody, Tr, Td, TableContainer, Box, Collapse, Heading } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { getAnnouncements, reset } from '../Features/Mess/messSlice';
+import { InfinitySpin } from 'react-loader-spinner';
 
 const Announcements = () => {
   const rowData = [
@@ -96,6 +27,37 @@ const Announcements = () => {
   const toggleRow = (id) => {
     setOpenRowId(openRowId === id ? null : id);
   };
+
+  const dispatch = useDispatch();
+  const { announcements, isError, isSuccess, isLoading, message } = useSelector((state) => state.mess);
+
+  // useEffect(() => {
+  //   if(isError){
+  //     console.log(message)
+  //   }
+
+    
+  //   // return () => {
+  //     //   dispatch(reset())
+  //     // }
+      
+  //   },[dispatch, isError, isSuccess, message, announcements])
+    
+    // dispatch(getAnnouncements());
+  console.log(announcements)
+  
+  if (isLoading) {
+    return (
+      <Box marginTop={'20%'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDir={'column'}>
+        <InfinitySpin
+          visible={true}
+          color="#2C3E50"
+          ariaLabel="infinity-spin-loading"
+        />
+        <Heading textAlign={'center'}>Fetching Announcements</Heading>
+      </Box>
+    )
+  }
 
   return (
     <Box padding={'2rem'}>

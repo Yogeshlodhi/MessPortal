@@ -147,6 +147,9 @@ const menuSchema = new Schema({
         }
 
     },
+    amountOfOneMeal: {
+        type: Number
+    }
 },
 {
     timestamps: true

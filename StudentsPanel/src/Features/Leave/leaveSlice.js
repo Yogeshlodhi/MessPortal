@@ -1,14 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import leaveService from "./leaveService";
 
-
-
 const initialState = {
     leaves: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ''
+    message: '',
 }
 
 export const applyLeave = createAsyncThunk(
@@ -29,11 +27,10 @@ export const getLeaves = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const token = thunkAPI.getState().auth.student.token;
-            // return await leaveService.getLeaves();
             return await leaveService.getLeaves(token);
         } catch (error) {
+            // console.log(error)
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-            console.log(error)
             return thunkAPI.rejectWithValue(message); 
         }
     }
@@ -47,19 +44,19 @@ const leaveSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // .addCase(applyLeave.pending, (state) => {
-            //     state.isLoading = true
-            // })
-            // .addCase(applyLeave.fulfilled, (state, action) => {
-            //     state.isLoading = false,
-            //     state.isSuccess = true,
-            //     state.leaves.push(action.payload)
-            // })
-            // .addCase(applyLeave.rejected, (state, action) => {
-            //     state.message = action.payload,
-            //     state.isError = true,
-            //     state.isLoading = false
-            // })
+            .addCase(applyLeave.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(applyLeave.fulfilled, (state, action) => {
+                state.isLoading = false,
+                state.isSuccess = true,
+                state.leaves.push(action.payload)
+            })
+            .addCase(applyLeave.rejected, (state, action) => {
+                state.message = action.payload,
+                state.isError = true,
+                state.isLoading = false
+            })
             .addCase(getLeaves.pending, (state) => {
                 
                 state.isLoading = true

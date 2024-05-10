@@ -1,8 +1,8 @@
 import LeaveModel from "../Models/leaveApplicationModel.js"
 
-const applyLeaveService = async (leaveData) => {
+const applyLeaveService = async (leaveData, roll) => {
     try {
-        const leaveApplication = await LeaveModel.create(leaveData)
+        const leaveApplication = await LeaveModel.create({...leaveData, studentRoll: roll})
         return leaveApplication ? leaveApplication : null;
     } catch (error) {
         throw { message: error.message };

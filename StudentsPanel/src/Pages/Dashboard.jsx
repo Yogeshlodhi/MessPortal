@@ -8,7 +8,6 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Box,
   Heading
@@ -88,12 +87,11 @@ function Dashboard() {
                   <Td>{leave.reason}</Td>
                   <Td>{UtilFunctions.formatDate(new Date(leave.startDate))}</Td> 
                   <Td>{UtilFunctions.formatDate(new Date(leave.endDate))}</Td> 
-                  <Td>10</Td>
+                  <Td>{UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))}</Td>
                   <Td>{leave.status}</Td>
                   <Td>1500</Td>
                 </Tr>
               ))}
-
             </Tbody>
             <Tfoot>
               <Tr>

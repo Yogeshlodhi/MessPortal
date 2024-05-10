@@ -6,7 +6,7 @@ import adminRoutes from './Routes/adminRoutes.js';
 import { errorHandler } from './Middleware/errorMiddleware.js';
 import cors from 'cors';
 import { applyLeave } from './Controllers/leaveController.js';
-
+import leaveRoutes from './Routes/leaveRoutes.js';
 
 const app = express();
 dotenv.config();
@@ -20,7 +20,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 app.use('/api/student',userRoutes);
-app.use('/api/student/leaveApplication',applyLeave);
+// app.use('/api/student/leaveApplication',applyLeave);
+app.use('/api/student/leaveApplication',leaveRoutes);
 app.use('/api/admin',adminRoutes);
 
 app.use(errorHandler);
