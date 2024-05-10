@@ -1,8 +1,10 @@
-import { Table, Thead, Tbody, Tr, Td, TableContainer, Box, Collapse, Heading } from '@chakra-ui/react'
+import { Table, Thead, Tbody, Tr, Td, TableContainer, Box, Collapse, Heading, Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnnouncements, reset } from '../Features/Mess/messSlice';
 import { InfinitySpin } from 'react-loader-spinner';
+import { useNavigate } from 'react-router-dom';
+import UtilFunctions from '../Utils/UtilFunctions';
 
 const Announcements = () => {
   const rowData = [
@@ -29,23 +31,20 @@ const Announcements = () => {
   };
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { announcements, isError, isSuccess, isLoading, message } = useSelector((state) => state.mess);
 
-  // useEffect(() => {
-  //   if(isError){
-  //     console.log(message)
-  //   }
+  useEffect(() => {
+    if (isError) {
+      console.log(message)
+    }
+    dispatch(getAnnouncements());
 
-    
-  //   // return () => {
-  //     //   dispatch(reset())
-  //     // }
-      
-  //   },[dispatch, isError, isSuccess, message, announcements])
-    
-    // dispatch(getAnnouncements());
-  console.log(announcements)
-  
+    return () => {
+      dispatch(reset())
+    }
+  }, [dispatch]);
+
   if (isLoading) {
     return (
       <Box marginTop={'20%'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDir={'column'}>
@@ -59,30 +58,42 @@ const Announcements = () => {
     )
   }
 
+  const announcementList = announcements && announcements.data;
+
   return (
     <Box padding={'2rem'}>
       <TableContainer>
         <Table variant='striped' colorScheme='teal'>
           <Thead>
             <Tr textAlign={'center'} justifyContent={'center'}>
-              Announcements
+              <Heading>
+                Announcements
+              </Heading>
             </Tr>
           </Thead>
           <Tbody>
-            {rowData.map((row) => (
-              <React.Fragment key={row.id}>
-                <Tr onClick={() => toggleRow(row.id)} cursor={'pointer'}>
-                  <Td>{row.title}</Td>
+            {announcements && announcementList?.map((row, id) => (
+              <React.Fragment key={id}>
+                <Tr onClick={() => toggleRow(id)} cursor={'pointer'}>
+                  <Td display={'flex'} alignItems={'center'} justifyContent={'space-between'} gap={'50%'}>
+                    <Text>
+                      {row.heading}
+                    </Text>
+                    <Text>
+                      {UtilFunctions.formatDate(new Date(row.createdAt))}
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
-                  <Td colSpan={1}>
-                    <Collapse in={openRowId === row.id} width={'100%'} animateOpacity>
-                      <Box p='4' bg='teal.500' rounded='md' shadow='md' color='white'>
-                        {row.details}
+                  <Td colSpan={1} style={{ overflowX: 'hidden' }}>
+                    <Collapse in={openRowId === id} width={'100%'} animateOpacity>
+                      <Box p='4' bg='teal.500' rounded='md' shadow='md' color='white' whiteSpace={'normal'}>
+                        {row.description}
                       </Box>
                     </Collapse>
                   </Td>
                 </Tr>
+
               </React.Fragment>
             ))}
           </Tbody>
@@ -93,3 +104,4 @@ const Announcements = () => {
 }
 
 export default Announcements
+

@@ -43,7 +43,7 @@ function Dashboard() {
       dispatch(reset())
     }
 
-  }, [student, navigate, isError, message])
+  }, [student, navigate,dispatch, isError, message])
 
 
   if (isLoading) {
