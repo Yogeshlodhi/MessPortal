@@ -5,7 +5,6 @@ const student = JSON.parse(localStorage.getItem('student'));
   
 
 const initialState = {
-    // student : '',
     student : student ? student : null,
     isError: false,
     isSuccess: false,
@@ -14,8 +13,6 @@ const initialState = {
 }
 
 
-// Register the student
-// auth/register is the action
 export const register = createAsyncThunk(
     'auth/register',
     async (user, thunkAPI) => {
@@ -34,6 +31,7 @@ export const login = createAsyncThunk(
         try {
             return await authService.login(user);
         } catch (error) {
+            console.log(error.response.data.message)
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
         }
@@ -62,13 +60,10 @@ export const authSlice = createSlice({
         builder
             .addCase(register.pending, (state) => {
                 state.isLoading = true
-                // state.isError = false,
             })
             .addCase(register.fulfilled, (state, action) => {
                 state.isLoading = false,
                 state.isSuccess = true
-                // state.isError = false,
-                // state.student = action.payload
             })
             .addCase(register.rejected, (state, action) => {
                 state.isLoading = false,
@@ -85,8 +80,8 @@ export const authSlice = createSlice({
                 state.student = action.payload
             })
             .addCase(login.rejected, (state, action) => {
-                isLoading = false,
-                isError = true
+                state.isLoading = false,
+                state.isError = true
                 state.message = action.payload
                 state.student = null
             })

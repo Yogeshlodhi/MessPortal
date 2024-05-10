@@ -47,8 +47,7 @@ function Login() {
             }
         }
         dispatch(reset());
-    }, [student, navigate, dispatch])
-    // }, [student, isError, isSuccess, message, navigate, dispatch])
+    }, [student, navigate, isError, message, isSuccess, dispatch])
     
     const onChange = (e) => {
         setFormData((prev) => ({

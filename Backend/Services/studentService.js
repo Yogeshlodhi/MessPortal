@@ -49,7 +49,7 @@ const studentLogin = async (loginData) => {
     const isPasswordValid = await bcrypt.compare(loginData.password, student.password);
     
     let jwtToken = createToken(student._id);
-    console.log(jwtToken);
+    
     if (student && isPasswordValid) {
         const { password, bankAccount, ifsc, ...studentDataWithoutPassword } = student.toObject();
         return {

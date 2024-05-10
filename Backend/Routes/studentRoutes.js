@@ -16,6 +16,7 @@ router
     .post(registerStudent)
     .get(verifyToken, getProfile)
 
+// router.get('/leaves', getAllLeaves);
 router.get('/leaves',verifyToken, getAllLeaves);
 
 router.post('/login', loginStudent);

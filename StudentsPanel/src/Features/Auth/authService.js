@@ -8,7 +8,6 @@ const register = async (data) => {
 
 const login = async (data) => {
     const response = await axios.post(`${API_URL}/login`, data);
-    console.log(response);
     if(response.data && response.data.data){
         localStorage.setItem('student', JSON.stringify(response.data.data));
         return response.data.data;

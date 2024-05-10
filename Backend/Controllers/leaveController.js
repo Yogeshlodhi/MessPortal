@@ -28,11 +28,12 @@ const applyLeave = (req, res) => {
 
 const getAllLeaves = (req, res) => {
     const student = req.user;
+    // console.log(req.body)
     getAllLeavesService(student)
         .then((data) => {
             return res
-                    .status(statusCode.found)
-                    .send({message: 'Leaves Found', leavesList: data})
+                    .status(statusCode.ok)
+                    .send({message: 'Leaves Found', data: data})
         })
         .catch((err) => {
             return res 
