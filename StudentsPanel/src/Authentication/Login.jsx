@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Text, Spinner, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Text, useToast } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { login, reset } from '../Features/Auth/authSlice';
-import {InfinitySpin} from 'react-loader-spinner'
+import { InfinitySpin } from 'react-loader-spinner'
+import Spinner from '../Components/Spinner';
 
 
 function Login() {
-    
+
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
 
@@ -22,21 +23,21 @@ function Login() {
         password: ''
     })
 
-    const {emailId, password} = formData;
+    const { emailId, password } = formData;
 
-    const {student, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth);
-    
+    const { student, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+
     useEffect(() => {
-        if(isError){
+        if (isError) {
             toast({
                 title: message,
                 duration: 3000,
                 status: 'error'
             })
         }
-        if(isSuccess || student){
+        if (isSuccess || student) {
             navigate('/')
-            if(isSuccess){
+            if (isSuccess) {
                 toast({
                     title: 'Successfully Logged In',
                     duration: 3000,
@@ -48,14 +49,14 @@ function Login() {
         }
         dispatch(reset());
     }, [student, navigate, isError, message, isSuccess, dispatch])
-    
+
     const onChange = (e) => {
         setFormData((prev) => ({
             ...prev,
-            [e.target.name] : e.target.value
+            [e.target.name]: e.target.value
         }))
     }
-    
+
     const SubmitHandler = async (e) => {
         e.preventDefault();
         const loginData = {
@@ -65,19 +66,12 @@ function Login() {
         dispatch(login(loginData))
     }
 
-    if(isLoading){
+    if (isLoading) {
         return (
-            <Box marginTop={'20%'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDir={'column'}>
-                <InfinitySpin
-                    visible={true}
-                    color="#2C3E50"
-                    ariaLabel="infinity-spin-loading"
-                />
-                <Heading textAlign={'center'}>Logging You In.....</Heading>
-            </Box>
-        )
+            <Spinner message={"Logging You In....."}/>
+        );
     }
-    
+
     return (
         <Box display={'flex'} flexDirection={'column'} boxSizing='border-box' height={'95vh'}>
             <Box

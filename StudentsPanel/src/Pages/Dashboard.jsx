@@ -13,8 +13,7 @@ import {
   Heading
 } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux';
-import { InfinitySpin } from 'react-loader-spinner';
-
+import Spinner from '../Components/Spinner';
 import { getLeaves, reset } from '../Features/Leave/leaveSlice';
 import { useNavigate } from 'react-router-dom';
 import UtilFunctions from '../Utils/UtilFunctions';
@@ -35,7 +34,7 @@ function Dashboard() {
     if (!student) {
       navigate('/login')
     }
-    else{
+    else {
       dispatch(getLeaves())
     }
 
@@ -43,23 +42,18 @@ function Dashboard() {
       dispatch(reset())
     }
 
-  }, [student, navigate,dispatch, isError, message])
+  }, [student, navigate, dispatch, isError, message])
 
 
   if (isLoading) {
     return (
-      <Box marginTop={'20%'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDir={'column'}>
-        <InfinitySpin
-          visible={true}
-          color="#2C3E50"
-          ariaLabel="infinity-spin-loading"
-        />
-        <Heading textAlign={'center'}>Fetching Leaves</Heading>
-      </Box>
+      <Spinner message={'Fetching Leaves'}/>
     )
   }
 
   const leavesData = leaves && leaves.data;
+  const totalAmount = leavesData && leavesData.reduce((acc, leave) => acc + 1500, 0);
+  const totalDays = leavesData && leavesData.reduce((acc, leave) => acc + 1, 0);
 
   return (
     <Box padding={'2rem'} className='flex gap-8 flex-col'>
@@ -85,8 +79,8 @@ function Dashboard() {
               {leaves && leaves.data && leavesData.map((leave, index) => (
                 <Tr key={index}>
                   <Td>{leave.reason}</Td>
-                  <Td>{UtilFunctions.formatDate(new Date(leave.startDate))}</Td> 
-                  <Td>{UtilFunctions.formatDate(new Date(leave.endDate))}</Td> 
+                  <Td>{UtilFunctions.formatDate(new Date(leave.startDate))}</Td>
+                  <Td>{UtilFunctions.formatDate(new Date(leave.endDate))}</Td>
                   <Td>{UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))}</Td>
                   <Td>{leave.status}</Td>
                   <Td>1500</Td>
@@ -96,7 +90,9 @@ function Dashboard() {
             <Tfoot>
               <Tr>
                 <Td colSpan={5} textAlign="center">Total</Td>
-                <Td>24000</Td>
+                <Td>
+                  {totalAmount}
+                </Td>
               </Tr>
             </Tfoot>
           </Table>
