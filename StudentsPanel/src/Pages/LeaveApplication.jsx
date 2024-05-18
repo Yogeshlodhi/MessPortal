@@ -124,6 +124,7 @@ function LeaveApplication() {
             value={reason}
             name='reason'
             onChange={(e) => onFormChange(e, "reason")}
+            resize={'none'}
           />
         </FormControl>
         <Button
