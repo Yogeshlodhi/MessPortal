@@ -19,7 +19,7 @@ const registerStudent = (req, res) => {
                 .send({ message: 'Student Registered', data: data })
         })
         .catch((error) => {
-            console.log(error)
+            // console.log(error)
             return res
                 .status(statusCode.badRequest)
                 .send({ message: 'Bad Request', error: error.message })

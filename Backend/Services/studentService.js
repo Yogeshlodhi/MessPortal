@@ -37,7 +37,7 @@ const studentRegister = async (registrationData) => {
             throw { message: 'Unexpected Error Occured' };
         }
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         throw { message: error.message };
     }
 }
@@ -77,7 +77,7 @@ const feedbackAndSuggestion = async (feedbackData, studentId) => {
         const savedFeedback = await newFeedback.save();
         return savedFeedback;
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         throw {message: error.message}
       }
 }
