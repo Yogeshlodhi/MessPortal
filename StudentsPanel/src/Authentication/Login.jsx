@@ -35,7 +35,7 @@ function Login() {
                 status: 'error'
             })
         }
-        if (isSuccess || student) {
+        if (isSuccess) {
             navigate('/')
             if (isSuccess) {
                 toast({

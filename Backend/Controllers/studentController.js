@@ -49,9 +49,11 @@ const getProfile = (req, res) => {
                 .status(statusCode.found)
                 .send({ message: 'Student Profile Found', data: data })
         })
-        return res
-            .status(statusCode.badRequest)
-            .send({message: err.message})
+        .catch((err) => {
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
+        })
 }
 
 const submitFeedback = (req, res) => {
@@ -60,13 +62,13 @@ const submitFeedback = (req, res) => {
     feedbackAndSuggestion(feedbackData, studentId)
         .then((data) => {
             return res
-                    .status(statusCode.ok)
-                    .send({message: 'FeedBack Submitted', data: data})
+                .status(statusCode.ok)
+                .send({ message: 'FeedBack Submitted', data: data })
         })
         .catch((err) => {
             return res
-                    .status(statusCode.badRequest)
-                    .send({message: 'Bad Request', error: err.message})
+                .status(statusCode.badRequest)
+                .send({ message: 'Bad Request', error: err.message })
         })
 }
 
@@ -77,13 +79,13 @@ const addComplaint = (req, res) => {
     complaintService(complaintData, studentId)
         .then((data) => {
             return res
-                    .status(statusCode.created)
-                    .send({message: "Complaint Raised", data: data})
+                .status(statusCode.created)
+                .send({ message: "Complaint Raised", data: data })
         })
         .catch((err) => {
             return res
-                    .status(statusCode.badRequest)
-                    .send({message: err.message})
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
         })
 }
 
@@ -91,22 +93,27 @@ const getAnnouncements = (req, res) => {
     getAnnouncementsService()
         .then((data) => {
             return res
-                     .status(statusCode.ok)
-                     .send({message: 'Announcements Received', data: data})
+                .status(statusCode.ok)
+                .send({ message: 'Announcements Received', data: data })
         })
         .catch((err) => {
             return res
-            .status(statusCode.badRequest)
-            .send({message: err.message})
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
         })
 }
 
 const getMenu = (req, res) => {
     getMenuService()
         .then((data) => {
-            return res 
-                    .status(statusCode.ok)
-                    .send({message: 'Menu Details Received', data: data})
+            return res
+                .status(statusCode.ok)
+                .send({ message: 'Menu Details Received', data: data })
+        })
+        .catch((err) => {
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
         })
 }
 
@@ -117,8 +124,13 @@ const updateProfile = (req, res) => {
     updateProfileService(userId, profileData)
         .then((data) => {
             return res
-                    .status(statusCode.ok)
-                    .send({message: 'Profile Updated Successfully', data: data})
+                .status(statusCode.ok)
+                .send({ message: 'Profile Updated Successfully', data: data })
+        })
+        .catch((err) => {
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
         })
 }
 

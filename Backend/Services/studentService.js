@@ -56,6 +56,8 @@ const studentLogin = async (loginData) => {
         const { password, bankAccount, ifsc, ...studentDataWithoutPassword } = student.toObject();
         return {
             ...studentDataWithoutPassword,
+            bankAccount,
+            ifsc,
             token: jwtToken
         };
     } else {
@@ -116,13 +118,18 @@ const getMenuService = async () => {
 
 const updateProfileService = async (userId, profileData) => {
     try{
-        const updatedUser = await studentModel.findByIdAndUpdate(userId, profileData, { new: true });
+        if (profileData.password) {
+            const hashedPassword = await hashPassword(profileData.password);
+            profileData.password = hashedPassword;
+        }
+
+        const updatedUser = await studentModel.findByIdAndUpdate(userId, profileData, { new: true }).select('-password');
 
         if (!updatedUser) {
             throw new Error('User not found');
         }
 
-        return updatedUser;
+        return updatedUser
     }catch(err){
 
     }
@@ -133,7 +140,7 @@ const getProfileService = async (userId) => {
         const user = await studentModel.findById(userId).select('-password'); 
         return user;
     } catch (err) {
-        throw err;
+        throw {message: err.message};
     }
 };
 
