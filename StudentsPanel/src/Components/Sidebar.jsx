@@ -6,6 +6,7 @@ import RateReviewIcon from '@mui/icons-material/RateReview';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import PaymentIcon from '@mui/icons-material/Payment';
 import { Link } from 'react-router-dom';
 
 function Sidebar() {
@@ -118,6 +119,21 @@ function Sidebar() {
             style={{ color: '#FFFFFF', textDecoration: 'none', fontSize: '1.5rem' }}
           >
             Complaints
+          </Link>
+        </Box>
+        <Box
+          display='flex'
+          alignItems='center'
+          marginBottom='15px'
+          justifyContent='center'
+          padding={'0.5rem'}
+        >
+          <PaymentIcon style={{ marginRight: '10px' }} />
+          <Link
+            to="/payments"
+            style={{ color: '#FFFFFF', textDecoration: 'none', fontSize: '1.5rem' }}
+          >
+            Payments
           </Link>
         </Box>
       </Box>

@@ -5,7 +5,9 @@ import {
     loginStudent, 
     registerStudent, 
     submitFeedback,
-    getAnnouncements
+    getAnnouncements,
+    getMenu,
+    updateProfile
 } from "../Controllers/studentController.js";
 import verifyToken from "../Middleware/verifyToken.js";
 import { getAllLeaves } from "../Controllers/leaveController.js";
@@ -16,12 +18,14 @@ router
     .route('')
     .post(registerStudent)
     .get(verifyToken, getProfile)
+    .put(verifyToken, updateProfile)
 
 router.get('/leaves',verifyToken, getAllLeaves);
 router.post('/login', loginStudent);
 router.post('/submitFeedback', verifyToken, submitFeedback);
 router.post('/raise_complaint', verifyToken, addComplaint)
 router.get('/announcements', verifyToken, getAnnouncements)
+router.get('/getMenu', verifyToken, getMenu)
 
 
 export default router;

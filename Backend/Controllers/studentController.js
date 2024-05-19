@@ -1,4 +1,4 @@
-import { complaintService, feedbackAndSuggestion, getAnnouncementsService, studentLogin, studentRegister } from '../Services/studentService.js';
+import { complaintService, feedbackAndSuggestion, getAnnouncementsService, getMenuService, getProfileService, studentLogin, studentRegister, updateProfileService } from '../Services/studentService.js';
 import { statusCode } from '../Utils/http.js';
 
 const registerStudent = (req, res) => {
@@ -42,9 +42,16 @@ const loginStudent = (req, res) => {
 }
 
 const getProfile = (req, res) => {
-    return res
-        .status(statusCode.found)
-        .send({ message: 'Student Profile Found', student: req.user })
+    const userId = req.user.id;
+    getProfileService(userId)
+        .then((data) => {
+            return res
+                .status(statusCode.found)
+                .send({ message: 'Student Profile Found', data: data })
+        })
+        return res
+            .status(statusCode.badRequest)
+            .send({message: err.message})
 }
 
 const submitFeedback = (req, res) => {
@@ -94,11 +101,34 @@ const getAnnouncements = (req, res) => {
         })
 }
 
+const getMenu = (req, res) => {
+    getMenuService()
+        .then((data) => {
+            return res 
+                    .status(statusCode.ok)
+                    .send({message: 'Menu Details Received', data: data})
+        })
+}
+
+const updateProfile = (req, res) => {
+    const userId = req.user.id
+    const profileData = req.body
+
+    updateProfileService(userId, profileData)
+        .then((data) => {
+            return res
+                    .status(statusCode.ok)
+                    .send({message: 'Profile Updated Successfully', data: data})
+        })
+}
+
 export {
     registerStudent,
     loginStudent,
     getProfile,
     submitFeedback,
     addComplaint,
-    getAnnouncements
+    getAnnouncements,
+    getMenu,
+    updateProfile,
 }

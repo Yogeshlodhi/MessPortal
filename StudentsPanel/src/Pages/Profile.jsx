@@ -39,11 +39,11 @@ const Profile = () => {
           </FormControl>
           <FormControl >
             <FormLabel>Bank Account Number</FormLabel>
-            <Input placeholder='111111111111111'/>
+            <Input placeholder={student.bankAccount}/>
           </FormControl>
           <FormControl >
             <FormLabel>IFSC Code</FormLabel>
-            <Input placeholder='CYOJSFIUH1237'/>
+            <Input placeholder={student.ifsc}/>
           </FormControl>
         </Box>
       </Container>

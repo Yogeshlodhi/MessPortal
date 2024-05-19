@@ -56,7 +56,7 @@ function Dashboard() {
   const totalDays = leavesData && leavesData.reduce((acc, leave) => acc + 1, 0);
 
   return (
-    <Box padding={'2rem'} className='flex gap-8 flex-col'>
+    <Box className='flex gap-8 flex-col'>
 
       <Box className='flex gap-4' alignItems={'center'}>
         <TextSnippetIcon style={{ fontSize: '2rem' }} />

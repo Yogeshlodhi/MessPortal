@@ -9,7 +9,16 @@ const getAnnouncements = async (token) => {
         }
     }
     const response = await axios.get(`${API_URL}/announcements`, config);
-    // console.log(response)
+    return response.data;
+}
+
+const getMenu = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.get(`${API_URL}/getMenu`, config);
     return response.data;
 }
 
@@ -27,6 +36,7 @@ const postFeedback = async (token, feedbackData) => {
 const messService = {
     getAnnouncements,
     postFeedback,
+    getMenu
 }
 
 export default messService

@@ -4,6 +4,7 @@ import messService from './messService';
 const initialState = {
     announcements: [],
     feedback: [],
+    menu: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -17,6 +18,19 @@ export const getAnnouncements = createAsyncThunk(
         try {
             const token = thunkAPI.getState().auth.student.token;
             return await messService.getAnnouncements(token);
+        } catch (error) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+)
+
+export const getMenu = createAsyncThunk(
+    'mess/menu',
+    async (_, thunkAPI) => {
+        try {
+            const token = thunkAPI.getState().auth.student.token;
+            return await messService.getMenu(token);
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
@@ -67,6 +81,19 @@ const messSlice = createSlice({
                 state.feedback = action.payload
             })
             .addCase(postFeedback.rejected, (state, action) => {
+                state.isError = true,
+                state.isLoading = false,
+                state.message = action.payload
+            })
+            .addCase(getMenu.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getMenu.fulfilled, (state, action) => {
+                state.isLoading = false,
+                state.isSuccess = true,
+                state.menu = action.payload
+            })
+            .addCase(getMenu.rejected, (state, action) => {
                 state.isError = true,
                 state.isLoading = false,
                 state.message = action.payload

@@ -4,6 +4,7 @@ import { createToken, hashPassword } from "../Utils/createToken.js";
 import bcrypt from 'bcryptjs';
 import complaintModel from "../Models/complaintModel.js";
 import announcementModel from "../Models/announcementModel.js";
+import menuModel from '../Models/menuModel.js';
 
 const studentRegister = async (registrationData) => {
 
@@ -104,10 +105,45 @@ const getAnnouncementsService = async () => {
     }
 }
 
+const getMenuService = async () => {
+    try{
+        const response = await menuModel.find();
+        return response;
+    }catch(err){
+        throw {message: err.message}
+    }
+}
+
+const updateProfileService = async (userId, profileData) => {
+    try{
+        const updatedUser = await studentModel.findByIdAndUpdate(userId, profileData, { new: true });
+
+        if (!updatedUser) {
+            throw new Error('User not found');
+        }
+
+        return updatedUser;
+    }catch(err){
+
+    }
+}
+
+const getProfileService = async (userId) => {
+    try {
+        const user = await studentModel.findById(userId).select('-password'); 
+        return user;
+    } catch (err) {
+        throw err;
+    }
+};
+
 export {
     studentRegister,
     studentLogin,
     feedbackAndSuggestion,
     complaintService,
-    getAnnouncementsService
+    getAnnouncementsService,
+    getMenuService,
+    updateProfileService,
+    getProfileService
 }

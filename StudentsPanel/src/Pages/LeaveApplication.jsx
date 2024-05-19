@@ -77,7 +77,7 @@ function LeaveApplication() {
   }
 
   return (
-    <Box padding={'2rem'} className='flex gap-8 flex-col'>
+    <Box  className='flex gap-8 flex-col'>
       <Heading fontSize={'2rem'}>Apply For Leave</Heading>
       <List spacing={1}>
         <ListItem display={'flex'} alignItems={'center'}>

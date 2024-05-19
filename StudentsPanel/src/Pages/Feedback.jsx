@@ -63,7 +63,7 @@ const Feedback = () => {
   }
 
   return (
-    <Box padding={'2rem'} height={'100%'}>
+    <Box  height={'100%'}>
       <Flex align="flex-start" border={'2px solid black'} padding={'2rem'} height={'100%'}>
         <Box flex="1" border={'1px solid black'} padding={'1rem'} borderRadius={'1rem'} height={'100%'}>
           <VStack spacing={4} align="center">

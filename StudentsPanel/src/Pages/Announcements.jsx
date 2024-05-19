@@ -61,7 +61,7 @@ const Announcements = () => {
   const announcementList = announcements && announcements.data;
 
   return (
-    <Box padding={'2rem'}>
+    <Box>
       <TableContainer>
         <Table variant='striped' colorScheme='teal'>
           <Thead>

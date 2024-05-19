@@ -12,6 +12,7 @@ import Profile from './Pages/Profile';
 import Complaints from './Pages/Complaints';
 import Sidebar from './Components/Sidebar';
 import Header from './Components/Header';
+import Payments from './Pages/Payments'
 import { Box } from '@chakra-ui/react';
 
 const App = () => {
@@ -48,6 +49,7 @@ const AuthenticatedRoutes = () => (
       <Box
         overflowY={'scroll'}
         height={'90%'}
+        padding={'2rem'}
       >
         <Routes>
           <Route index element={<Dashboard />} />
@@ -58,6 +60,7 @@ const AuthenticatedRoutes = () => (
           <Route path="/announcements" element={<Announcements />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/complaints" element={<Complaints />} />
+          <Route path="/payments" element={<Payments />} />
         </Routes>
       </Box>
     </Box>
