@@ -52,7 +52,7 @@ const loginAdminService = async (loginData) => {
 
 const getAllStudentsList = async () => {
     try {
-        const students = await studentModel.find();
+        const students = await studentModel.find().select('-password');
         return students;
     } catch (error) {
         console.log(error);

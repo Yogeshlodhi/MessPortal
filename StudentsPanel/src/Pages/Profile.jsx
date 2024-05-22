@@ -22,6 +22,7 @@ const Profile = () => {
     ifsc: student.ifsc
   })
 
+  const [disable, setDisable] = useState(true);
   const {emailId, studentName, studentRoll, number, bankAccount, ifsc} = updateFormData;
 
   const getRandomColor = () => {
@@ -35,6 +36,7 @@ const Profile = () => {
   };
 
   const onChange = (e) => {
+    setDisable(false);
     setUpdateFormData((prev) => ({
       ...prev,
       [e.target.name] : e.target.value,
@@ -52,6 +54,7 @@ const Profile = () => {
       emailId
     }
     dispatch(updateStudent(updatedData));
+    setDisable(true);
     toast({
       title: 'Profile Updated Successfully',
       status: 'success',
@@ -121,13 +124,14 @@ const Profile = () => {
       </Container>
       <Button
         onClick={onUpdate}
-        width={'50%'}
+        width={'30%'}
         display={'inline-block'}
         alignSelf={'center'}
         background={'teal'}
         color={'white'}
         fontSize={'1.5rem'}
         _hover={{background:'teal.500'}}
+        isDisabled = {disable}
       >
         Update Profile
       </Button>
