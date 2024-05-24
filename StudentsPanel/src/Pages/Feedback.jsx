@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Icon, IconButton, Image, Input, Text, Textarea, VStack, useToast } from '@chakra-ui/react'
+import { Box, Button, Flex, FormControl, FormLabel, Heading, Icon, IconButton, Image, Input, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import TelegramIcon from '@mui/icons-material/Telegram';
@@ -7,6 +7,8 @@ import { postFeedback } from '../Features/Mess/messSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Feedback = () => {
+  const bgColor = useColorModeValue('brand.100', 'brand.900');
+  const textColor = useColorModeValue('gray.800', 'white');
 
   const dispatch = useDispatch();
   const toast = useToast();
@@ -62,8 +64,13 @@ const Feedback = () => {
     // console.log(feedback, feedbackDescription, suggestion);
   }
 
-  return (
-    <Box  height={'100%'}>
+    
+    return (
+      <Box  
+      height={'100%'}
+      bg={bgColor} 
+      color={textColor}
+    >
       <Flex align="flex-start" border={'2px solid black'} padding={'2rem'} height={'100%'}>
         <Box flex="1" border={'1px solid black'} padding={'1rem'} borderRadius={'1rem'} height={'100%'}>
           <VStack spacing={4} align="center">
@@ -79,7 +86,7 @@ const Feedback = () => {
                 </Button>
               ))}
             </VStack>
-            <FormControl w={'95%'} maxW='40rem' padding='4' color={'white'}>
+            <FormControl w={'95%'} maxW='40rem' padding='4' color={textColor}>
               <Textarea
                 placeholder='Write Something About Your Feedback.......'
                 minHeight={'10rem'}
@@ -88,11 +95,12 @@ const Feedback = () => {
                 onChange={onChange}
                 name='feedbackDescription'
                 value={feedbackDescription}
-                color={'black'}
+                // color={'black'}
+                color={textColor}
                 outlineColor={'teal'}
               />
             </FormControl>
-            <FormControl w={'95%'} maxW='40rem' padding='4' color={'white'}>
+            <FormControl w={'95%'} maxW='40rem' padding='4' color={textColor}>
               <Textarea
                 placeholder='Please Write Suggestions if any.....'
                 minHeight={'10rem'}
@@ -102,7 +110,7 @@ const Feedback = () => {
                 onChange={onChange}
                 name='suggestion'
                 value={suggestion}
-                color={'black'}
+                color={textColor}
               />
             </FormControl>
           </VStack>
@@ -157,6 +165,7 @@ const Feedback = () => {
             justifyContent="center"
             width="100%"
             mt="4rem"
+            // colorScheme={textColor}
             colorScheme="teal"
             variant="solid"
             gap="6"

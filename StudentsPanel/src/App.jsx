@@ -53,7 +53,7 @@ const AuthenticatedRoutes = () => (
       >
         <Routes>
           <Route index element={<Dashboard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/apply-leave" element={<LeaveApplication />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/menu" element={<Menu />} />

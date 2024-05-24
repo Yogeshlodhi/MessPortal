@@ -1,4 +1,4 @@
-import { Table, Thead, Tbody, Tr, Td, TableContainer, Box, Collapse, Heading, Text } from '@chakra-ui/react'
+import { Table, Thead, Tbody, Tr, Td, TableContainer, Box, Collapse, Heading, Text, useColorModeValue } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnnouncements, reset } from '../Features/Mess/messSlice';
@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import UtilFunctions from '../Utils/UtilFunctions';
 
 const Announcements = () => {
+  const bgColor = useColorModeValue('brand.100', 'brand.900');
+  const textColor = useColorModeValue('gray.800', 'white');
+  
   const rowData = [
     {
       id: 1,
@@ -60,9 +63,14 @@ const Announcements = () => {
 
   const announcementList = announcements && announcements.data;
 
+  
   return (
-    <Box>
-      <TableContainer>
+    <Box
+    >
+      <TableContainer
+        bg={bgColor}
+        color={textColor}
+      >
         <Table variant='striped' colorScheme='teal'>
           <Thead>
             <Tr textAlign={'center'} justifyContent={'center'}>

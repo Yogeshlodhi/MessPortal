@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Heading, Button } from '@chakra-ui/react';
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Heading, Button, useColorModeValue } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import {useDispatch, useSelector} from 'react-redux'
@@ -7,6 +7,8 @@ import { getMenu } from '../Features/Mess/messSlice';
 import Spinner from '../Components/Spinner';
 
 const Menu = () => {
+  const bgColor = useColorModeValue('brand.100', 'brand.900');
+  const textColor = useColorModeValue('gray.800', 'white');
   const generatePDF = () => {
     const input = document.getElementById('table-content');
     html2canvas(input).then((canvas) => {
@@ -46,10 +48,31 @@ const Menu = () => {
     }
   };
 
+  
   return (
     <Box>
-      <Box maxW="70rem" mx="auto" p="5" bg="white" borderRadius="md" boxShadow="md" id='table-content'>
-        <Heading textAlign={'center'} paddingTop={'0.5rem'} paddingBottom={'1.5rem'} background={'teal'} color={'white'}>Weekly Mess Schedule</Heading>
+      <Box 
+        maxW="70rem" 
+        mx="auto" 
+        p="5" 
+        // bg="white" 
+        bg={bgColor}
+        color={textColor}
+        borderRadius="md" 
+        boxShadow="md" 
+        id='table-content'
+      >
+        <Heading 
+          textAlign={'center'} 
+          paddingTop={'0.5rem'} 
+          paddingBottom={'1.5rem'} 
+          // bg={bgColor}
+          // color={textColor}
+          background={'teal'} 
+          color={'white'}
+        >
+          Weekly Mess Schedule
+        </Heading>
         <Table variant="striped" size="md">
           <Thead height={'4rem'}>
             <Tr>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, FormControl, FormLabel, Heading, Input, List, ListIcon, ListItem, Textarea, useToast } from '@chakra-ui/react'
+import { Box, Button, Container, FormControl, FormLabel, Heading, Input, List, ListIcon, ListItem, Textarea, useColorModeValue, useToast } from '@chakra-ui/react'
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { applyLeave, reset } from '../Features/Leave/leaveSlice';
 
 function LeaveApplication() {
 
+  const bgColor = useColorModeValue('brand.100', 'brand.900');
+  const textColor = useColorModeValue('gray.800', 'white');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast()
@@ -26,12 +28,12 @@ function LeaveApplication() {
   // useEffect(() => {
   //   if (isError) {
   //     toast({
-  //       title: message,
-  //       duration: 3000,
-  //       status: 'error',
-  //       isClosable: true
-  //     })
-  //   }
+    //       title: message,
+    //       duration: 3000,
+    //       status: 'error',
+    //       isClosable: true
+    //     })
+    //   }
   // }, [navigate, dispatch, leaves])
 
   const onFormChange = (e, field) => {
@@ -76,8 +78,13 @@ function LeaveApplication() {
     navigate('/')
   }
 
+
   return (
-    <Box  className='flex gap-8 flex-col'>
+    <Box
+      className='flex gap-8 flex-col'
+      bg={bgColor}
+      color={textColor}
+    >
       <Heading fontSize={'2rem'}>Apply For Leave</Heading>
       <List spacing={1}>
         <ListItem display={'flex'} alignItems={'center'}>
@@ -93,30 +100,43 @@ function LeaveApplication() {
           Kindly upload the screenshot of the leave after the application
         </ListItem>
       </List>
-      <Container padding={'2rem'} maxW='70rem' bg='#2C3E50' centerContent borderRadius={'1rem'} minHeight={'30rem'} maxH={'35rem'} height={'auto'}>
+      <Container 
+        padding={'2rem'} 
+        maxW='70rem' 
+        // bg='#2C3E50' 
+        bg={bgColor}
+        color={textColor}
+        centerContent 
+        borderRadius={'1rem'} 
+        minHeight={'30rem'} 
+        maxH={'35rem'} 
+        height={'auto'}
+      >
         <Box padding='4' w={'90%'} maxW='100%' className='grid grid-flow-col gap-5'>
           <FormControl>
-            <FormLabel color={'white'}>From</FormLabel>
+            <FormLabel color={textColor}>From</FormLabel>
             <Input
               type='date'
-              color={'white'}
+              // color={'white'}
+              color={textColor}
               value={startDate}
               name='startDate'
               onChange={(e) => onFormChange(e, "startDate")}
-            />
+              />
           </FormControl>
           <FormControl>
-            <FormLabel color={'white'}>To</FormLabel>
+            <FormLabel color={textColor}>To</FormLabel>
             <Input
               type='date'
-              color={'white'}
+              // color={'white'}
+              color={textColor}
               value={endDate}
               name='endDate'
               onChange={(e) => onFormChange(e, "endDate")}
             />
           </FormControl>
         </Box>
-        <FormControl w={'90%'} maxW='100%' padding='4' color={'white'}>
+        <FormControl w={'90%'} maxW='100%' padding='4' color={textColor}>
           <Textarea
             placeholder='Provide the reason for your leave'
             minHeight={'15rem'}
@@ -131,8 +151,10 @@ function LeaveApplication() {
           display={'inline-block'}
           width={'50%'}
           marginTop={'1rem'}
-          color={'#2C3E50'}
+          // color={'#2C3E50'}
+          color={textColor}
           onClick={onApply}
+          bg={bgColor}
         >
           Apply
         </Button>

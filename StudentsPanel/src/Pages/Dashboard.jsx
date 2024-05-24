@@ -10,7 +10,8 @@ import {
   Td,
   TableContainer,
   Box,
-  Heading
+  Heading,
+  useColorModeValue
 } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../Components/Spinner';
@@ -19,6 +20,8 @@ import { useNavigate } from 'react-router-dom';
 import UtilFunctions from '../Utils/UtilFunctions';
 
 function Dashboard() {
+  const bgColor = useColorModeValue('brand.100', 'brand.900');
+  const textColor = useColorModeValue('gray.800', 'white');
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -55,8 +58,13 @@ function Dashboard() {
   const totalAmount = leavesData && leavesData.reduce((acc, leave) => acc + 1500, 0);
   const totalDays = leavesData && leavesData.reduce((acc, leave) => acc + 1, 0);
 
+  
   return (
-    <Box className='flex gap-8 flex-col'>
+    <Box 
+      className='flex gap-8 flex-col'
+      // bg={bgColor} 
+      // color={textColor}
+    >
 
       <Box className='flex gap-4' alignItems={'center'}>
         <TextSnippetIcon style={{ fontSize: '2rem' }} />
