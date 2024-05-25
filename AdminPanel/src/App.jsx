@@ -1,14 +1,14 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Sidebar from './Components/Sidebar';
-// import Options1 from './Options1';
 import Login from './Authentication/Login';
 import Register from './Authentication/Register';
 
 
 function App() {
-  const isAuthenticated = true;
+  const isAuthenticated = useSelector((state) => state.auth);
 
   return (
     <Router>

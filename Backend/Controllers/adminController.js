@@ -39,13 +39,13 @@ const loginAdmin = (req, res) => {
         loginAdminService(loginData)
             .then((data) => {
                 return res
-                    .status(statusCode.found)
+                    .status(statusCode.ok)
                     .send({ message: "Admin Logged In", data: data })
             })
             .catch((err) => {
                 console.log(err);
                 return res
-                    .status(statusCode.notFound)
+                    .status(statusCode.badRequest)
                     .send({ message: err.message })
             })
     }

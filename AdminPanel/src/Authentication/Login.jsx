@@ -1,51 +1,51 @@
 import React, { useEffect, useState } from 'react'
-import { useLoginMutation } from '../Slices/adminsApiSlice';
-import { setCredentials } from '../Slices/authSlice';
 import { Box, Button, Container, FormControl, FormLabel, Heading, Input, Text, useToast } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { login, reset } from '../Features/Auth/authSlice';
 
 function Login() {
     const navigate = useNavigate();
-    const [emailId, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [login, { isLoading, error }] = useLoginMutation();
+    const dispatch = useDispatch();
     const toast = useToast();
 
-    const { adminInfo } = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
+    const [formdata, setFormData] = useState({
+        emailId: '',
+        password: ''
+    })
+
+    const {emailId, password} = formdata;
+    const {admin, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if (adminInfo) navigate('/');
-    }, [navigate, adminInfo])
+        if(isError){
+            toast({
+                title: message,
+                duration: 3000,
+                status: 'error'
+            })
+        }
+        if(isSuccess){
+            navigate('/')
+        }
+
+        dispatch(reset());
+    },[admin, navigate, isError, message, isSuccess, dispatch])
+
+    const onChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }))
+    }
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        if (!emailId || !password) {
-            return toast(
-                {
-                    title: 'Required Fields Must Be Filled',
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                }
-            )
+        const loginData = {
+            emailId,
+            password
         }
-        try {
-            const res = await login({ emailId, password }).unwrap();
-            dispatch(setCredentials({ ...res }));
-            navigate('/');
-        } catch (err) {
-            toast(
-                {
-                    title: err.data?.message,
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                }
-            )
-            console.log(err.data?.message || err.error);
-        }
+        dispatch(login(loginData));
     }
 
     return (
@@ -94,7 +94,8 @@ function Login() {
                                 borderRadius={'2rem'}
                                 placeholder='yogesh_2101cb61@iitp.ac.in'
                                 value={emailId}
-                                onChange={(e) => setEmail(e.target.value)}
+                                name='emailId'
+                                onChange={onChange}
                             />
                         </FormControl>
                         <FormControl mt={6} isRequired>
@@ -104,7 +105,8 @@ function Login() {
                                 borderRadius={'2rem'}
                                 placeholder='************'
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                name='password'
+                                onChange={onChange}
                             />
                         </FormControl>
                         <Box textAlign={'left'} mt={2}>
