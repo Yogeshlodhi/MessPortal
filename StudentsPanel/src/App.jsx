@@ -35,11 +35,11 @@ const AuthenticatedRoutes = () => (
     maxHeight={'90vh'}
     height={'80vh'}
   >
-    <Box flex={1}>
+    <Box flex={1.5}>
       <Sidebar />
     </Box>
     <Box
-      flex={7}
+      flex={6.5}
       display={'flex'}
       flexDirection={'column'}
       height={'100vh'}

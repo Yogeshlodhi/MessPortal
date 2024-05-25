@@ -11,8 +11,9 @@ import { Link, NavLink } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
 function Sidebar() {
-  const bgColor = useColorModeValue('brand.100', 'brand.900');
-  const textColor = useColorModeValue('gray.800', 'white');
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  const textColor = useColorModeValue('lightMode.text', 'darkMode.text');
+  const headingColor = useColorModeValue('lightMode.heading', 'darkMode.heading');
 
   const SidebarOptions = [
     {
@@ -61,18 +62,22 @@ function Sidebar() {
 
   return (
     <Box
-      bg={bgColor}
-      color={textColor}
-      // backgroundColor='#2C3E50'
-      // color='#FFFFFF'
+      // bg={bgColor}
+      // color={textColor}
+      backgroundColor='#2C3E50'
+      color='#FFFFFF'
       height='100vh'
       paddingRight={'1rem'}
+      display={'flex'}
+      flexDir={'column'}
+      justifyContent={'space-between'}
     >
       <Box>
         <Heading
           minHeight={'3.5rem'}
           padding={'1rem'}
           textAlign={'center'}
+          color={headingColor}
         >
           Mess Portal
         </Heading>
@@ -92,14 +97,17 @@ function Sidebar() {
                   marginBottom='15px'
                   padding='0.5rem'
                   key={item.id}
+                  borderRadius={'1rem'}
+                  // className='active'
                 >
-                  {item.icon}
-                  <Link
+                  <NavLink
                     to={item.path}
                     style={{ textDecoration: 'none', fontSize: '1.5rem' }}
+                    activeclassname="active"
                   >
+                    {item.icon}
                     {item.name}
-                  </Link>
+                  </NavLink>
                 </Box>
               )
             }
@@ -107,7 +115,7 @@ function Sidebar() {
           }
         </Box>
       </Box>
-      <Box>
+      <Box alignSelf={'flex-end'} paddingBottom={'2rem'}>
         <ThemeToggle />
       </Box>
     </Box>
@@ -115,3 +123,4 @@ function Sidebar() {
 }
 
 export default Sidebar
+

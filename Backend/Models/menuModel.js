@@ -149,6 +149,11 @@ const menuSchema = new Schema({
     },
     amountOfOneMeal: {
         type: Number
+    },
+    monthOfMenu: {
+        type: String,
+        enum: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        required: true
     }
 },
 {

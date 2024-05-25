@@ -11,9 +11,6 @@ const ThemeToggle = () => {
   );
 
   return (
-    // <Button onClick={toggleColorMode}>
-    //   Toggle {colorMode === "light" ? "Dark" : "Light"}
-    // </Button>
     <IconButton
       aria-label="Toggle theme"
       icon={icon}

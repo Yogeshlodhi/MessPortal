@@ -13,12 +13,34 @@ const colors = {
       800: '#2d3975',
       900: '#1e2540',
     },
+    darkMode: {
+      bg: '#2D3250',
+      text: '#E0E0E0',
+      heading: '#FFFFFF',
+      btnBg: '#1F6FEB',
+      btnTxt: '#121212',
+      tableBg: '#1E1E1E',
+      tableText: '#E0E0E0',
+      tableHeadingBg: '#2C2C2C',
+      tableHeadingTxt: '#FFFFFF'
+    },
+    lightMode: {
+      bg: '#607D8B',
+      text: '#333333',
+      heading: '#111111',
+      btnBg: '#007BFF',
+      btnTxt: '#FFFFFF',
+      tableBg: '#F8F9FA',
+      tableText: '#333333',
+      tableHeadingBg: '#E9ECEF',
+      tableHeadingTxt: '#111111'
+    }
   };
 
   const theme = extendTheme({
     config: {
       initialColorMode: 'light',
-      useSystemColorMode: false,
+      useSystemColorMode: true,
     },
     colors,
     styles: {

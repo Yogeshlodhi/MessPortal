@@ -19,6 +19,11 @@ const feedBackSuggestion = new Schema(
         },
         studentRoll: {
             type: String
+        },
+        mealOfDay: {
+            type: String,
+            required: true,
+            enum: ["Breakfast", "Lunch", "Dinner"],
         }
     },
     {

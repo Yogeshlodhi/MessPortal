@@ -7,8 +7,12 @@ import { applyLeave, reset } from '../Features/Leave/leaveSlice';
 
 function LeaveApplication() {
 
-  const bgColor = useColorModeValue('brand.100', 'brand.900');
-  const textColor = useColorModeValue('gray.800', 'white');
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  const textColor = useColorModeValue('lightMode.text', 'darkMode.text');
+  const btnColor = useColorModeValue('lightMode.btnTxt', 'darkMode.btnTxt');
+  const btnBg = useColorModeValue('lightMode.btnBg', 'darkMode.btnBg');
+
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast()
@@ -151,10 +155,10 @@ function LeaveApplication() {
           display={'inline-block'}
           width={'50%'}
           marginTop={'1rem'}
-          // color={'#2C3E50'}
-          color={textColor}
+          color={'#2C3E50'}
+          // color={btnColor}
           onClick={onApply}
-          bg={bgColor}
+          // bg={btnBg}
         >
           Apply
         </Button>
