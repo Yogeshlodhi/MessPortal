@@ -24,6 +24,9 @@ export const login = createAsyncThunk(
     }
 )
 
+// export const logout = createAsyncThunk(
+//     'auth/logout'
+// )
 
 export const authSlice = createSlice({
     name: 'auth',

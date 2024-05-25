@@ -58,7 +58,6 @@ const leaveSlice = createSlice({
                 state.isLoading = false
             })
             .addCase(getLeaves.pending, (state) => {
-                
                 state.isLoading = true
             })
             .addCase(getLeaves.fulfilled, (state, action) => {

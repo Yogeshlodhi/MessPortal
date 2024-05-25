@@ -60,12 +60,12 @@ const getAllStudents = (req, res) => {
     getAllStudentsList()
         .then((data) => {
             return res
-                .status(statusCode.found)
+                .status(statusCode.ok)
                 .send({ message: 'List Received', StudentsList: data })
         })
         .catch((err) => {
             return res
-                .status(statusCode.notFound)
+                .status(statusCode.badRequest)
                 .send({ message: err.message })
         })
 }
@@ -74,7 +74,7 @@ const getAllLeaves = (req, res) => {
     getAllLeavesList()
         .then((data) => {
             return res
-                .status(statusCode.found)
+                .status(statusCode.ok)
                 .send({ message: 'Leaves List Received', LeavesList: data })
         })
         .catch((err) => {
@@ -138,7 +138,7 @@ const addAnnouncement = (req, res) => {
 }
 
 const getStudentByEmail = (req, res) => {
-    const {emailId} = req.body;
+    const { emailId } = req.query;
     getStudentByEmailService(emailId)
         .then((data) => {
             if (!data) {

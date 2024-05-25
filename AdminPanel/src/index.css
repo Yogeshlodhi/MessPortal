@@ -7,3 +7,19 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.link:hover{
+    color: teal;
+}
+.active{
+    /* background-color: slateblue; */
+    background-color: teal;
+    color: white;
+}
+.active:hover{
+    background-color: teal;
+    color: white;
+}
+/* .h{
+    color: slategray;
+} */

@@ -95,14 +95,20 @@ function Sidebar() {
                   display='flex'
                   alignItems='center'
                   marginBottom='15px'
-                  padding='0.5rem'
+                  // padding='0.5rem'
                   key={item.id}
-                  borderRadius={'1rem'}
-                  // className='active'
+                  // borderRadius={'1rem'}
+                // className='active'
                 >
                   <NavLink
                     to={item.path}
-                    style={{ textDecoration: 'none', fontSize: '1.5rem' }}
+                    style={{
+                      textDecoration: 'none',
+                      fontSize: '1.5rem',
+                      width: '100%',
+                      padding: '0.5rem',
+                      borderRadius: '0.5rem'
+                    }}
                     activeclassname="active"
                   >
                     {item.icon}

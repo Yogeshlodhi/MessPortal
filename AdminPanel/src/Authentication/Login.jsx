@@ -3,6 +3,7 @@ import { Box, Button, Container, FormControl, FormLabel, Heading, Input, Text, u
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, reset } from '../Features/Auth/authSlice';
+import Spinner from '../Components/Spinner';
 
 function Login() {
     const navigate = useNavigate();
@@ -46,6 +47,10 @@ function Login() {
             password
         }
         dispatch(login(loginData));
+    }
+
+    if(isLoading){
+        return <Spinner message={'Please Wait While We Log You In...'}/>
     }
 
     return (
