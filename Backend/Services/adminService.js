@@ -133,6 +133,25 @@ const announcementService = async (announcementData) => {
     }
 }
 
+const getAnnounceService = async () => {
+    try{
+        const announcements = await announcementModel.find();
+        return announcements;
+    }catch(err){    
+        console.log(err);
+        throw {message: err.message}
+    }
+}
+
+const deleteAnnounceService = async (id) => {
+    try {
+        return await announcementModel.deleteOne({ _id: id });
+    } catch (err) {
+        console.error(err);
+        throw new Error(err.message);
+    }
+};
+
 const getStudentByEmailService = async (webmail) => {
     try {
         const student = await studentModel.findOne({ emailId: webmail });
@@ -166,4 +185,6 @@ export {
     announcementService,
     getStudentByEmailService,
     getFeedbackService,
+    getAnnounceService,
+    deleteAnnounceService
 }

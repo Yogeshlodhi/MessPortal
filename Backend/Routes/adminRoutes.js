@@ -8,7 +8,9 @@ import {
     addAnnouncement,
     updateMenu,
     getStudentByEmail,
-    getFeedbacks
+    getFeedbacks,
+    getAnnouncements,
+    deleteAnnouncement
 } from "../Controllers/adminController.js";
 
 const router = Router();
@@ -25,6 +27,13 @@ router.put('/menu/:month', updateMenu)
 
 router.get('/feedback_list', getFeedbacks);
 
-router.post('/announcement', addAnnouncement);
+router
+    .route('/announcement')
+        .post(addAnnouncement)
+        .get(getAnnouncements)
+
+router.delete('/announcement/:id', deleteAnnouncement);
+        // .delete('/:id',deleteAnnouncement);
+
 
 export default router;

@@ -45,6 +45,7 @@ const Menu = () => {
       thursday : menuData.thursday,
       friday : menuData.friday,
       saturday : menuData.saturday,
+      sunday : menuData.sunday,
     }
   };
 

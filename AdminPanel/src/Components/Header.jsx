@@ -34,7 +34,6 @@ function Header() {
             background={'white'}
             boxShadow={'4px 2px 5px 0px rgba(0,0,0,0.35)'}
             pr={4}
-            // width={'100%'}
         >
             <Popover placement='top-start'>
                 <PopoverTrigger>

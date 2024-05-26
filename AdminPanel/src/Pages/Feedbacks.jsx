@@ -70,15 +70,16 @@ const Feedbacks = () => {
               borderWidth="1px"
               borderRadius="lg"
               overflow="hidden"
+              width="80%"
               p={4}
             >
               <Button
                 onClick={() => toggleFeedback(feedback._id)}
-                width="80%"
                 background={'teal'}
                 color={'white'}
                 display={'flex'}
                 alignItems={'center'}
+                width={'100%'}
                 justifyContent={'space-between'}
                 _hover={{background: 'teal'}}
               >

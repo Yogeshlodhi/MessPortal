@@ -4,6 +4,7 @@ import studentReducer from '../Features/Students/studentSlice'
 import studentProfileReducer from '../Features/Students/studentProfileSlice'
 import leaveReducer from '../Features/Leaves/leaveSlice';
 import feedBackSlice from '../Features/Feedback/feedBackSlice';
+import announceSlice from '../Features/Announcements/announceSlice';
 
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
         studentProfile: studentProfileReducer,
         leaves: leaveReducer,
         feedbacks: feedBackSlice,
+        announcements: announceSlice,
     },
     devTools: process.env.NODE_ENV !== 'production',
 })

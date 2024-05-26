@@ -35,22 +35,18 @@ const AuthenticatedRoutes = () => (
     maxHeight={'90vh'}
     height={'80vh'}
   >
-    {/* <Box flex={2}> */}
-    <Box flex={1.5}>
+    <Box flex={2}>
       <Sidebar />
     </Box>
     <Box
-      // flex={8}
-      flex={6.5}
+      flex={7}
       display={'flex'}
       flexDirection={'column'}
       height={'100vh'}
-      // overflowX={'hidden'}
+      overflow={'scroll'}
     >
       <Header />
       <Box 
-        // overflowY={'scroll'}
-        overflowy={'scroll'}
         height={'90%'}
         padding={'1rem'} 
         paddingTop={'2rem'}

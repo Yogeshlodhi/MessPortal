@@ -1,7 +1,9 @@
 import {
     announcementService,
+    deleteAnnounceService,
     getAllLeavesList, 
     getAllStudentsList, 
+    getAnnounceService, 
     getFeedbackService, 
     getStudentByEmailService, 
     loginAdminService, 
@@ -137,6 +139,20 @@ const addAnnouncement = (req, res) => {
         })
 }
 
+const getAnnouncements = (req, res) => {
+    getAnnounceService()
+        .then((data) => {
+            return res
+                    .status(statusCode.ok)
+                    .send({message: 'Announcements List Found', data: data});
+        })
+        .catch((err) => {
+            return res
+                    .status(statusCode.badRequest)
+                    .send({message: err.message})
+        })
+}
+
 const getStudentByEmail = (req, res) => {
     const { emailId } = req.query;
     getStudentByEmailService(emailId)
@@ -167,6 +183,22 @@ const getFeedbacks = (req, res) => {
         })
 }
 
+const deleteAnnouncement = (req, res) => {
+    const { id } = req.params;
+    deleteAnnounceService(id)
+        .then((data) => {
+            return res
+                .status(statusCode.ok)
+                .json({ message: 'Announcement Deleted', data: data });
+        })
+        .catch((err) => {
+            console.error(err);
+            return res
+                .status(statusCode.badRequest)
+                .json({ message: err.message });
+        });
+};
+
 export {
     registerAdmin,
     loginAdmin,
@@ -176,5 +208,7 @@ export {
     updateMenu,
     addAnnouncement,
     getStudentByEmail,
-    getFeedbacks
+    getFeedbacks,
+    getAnnouncements,
+    deleteAnnouncement
 }
