@@ -4,6 +4,7 @@ import { statusCode } from '../Utils/http.js'
 const applyLeave = (req, res) => {
     const leaveData = req.body;
     const roll = req.user
+    // const roll = req.user
     console.log(roll)
     if (
         !leaveData.startDate ||
@@ -30,6 +31,7 @@ const applyLeave = (req, res) => {
 
 const getAllLeaves = (req, res) => {
     const student = req.user;
+    // console.log(req.user)
     getAllLeavesService(student)
         .then((data) => {
             return res

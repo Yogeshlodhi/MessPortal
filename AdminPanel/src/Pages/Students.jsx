@@ -39,9 +39,9 @@ const Students = () => {
       onOpen();
     }
 
-    return () => {
-      dispatch(reset())
-    }
+    // return () => {
+    //   dispatch(reset())
+    // }
 
   }, [student, onOpen]);
 
@@ -121,7 +121,6 @@ const Students = () => {
             <ModalBody display={'flex'} gap={'1rem'}>
               <Box>
                 <Avatar 
-                  // size="xl" 
                   style={{width: '10rem', height: '10rem'}}
                   name={selectedStudent.studentName} 
                   src={profile} 
@@ -130,15 +129,15 @@ const Students = () => {
               </Box>
               <VStack alignItems={'flex-start'} >
                 <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-                  <Heading fontSize={'medium'}>Student's Roll No. : </Heading>
+                  <Heading fontSize={'medium'}>Roll No. : </Heading>
                   <Text>{selectedStudent.studentRoll}</Text>
                 </Box>
                 <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-                  <Heading fontSize={'medium'}>Student's Name : </Heading>
+                  <Heading fontSize={'medium'}>Name : </Heading>
                   <Text>{selectedStudent.studentName}</Text>
                 </Box>
                 <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-                  <Heading fontSize={'medium'}>Student Webmail : </Heading>
+                  <Heading fontSize={'medium'}>Webmail : </Heading>
                   <Text>{selectedStudent.emailId}</Text>
                 </Box>
                 <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>

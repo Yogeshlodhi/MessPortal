@@ -17,7 +17,6 @@ import Students from './Pages/Students';
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth);
-  // console.log(isAuthenticated)
 
   return (
     <Router>
@@ -32,16 +31,30 @@ function App() {
 
 const AuthenticatedRoutes = () => (
   <Box
+    display={'flex'}
     maxHeight={'90vh'}
     height={'80vh'}
-    display={'flex'}
   >
-    <Box flex={2}>
+    {/* <Box flex={2}> */}
+    <Box flex={1.5}>
       <Sidebar />
     </Box>
-    <Box flex={8}>
+    <Box
+      // flex={8}
+      flex={6.5}
+      display={'flex'}
+      flexDirection={'column'}
+      height={'100vh'}
+      // overflowX={'hidden'}
+    >
       <Header />
-      <Box padding={'1rem'} paddingTop={'2rem'}>
+      <Box 
+        // overflowY={'scroll'}
+        overflowy={'scroll'}
+        height={'90%'}
+        padding={'1rem'} 
+        paddingTop={'2rem'}
+      >
         <Routes>
           <Route index element={<Dashboard />} />
           <Route path='/' element={<Dashboard />} />

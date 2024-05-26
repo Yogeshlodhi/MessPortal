@@ -30,7 +30,7 @@ function Login() {
             navigate('/')
         }
 
-        dispatch(reset());
+        // dispatch(reset());
     },[admin, navigate, isError, message, isSuccess, dispatch])
 
     const onChange = (e) => {

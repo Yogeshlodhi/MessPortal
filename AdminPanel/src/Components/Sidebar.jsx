@@ -69,7 +69,7 @@ function Sidebar() {
             >
                 Admin Panel
             </Heading>
-            <Divider/>
+            <Divider />
             {
                 SidebarOptions.map((item) => {
                     return (
@@ -84,9 +84,9 @@ function Sidebar() {
                         >
                             <NavLink
                                 to={item.path}
-                                style={{ 
-                                    textDecoration: 'none', 
-                                    fontSize: '1.5rem', 
+                                style={{
+                                    textDecoration: 'none',
+                                    fontSize: '1.5rem',
                                     width: '100%',
                                     padding: '0.5rem',
                                     borderRadius: '0.5rem'

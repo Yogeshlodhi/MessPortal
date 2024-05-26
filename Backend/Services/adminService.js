@@ -72,11 +72,13 @@ const getAllLeavesList = async () => {
         const leaves = await LeaveModel.find().populate({
             path: 'studentRoll',
             model: studentModel,
-            select: 'studentRoll',
+            select: 'studentRoll studentName',
         });
+        // console.log(leaves)
         const updatedLeaves = leaves.map(leave => ({
             _id: leave._id,
             studentRoll: leave.studentRoll ? leave.studentRoll.studentRoll : 'Student Does Not Exist Anymore',
+            studentName: leave.studentRoll ? leave.studentRoll.studentName : 'Student Does Not Exist Anymore',
             startDate: leave.startDate,
             endDate: leave.endDate,
             reason: leave.reason,

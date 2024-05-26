@@ -1,21 +1,19 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import studentService from './studentService';
+import feedBackService from './feedBackService';
 
 const initialState = {
-    studentsList: [],
+    feedbacks : [],
     isLoading: false,
     isSuccess: false,
     isError: false,
     message: ''
 }
 
-export const getStudentsList = createAsyncThunk(
-    'students/getAll',
+export const getAllFeedbacks = createAsyncThunk(
+    'feedback/getAll',
     async (_, thunkAPI) => {
         try{
-            const token = thunkAPI.getState().auth.admin;
-            // console.log(token);
-            return await studentService.getStudList();
+            return await feedBackService.getAllFeedback();
         }catch(error){
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message); 
@@ -23,24 +21,23 @@ export const getStudentsList = createAsyncThunk(
     }
 )
 
-const studentSlice = createSlice({
-    name: 'students',
+const feedBackSlice = createSlice({
+    name: 'feedback',
     initialState,
-    reducers: {
-        reset: (state) => initialState
+    reducers:{
+        reset : (state) => initialState
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getStudentsList.pending, (state, action) => {
+            .addCase(getAllFeedbacks.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(getStudentsList.fulfilled, (state, action) => {
+            .addCase(getAllFeedbacks.fulfilled, (state, action) => {
                 state.isLoading = false,
                 state.isSuccess = true,
-                state.studentsList = action.payload.StudentsList,
-                state.message = action.payload.message
+                state.feedbacks = action.payload
             })
-            .addCase(getStudentsList.rejected, (state, action) => {
+            .addCase(getAllFeedbacks.rejected, (state, action) => {
                 state.isLoading = false,
                 state.isError = true,
                 state.message = action.payload
@@ -48,5 +45,5 @@ const studentSlice = createSlice({
     }
 })
 
-export const {reset} = studentSlice.actions
-export default studentSlice.reducer
+export const {reset} = feedBackSlice.actions;
+export default feedBackSlice.reducer;

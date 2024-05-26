@@ -11,6 +11,7 @@ const applyLeaveService = async (leaveData, roll) => {
 
 const getAllLeavesService = async (studentData) => {
     try {
+        console.log(studentData)
         const list = await LeaveModel.find({ studentRoll: studentData._id })
         return list;
     } catch (error) {
