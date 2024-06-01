@@ -39,10 +39,6 @@ const Students = () => {
       onOpen();
     }
 
-    // return () => {
-    //   dispatch(reset())
-    // }
-
   }, [student, onOpen]);
 
   const handleViewProfile = async (emailId) => {
@@ -62,7 +58,7 @@ const Students = () => {
     <VStack width={'100%'} gap={'2rem'}>
       <Box width={'90%'}>
         <Input
-          placeholder="Search students Here"
+          placeholder="Search Student With Name / RollNo / EmailId"
           onChange={(e) => setSearch(e.target.value)}
         />
       </Box>
@@ -85,7 +81,8 @@ const Students = () => {
                 return searchLower === ''
                   ? true
                   : student.studentName.toLowerCase().includes(searchLower) ||
-                  student.studentRoll.toLowerCase().includes(searchLower);
+                  student.studentRoll.toLowerCase().includes(searchLower) ||
+                  student.emailId.toLowerCase().includes(searchLower);
               })
               .map((student, index) => (
                 <Tr key={student._id}>

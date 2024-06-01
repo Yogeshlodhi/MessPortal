@@ -10,7 +10,8 @@ import {
     getStudentByEmail,
     getFeedbacks,
     getAnnouncements,
-    deleteAnnouncement
+    deleteAnnouncement,
+    getMenu
 } from "../Controllers/adminController.js";
 
 const router = Router();
@@ -26,6 +27,7 @@ router.post('/menu_upload', uploadMenu)
 router.put('/menu/:month', updateMenu)
 
 router.get('/feedback_list', getFeedbacks);
+router.get('/getMenu', getMenu)
 
 router
     .route('/announcement')

@@ -5,6 +5,7 @@ import {
     getAllStudentsList, 
     getAnnounceService, 
     getFeedbackService, 
+    getMenuService, 
     getStudentByEmailService, 
     loginAdminService, 
     registerAdminService, 
@@ -199,6 +200,20 @@ const deleteAnnouncement = (req, res) => {
         });
 };
 
+const getMenu = (req, res) => {
+    getMenuService()
+        .then((data) => {
+            return res
+                .status(statusCode.ok)
+                .send({ message: 'Menu Details Received', data: data })
+        })
+        .catch((err) => {
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
+        })
+}
+
 export {
     registerAdmin,
     loginAdmin,
@@ -210,5 +225,6 @@ export {
     getStudentByEmail,
     getFeedbacks,
     getAnnouncements,
-    deleteAnnouncement
+    deleteAnnouncement,
+    getMenu
 }

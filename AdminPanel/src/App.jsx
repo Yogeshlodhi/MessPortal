@@ -13,6 +13,7 @@ import Feedbacks from './Pages/Feedbacks';
 import Menu from './Pages/Menu';
 import MessLeaves from './Pages/MessLeaves';
 import Students from './Pages/Students';
+import Profile from './Pages/Profile';
 
 
 function App() {
@@ -60,6 +61,7 @@ const AuthenticatedRoutes = () => (
           <Route path='/menu' element={<Menu />} />
           <Route path='/leaves' element={<MessLeaves />} />
           <Route path='/students' element={<Students />} />
+          {/* <Route path='/profile' element={<Profile/>}/> */}
         </Routes>
       </Box>
     </Box>

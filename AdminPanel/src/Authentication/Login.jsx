@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, FormControl, FormLabel, Heading, Input, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Text, useToast } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, reset } from '../Features/Auth/authSlice';
@@ -10,28 +10,31 @@ function Login() {
     const dispatch = useDispatch();
     const toast = useToast();
 
+    const [show, setShow] = useState(false)
+    const handleClick = () => setShow(!show)
+
     const [formdata, setFormData] = useState({
         emailId: '',
         password: ''
     })
 
-    const {emailId, password} = formdata;
-    const {admin, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+    const { emailId, password } = formdata;
+    const { admin, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if(isError){
+        if (isError) {
             toast({
                 title: message,
                 duration: 3000,
                 status: 'error'
             })
         }
-        if(isSuccess){
+        if (isSuccess) {
             navigate('/')
         }
 
         // dispatch(reset());
-    },[admin, navigate, isError, message, isSuccess, dispatch])
+    }, [admin, navigate, isError, message, isSuccess, dispatch])
 
     const onChange = (e) => {
         setFormData((prev) => ({
@@ -49,8 +52,8 @@ function Login() {
         dispatch(login(loginData));
     }
 
-    if(isLoading){
-        return <Spinner message={'Please Wait While We Log You In...'}/>
+    if (isLoading) {
+        return <Spinner message={'Please Wait While We Log You In...'} />
     }
 
     return (
@@ -64,7 +67,7 @@ function Login() {
                 padding={'0rem 2rem'}
             >
                 <Heading className="logo">Mess</Heading>
-                <Box
+                {/* <Box
                     className="register-message"
                     display={'flex'}
                     alignItems={'center'}
@@ -75,7 +78,7 @@ function Login() {
                     <Box color='#25659F'>
                         <Link to='/register'>Register Now</Link>
                     </Box>
-                </Box>
+                </Box> */}
             </Box>
             <Box
                 className="login-container"
@@ -105,14 +108,23 @@ function Login() {
                         </FormControl>
                         <FormControl mt={6} isRequired>
                             <FormLabel>Password</FormLabel>
-                            <Input
-                                type='password'
-                                borderRadius={'2rem'}
-                                placeholder='************'
-                                value={password}
-                                name='password'
-                                onChange={onChange}
-                            />
+                            <InputGroup size='md'>
+                                <Input
+                                    pr='4.5rem'
+                                    type={show ? 'text' : 'password'}
+                                    placeholder='************'
+                                    borderRadius={'2rem'}
+                                    color={'#474745'}
+                                    value={password}
+                                    name='password'
+                                    onChange={onChange}
+                                />
+                                <InputRightElement width='4.5rem'>
+                                    <Button h='1.75rem' borderRadius={'2rem'} size='sm' onClick={handleClick}>
+                                        {show ? 'Hide' : 'Show'}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
                         </FormControl>
                         <Box textAlign={'left'} mt={2}>
                             <Link to={'#'}>Forgot Password</Link>

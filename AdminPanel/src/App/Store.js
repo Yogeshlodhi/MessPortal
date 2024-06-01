@@ -5,6 +5,7 @@ import studentProfileReducer from '../Features/Students/studentProfileSlice'
 import leaveReducer from '../Features/Leaves/leaveSlice';
 import feedBackSlice from '../Features/Feedback/feedBackSlice';
 import announceSlice from '../Features/Announcements/announceSlice';
+import menuSlice from '../Features/Menu/menuSlice';
 
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
         leaves: leaveReducer,
         feedbacks: feedBackSlice,
         announcements: announceSlice,
+        menu: menuSlice
     },
     devTools: process.env.NODE_ENV !== 'production',
 })

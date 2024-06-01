@@ -4,6 +4,7 @@ import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { reset } from '../Features/Auth/authSlice';
 
 function Header() {
     const navigate = useNavigate();
@@ -42,13 +43,13 @@ function Header() {
                     </WrapItem>
                 </PopoverTrigger>
                 <PopoverContent width={'12rem'}>
-                    <Link to={'/profile'}>
+                    {/* <Link to={'/profile'}> */}
                         <PopoverHeader display={'flex'} justifyContent={'space-between'}>
                             {admin.firstName}  {' '} 
                             {admin.lastName}
                             <KeyboardTabIcon />
                         </PopoverHeader>
-                    </Link>
+                    {/* </Link> */}
                     <PopoverArrow />
                     <Box>
                         <Link to={'/login'}>

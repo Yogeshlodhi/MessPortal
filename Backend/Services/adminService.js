@@ -175,6 +175,15 @@ const getFeedbackService = async () => {
     }
 }
 
+const getMenuService = async () => {
+    try{
+        const response = await menuModel.find();
+        return response;
+    }catch(err){
+        throw {message: err.message}
+    }
+}
+
 export {
     registerAdminService,
     loginAdminService,
@@ -186,5 +195,6 @@ export {
     getStudentByEmailService,
     getFeedbackService,
     getAnnounceService,
-    deleteAnnounceService
+    deleteAnnounceService,
+    getMenuService
 }
