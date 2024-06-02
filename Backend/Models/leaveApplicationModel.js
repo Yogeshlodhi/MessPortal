@@ -20,6 +20,10 @@ const leaveApplicationSchema = new Schema({
         type: String,
         required: true,
     },
+    appliedDate: { 
+        type: Date, 
+        default: Date.now 
+    },
     status: {
         type: String,
         enum: ["Pending","Approved","Rejected"],

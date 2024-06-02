@@ -46,12 +46,12 @@ function Header() {
             alignItems={'center'}
             justifyContent={'flex-end'}
             height={'10%'}
+            boxShadow={'4px 2px 5px 0px rgba(0,0,0,0.35)'}
             background={'white'}
-            width={'100%'}
             pr={4}
-            bg={bgColor} 
-            color={textColor}
-            // backgroundColor={'#E4e4e4'}
+            // width={'80vw'}
+            width={'100%'}
+            zIndex={100}
         >
             {student &&
                 <Popover placement='top-start'>

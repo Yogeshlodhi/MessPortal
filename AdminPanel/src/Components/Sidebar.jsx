@@ -61,7 +61,7 @@ function Sidebar() {
             height={'100vh'}
             boxShadow="0px 0px 10px rgba(0,0,0,0.45)" 
             position="relative"
-            width={'20vw'}
+            // width={'20vw'}
         >
             <Heading
                 minHeight={'3.5rem'}

@@ -66,19 +66,12 @@ const getAllStudentsList = async () => {
 
 const getAllLeavesList = async () => {
     try {
-        //  Before Making Changes
-        // const leaves = await LeaveModel.find();
-        // return leaves;
-        //  Before Making Changes
-
-        //  After Making Changes
-
         const leaves = await LeaveModel.find().populate({
             path: 'studentRoll',
             model: studentModel,
             select: 'studentRoll studentName',
         });
-        // console.log(leaves)
+        console.log(leaves)
         const updatedLeaves = leaves.map(leave => ({
             _id: leave._id,
             studentRoll: leave.studentRoll ? leave.studentRoll.studentRoll : 'Student Does Not Exist Anymore',
@@ -87,11 +80,11 @@ const getAllLeavesList = async () => {
             endDate: leave.endDate,
             reason: leave.reason,
             status: leave.status,
+            appliedDate: leave.appliedDate,
             __v: leave.__v
         }));
 
         return updatedLeaves;
-        //  After Making Changes
     } catch (error) {
         throw { message: error.message }
     }

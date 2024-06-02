@@ -62,15 +62,15 @@ function Dashboard() {
   return (
     <Box 
       className='flex gap-8 flex-col'
-      // bg={bgColor} 
-      // color={textColor}
-    >
+      >
 
       <Box className='flex gap-4' alignItems={'center'}>
         <TextSnippetIcon style={{ fontSize: '2rem' }} />
         <Heading fontSize={'2rem'}>Leave History</Heading>
       </Box>
-      <Box>
+      <Box
+        // overflowX={'hidden'}
+      >
         <TableContainer>
           <Table variant='striped' colorScheme='teal'>
             <Thead>

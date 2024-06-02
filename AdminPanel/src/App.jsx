@@ -44,6 +44,7 @@ const AuthenticatedRoutes = () => (
       display={'flex'}
       flexDirection={'column'}
       height={'100vh'}
+      width={'80vw'}
     >
       <Header />
       <Box

@@ -11,8 +11,8 @@ import theme from './Components/theme.js'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <React.StrictMode>
-      <ChakraProvider theme={theme}>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <ChakraProvider>
+        {/* <ColorModeScript initialColorMode={theme.config.initialColorMode} /> */}
         <App />
       </ChakraProvider>
     </React.StrictMode>,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Heading, Container, Input, FormControl, FormLabel, useToast, Button, useColorModeValue } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,7 @@ const Profile = () => {
   const textColor = useColorModeValue('gray.800', 'white');
   const { student } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const toast = useToast();
 
   const { isLoading } = useSelector(state => state.auth);
@@ -36,6 +36,11 @@ const Profile = () => {
     if (color !== '#fff') return color;
     return 'black';
   };
+
+  const [randomColor, setRandomColor] = useState('');
+  useEffect(() => {
+    setRandomColor(getRandomColor());
+  }, []);
 
   const onChange = (e) => {
     setDisable(false);
@@ -77,7 +82,8 @@ const Profile = () => {
       bg={bgColor}
       color={textColor}
     >
-      <Heading>Hello ! <span style={{ color: getRandomColor() }}>{studentName}</span></Heading>
+      {/* <Heading>Hello ! <span style={{ color: getRandomColor() }}>{studentName}</span></Heading> */}
+      <Heading>Hello ! <span style={{ color: randomColor }}>{studentName}</span></Heading>
       <Container padding={'2rem'} maxW='70rem' centerContent >
         <Box padding='4' w={'90%'} maxW='100%' className='grid grid-cols-2 gap-6'>
           <FormControl>
