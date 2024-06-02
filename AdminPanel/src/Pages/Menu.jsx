@@ -1,104 +1,274 @@
-// import React from 'react'
-// import { Box, Heading, Container, Text, VStack, HStack, useColorModeValue, Divider, Icon } from '@chakra-ui/react'
-// import { FaCoffee, FaUtensils } from 'react-icons/fa'
-// import { GiMeal } from 'react-icons/gi'
+// import React, { useEffect, useState } from 'react'
+// import { Box, Heading, Container, Input, FormControl, FormLabel, useToast, Divider, AbsoluteCenter, Button, VStack, HStack, useColorModeValue, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react'
+// import { useDispatch, useSelector } from 'react-redux';
+// import Spinner from '../Components/Spinner';
+// import { getMenu, updateMenu } from '../Features/Menu/menuSlice';
+// import jsPDF from 'jspdf';
+// import html2canvas from 'html2canvas';
+
 
 // const Menu = () => {
-//   const bgColor = useColorModeValue('gray.100', 'gray.900');
+//   const bgColor = useColorModeValue('brand.100', 'brand.900');
 //   const textColor = useColorModeValue('gray.800', 'white');
+//   const dispatch = useDispatch();
+//   const toast = useToast();
+
+//   useEffect(() => {
+//     dispatch(getMenu());
+//   }, [dispatch]);
+
+//   const { isLoading, menu } = useSelector(state => state.menu);
+//   const [updateFormData, setUpdateFormData] = useState(null);
+//   const [disable, setDisable] = useState(true);
+
+//   useEffect(() => {
+//     if (menu) {
+//       setUpdateFormData(menu);
+//     }
+//   }, [menu]);
+
+//   const onChange = (e) => {
+//     setDisable(false);
+//     const [day, meal] = e.target.name.split('_');
+//     setUpdateFormData((prev) => ({
+//       ...prev,
+//       [day]: {
+//         ...prev[day],
+//         [meal]: e.target.value
+//       }
+//     }));
+//   }
+
+//   const onUpdate = (e) => {
+//     e.preventDefault();
+//     const { monthOfMenu } = updateFormData; // Extract month from the form data
+//     dispatch(updateMenu({ month: monthOfMenu, updatedMenu: updateFormData })) // Pass month along with the updatedMenu
+//       .unwrap()
+//       .then(() => {
+//         setDisable(true);
+//         toast({
+//           title: 'Menu Updated Successfully',
+//           status: 'success',
+//           isClosable: true,
+//           duration: 3000
+//         });
+//       })
+//       .catch(error => {
+//         console.error('Failed to update menu:', error);
+//         toast({
+//           title: 'Failed to Update Menu',
+//           description: error.message || 'An error occurred while updating the menu',
+//           status: 'error',
+//           isClosable: true,
+//           duration: 3000
+//         });
+//       });
+//   }
+
 //   const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-//   const menuData = {
-//     remarks: "There will be special Dinner tonight",
-//     timing: {
-//       breakfast: "8:00 AM To 10:00 AM",
-//       lunch: "12:45 PM To 02:00 PM",
-//       dinner: "8:00 PM To 10:00 PM"
-//     },
-//     monday: {
-//       breakfast: "Aloo Paratha",
-//       lunch: "Mix Veg",
-//       dinner: "Paneer"
-//     },
-//     tuesday: {
-//       breakfast: "Aloo Paratha",
-//       lunch: "Mix Veg",
-//       dinner: "Paneer"
-//     },
-//     wednesday: {
-//       breakfast: "Aloo Paratha",
-//       lunch: "Mix Veg",
-//       dinner: "Paneer"
-//     },
-//     thursday: {
-//       breakfast: "Aloo Paratha",
-//       lunch: "Mix Veg",
-//       dinner: "Paneer"
-//     },
-//     friday: {
-//       breakfast: "Aloo Paratha",
-//       lunch: "Mix Veg",
-//       dinner: "Paneer"
-//     },
-//     saturday: {
-//       breakfast: "Aloo Paratha",
-//       lunch: "Mix Veg",
-//       dinner: "Paneer"
-//     },
-//     sunday: {
-//       breakfast: "Aloo Paratha",
-//       lunch: "Mix Veg",
-//       dinner: "Paneer"
-//     },
-//     amountOfOneMeal: 55,
-//     monthOfMenu: "August"
+//   const generatePDF = () => {
+//     const input = document.getElementById('table-content');
+//     html2canvas(input).then((canvas) => {
+//       const imgData = canvas.toDataURL('image/png');
+//       const pdf = new jsPDF('p', 'mm', 'a4');
+//       const imgProps = pdf.getImageProperties(imgData);
+//       const pdfWidth = pdf.internal.pageSize.getWidth();
+//       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+//       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+//       pdf.save('meal-schedule.pdf');
+//     });
 //   };
 
+//   if (isLoading || !updateFormData) {
+//     return <Spinner message={'Loading Menu'} />;
+//   }
+
+
+//   const mealData = {
+//     weeklyMenu: {
+//       monday: menu.monday,
+//       tuesday: menu.tuesday,
+//       wednesday: menu.wednesday,
+//       thursday: menu.thursday,
+//       friday: menu.friday,
+//       saturday: menu.saturday,
+//       sunday: menu.sunday,
+//     }
+//   };
+
+
 //   return (
-//     <Container maxW="container.xl" py={8}>
-//       <Box bg={bgColor} color={textColor} borderRadius="lg" p={8} boxShadow="lg">
-//         <Heading textAlign="center" mb={4}>Menu for {menuData.monthOfMenu}</Heading>
-//         <Text textAlign="center" fontSize="lg" mb={6}>{menuData.remarks}</Text>
-//         <VStack spacing={6}>
-//           <Text fontSize="xl" fontWeight="bold">Timings:</Text>
-//           <HStack spacing={12}>
-//             <HStack>
-//               <Icon as={FaCoffee} w={6} h={6} />
-//               <Text fontSize="lg">Breakfast: {menuData.timing.breakfast}</Text>
-//             </HStack>
-//             <HStack>
-//               <Icon as={GiMeal} w={6} h={6} />
-//               <Text fontSize="lg">Lunch: {menuData.timing.lunch}</Text>
-//             </HStack>
-//             <HStack>
-//               <Icon as={FaUtensils} w={6} h={6} />
-//               <Text fontSize="lg">Dinner: {menuData.timing.dinner}</Text>
-//             </HStack>
-//           </HStack>
-//           <Divider borderColor={textColor} />
-//           {daysOfWeek.map(day => (
-//             <Box key={day} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%" bg={useColorModeValue('white', 'gray.700')}>
-//               <Heading size="md" textTransform="capitalize" mb={2}>{day}</Heading>
-//               <Text><b>Breakfast:</b> {menuData[day].breakfast}</Text>
-//               <Text><b>Lunch:</b> {menuData[day].lunch}</Text>
-//               <Text><b>Dinner:</b> {menuData[day].dinner}</Text>
-//             </Box>
-//           ))}
-//           <Divider borderColor={textColor} />
-//           <Text fontSize="lg">Amount for one meal: <b>₹{menuData.amountOfOneMeal}</b></Text>
-//         </VStack>
+//     <Box>
+//       <Box
+//         maxW="70rem"
+//         mx="auto"
+//         p="5"
+//         // bg="white" 
+//         bg={bgColor}
+//         color={textColor}
+//         borderRadius="md"
+//         boxShadow="md"
+//         id='table-content'
+//       >
+//         <Heading
+//           textAlign={'center'}
+//           paddingTop={'0.5rem'}
+//           paddingBottom={'1.5rem'}
+//           // bg={bgColor}
+//           // color={textColor}
+//           background={'teal'}
+//           color={'white'}
+//         >
+//           Weekly Mess Schedule
+//         </Heading>
+//         <Table variant="striped" size="md">
+//           <Thead height={'4rem'}>
+//             <Tr>
+//               <Th fontSize={'1.5rem'} textAlign="center">Day</Th>
+//               <Th fontSize={'1.5rem'} textAlign="center">Breakfast</Th>
+//               <Th fontSize={'1.5rem'} textAlign="center">Lunch</Th>
+//               <Th fontSize={'1.5rem'} textAlign="center">Dinner</Th>
+//             </Tr>
+//           </Thead>
+//           <Tbody>
+//             {Object.keys(mealData.weeklyMenu).map((day) => (
+//               <Tr key={day}>
+//                 <Td textAlign="center" fontSize={'1.5rem'}>{day.charAt(0).toUpperCase() + day.slice(1)}</Td>
+//                 <Td textAlign="center">{mealData.weeklyMenu[day].breakfast}</Td>
+//                 <Td textAlign="center">{mealData.weeklyMenu[day].lunch}</Td>
+//                 <Td textAlign="center">{mealData.weeklyMenu[day].dinner}</Td>
+//               </Tr>
+//             ))}
+//           </Tbody>
+//         </Table>
+//         <Box mt="6" fontSize="lg">
+//           <Box fontWeight="bold" mb="2">Meal Timing:</Box>
+//           <Box>Breakfast: {menu.timing.breakfast}</Box>
+//           <Box>Lunch: {menu.timing.lunch}</Box>
+//           <Box>Dinner: {menu.timing.dinner}</Box>
+//         </Box>
+//         <Box mt="4" fontSize="lg" fontWeight="bold">
+//           Amount of One Meal : ₹{menu.amountOfOneMeal}
+//         </Box>
+//         <Box mt="5" fontSize="lg" display={'flex'} gap={'1rem'}>
+//           <Box fontWeight="bold" mb="2">
+//             Additional Details :
+//           </Box>
+//           {menu.remarks}
+//         </Box>
 //       </Box>
-//     </Container>
-//   );
+//       <Button mt="4" colorScheme="teal" onClick={generatePDF}>Download as PDF</Button>
+//       <Box position='relative' paddingTop={'4rem'}>
+//         <Divider />
+//         <AbsoluteCenter bg={bgColor} color={textColor} px='6'>
+//           <Heading textAlign="center" mb={4}>Update Menu for {updateFormData.monthOfMenu}</Heading>
+//         </AbsoluteCenter>
+//       </Box>
+//       <Container maxW="container.xl" py={8}>
+//         <Box bg={bgColor} color={textColor} borderRadius="lg" p={8} boxShadow="lg">
+//           {/* <Heading textAlign="center" mb={4}>Menu for {updateFormData.monthOfMenu}</Heading> */}
+//           <VStack spacing={6}>
+//             <FormControl>
+//               <FormLabel>Remarks</FormLabel>
+//               <Input
+//                 onChange={(e) => setUpdateFormData({ ...updateFormData, remarks: e.target.value })}
+//                 value={updateFormData.remarks || ''}
+//                 name='remarks'
+//               />
+//             </FormControl>
+//             <FormControl>
+//               <FormLabel>Timing (Breakfast)</FormLabel>
+//               <Input
+//                 onChange={(e) => setUpdateFormData({ ...updateFormData, timing: { ...updateFormData.timing, breakfast: e.target.value } })}
+//                 value={updateFormData.timing?.breakfast || ''}
+//                 name='timing_breakfast'
+//               />
+//             </FormControl>
+//             <FormControl>
+//               <FormLabel>Timing (Lunch)</FormLabel>
+//               <Input
+//                 onChange={(e) => setUpdateFormData({ ...updateFormData, timing: { ...updateFormData.timing, lunch: e.target.value } })}
+//                 value={updateFormData.timing?.lunch || ''}
+//                 name='timing_lunch'
+//               />
+//             </FormControl>
+//             <FormControl>
+//               <FormLabel>Timing (Dinner)</FormLabel>
+//               <Input
+//                 onChange={(e) => setUpdateFormData({ ...updateFormData, timing: { ...updateFormData.timing, dinner: e.target.value } })}
+//                 value={updateFormData.timing?.dinner || ''}
+//                 name='timing_dinner'
+//               />
+//             </FormControl>
+//             {daysOfWeek.map(day => (
+//               <Box key={day} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%" bg={useColorModeValue('white', 'gray.700')}>
+//                 <Heading size="lg" textTransform="capitalize" mb={2}>{day}</Heading>
+//                 <FormControl mb={4}>
+//                   <FormLabel>Breakfast</FormLabel>
+//                   <Input
+//                     onChange={onChange}
+//                     value={updateFormData[day]?.breakfast || ''}
+//                     name={`${day}_breakfast`}
+//                   />
+//                 </FormControl>
+//                 <FormControl mb={4}>
+//                   <FormLabel>Lunch</FormLabel>
+//                   <Input
+//                     onChange={onChange}
+//                     value={updateFormData[day]?.lunch || ''}
+//                     name={`${day}_lunch`}
+//                   />
+//                 </FormControl>
+//                 <FormControl mb={4}>
+//                   <FormLabel>Dinner</FormLabel>
+//                   <Input
+//                     onChange={onChange}
+//                     value={updateFormData[day]?.dinner || ''}
+//                     name={`${day}_dinner`}
+//                   />
+//                 </FormControl>
+//               </Box>
+//             ))}
+//             <FormControl>
+//               <FormLabel>Amount for one meal</FormLabel>
+//               <Input
+//                 onChange={(e) => setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value })}
+//                 value={updateFormData.amountOfOneMeal || ''}
+//                 name='amountOfOneMeal'
+//               />
+//             </FormControl>
+//           </VStack>
+//           <Button
+//             onClick={onUpdate}
+//             width={'30%'}
+//             display={'inline-block'}
+//             alignSelf={'center'}
+//             background={'teal'}
+//             color={'white'}
+//             fontSize={'1.5rem'}
+//             _hover={{ background: 'teal.500' }}
+//             isDisabled={disable}
+//             mt={4}
+//           >
+//             Update Menu
+//           </Button>
+//         </Box>
+//       </Container>
+//     </Box>
+//   )
 // }
 
 // export default Menu;
 
+
 import React, { useEffect, useState } from 'react'
-import { Box, Heading, Container, Input, FormControl, FormLabel, useToast, Button, VStack, HStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Heading, Container, Input, FormControl, FormLabel, useToast, Divider, AbsoluteCenter, Button, VStack, HStack, useColorModeValue, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../Components/Spinner';
 import { getMenu, updateMenu } from '../Features/Menu/menuSlice';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const Menu = () => {
   const bgColor = useColorModeValue('brand.100', 'brand.900');
@@ -109,7 +279,7 @@ const Menu = () => {
   useEffect(() => {
     dispatch(getMenu());
   }, [dispatch]);
-  
+
   const { isLoading, menu } = useSelector(state => state.menu);
   const [updateFormData, setUpdateFormData] = useState(null);
   const [disable, setDisable] = useState(true);
@@ -132,131 +302,240 @@ const Menu = () => {
     }));
   }
 
+  const onRemarkOrTimingChange = (e) => {
+    setDisable(false);
+    const { name, value } = e.target;
+    if (name.startsWith('timing_')) {
+      const timingKey = name.split('_')[1];
+      setUpdateFormData((prev) => ({
+        ...prev,
+        timing: {
+          ...prev.timing,
+          [timingKey]: value
+        }
+      }));
+    } else {
+      setUpdateFormData((prev) => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
+
   const onUpdate = (e) => {
     e.preventDefault();
-    const { monthOfMenu } = updateFormData; // Extract month from the form data
-    dispatch(updateMenu({ month: monthOfMenu, updatedMenu: updateFormData })) // Pass month along with the updatedMenu
-        .unwrap()
-        .then(() => {
-            setDisable(true);
-            toast({
-                title: 'Menu Updated Successfully',
-                status: 'success',
-                isClosable: true,
-                duration: 3000
-            });
-        })
-        .catch(error => {
-            console.error('Failed to update menu:', error);
-            toast({
-                title: 'Failed to Update Menu',
-                description: error.message || 'An error occurred while updating the menu',
-                status: 'error',
-                isClosable: true,
-                duration: 3000
-            });
+    const { monthOfMenu } = updateFormData;
+    dispatch(updateMenu({ month: monthOfMenu, updatedMenu: updateFormData }))
+      .unwrap()
+      .then(() => {
+        setDisable(true);
+        toast({
+          title: 'Menu Updated Successfully',
+          status: 'success',
+          isClosable: true,
+          duration: 3000
         });
-}
+      })
+      .catch(error => {
+        console.error('Failed to update menu:', error);
+        toast({
+          title: 'Failed to Update Menu',
+          description: error.message || 'An error occurred while updating the menu',
+          status: 'error',
+          isClosable: true,
+          duration: 3000
+        });
+      });
+  }
 
+  const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+  const generatePDF = () => {
+    const input = document.getElementById('table-content');
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('meal-schedule.pdf');
+    });
+  };
 
   if (isLoading || !updateFormData) {
     return <Spinner message={'Loading Menu'} />;
   }
 
-  const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-
+  const mealData = {
+    weeklyMenu: {
+      monday: menu.monday,
+      tuesday: menu.tuesday,
+      wednesday: menu.wednesday,
+      thursday: menu.thursday,
+      friday: menu.friday,
+      saturday: menu.saturday,
+      sunday: menu.sunday,
+    }
+  };
 
   return (
-    <Container maxW="container.xl" py={8}>
-      <Box bg={bgColor} color={textColor} borderRadius="lg" p={8} boxShadow="lg">
-        <Heading textAlign="center" mb={4}>Menu for {updateFormData.monthOfMenu}</Heading>
-        <VStack spacing={6}>
-          <FormControl>
-            <FormLabel>Remarks</FormLabel>
-            <Input
-              onChange={(e) => setUpdateFormData({ ...updateFormData, remarks: e.target.value })}
-              value={updateFormData.remarks || ''}
-              name='remarks'
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Timing (Breakfast)</FormLabel>
-            <Input
-              onChange={(e) => setUpdateFormData({ ...updateFormData, timing: { ...updateFormData.timing, breakfast: e.target.value } })}
-              value={updateFormData.timing?.breakfast || ''}
-              name='timing_breakfast'
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Timing (Lunch)</FormLabel>
-            <Input
-              onChange={(e) => setUpdateFormData({ ...updateFormData, timing: { ...updateFormData.timing, lunch: e.target.value } })}
-              value={updateFormData.timing?.lunch || ''}
-              name='timing_lunch'
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Timing (Dinner)</FormLabel>
-            <Input
-              onChange={(e) => setUpdateFormData({ ...updateFormData, timing: { ...updateFormData.timing, dinner: e.target.value } })}
-              value={updateFormData.timing?.dinner || ''}
-              name='timing_dinner'
-            />
-          </FormControl>
-          {daysOfWeek.map(day => (
-            <Box key={day} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%" bg={useColorModeValue('white', 'gray.700')}>
-              <Heading size="lg" textTransform="capitalize" mb={2}>{day}</Heading>
-              <FormControl mb={4}>
-                <FormLabel>Breakfast</FormLabel>
-                <Input
-                  onChange={onChange}
-                  value={updateFormData[day]?.breakfast || ''}
-                  name={`${day}_breakfast`}
-                />
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel>Lunch</FormLabel>
-                <Input
-                  onChange={onChange}
-                  value={updateFormData[day]?.lunch || ''}
-                  name={`${day}_lunch`}
-                />
-              </FormControl>
-              <FormControl mb={4}>
-                <FormLabel>Dinner</FormLabel>
-                <Input
-                  onChange={onChange}
-                  value={updateFormData[day]?.dinner || ''}
-                  name={`${day}_dinner`}
-                />
-              </FormControl>
-            </Box>
-          ))}
-          <FormControl>
-            <FormLabel>Amount for one meal</FormLabel>
-            <Input
-              onChange={(e) => setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value })}
-              value={updateFormData.amountOfOneMeal || ''}
-              name='amountOfOneMeal'
-            />
-          </FormControl>
-        </VStack>
-        <Button
-          onClick={onUpdate}
-          width={'30%'}
-          display={'inline-block'}
-          alignSelf={'center'}
+    <Box>
+      <Box
+        maxW="70rem"
+        mx="auto"
+        p="5"
+        bg={bgColor}
+        color={textColor}
+        borderRadius="md"
+        boxShadow="md"
+        id='table-content'
+      >
+        <Heading
+          textAlign={'center'}
+          paddingTop={'0.5rem'}
+          paddingBottom={'1.5rem'}
           background={'teal'}
           color={'white'}
-          fontSize={'1.5rem'}
-          _hover={{ background: 'teal.500' }}
-          isDisabled={disable}
-          mt={4}
         >
-          Update Menu
-        </Button>
+          Weekly Mess Schedule
+        </Heading>
+        <Table variant="striped" size="md">
+          <Thead height={'4rem'}>
+            <Tr>
+              <Th fontSize={'1.5rem'} textAlign="center">Day</Th>
+              <Th fontSize={'1.5rem'} textAlign="center">Breakfast</Th>
+              <Th fontSize={'1.5rem'} textAlign="center">Lunch</Th>
+              <Th fontSize={'1.5rem'} textAlign="center">Dinner</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {Object.keys(mealData.weeklyMenu).map((day) => (
+              <Tr key={day}>
+                <Td textAlign="center" fontSize={'1.5rem'}>{day.charAt(0).toUpperCase() + day.slice(1)}</Td>
+                <Td textAlign="center">{mealData.weeklyMenu[day].breakfast}</Td>
+                <Td textAlign="center">{mealData.weeklyMenu[day].lunch}</Td>
+                <Td textAlign="center">{mealData.weeklyMenu[day].dinner}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+        <Box mt="6" fontSize="lg">
+          <Box fontWeight="bold" mb="2">Meal Timing:</Box>
+          <Box>Breakfast: {menu.timing.breakfast}</Box>
+          <Box>Lunch: {menu.timing.lunch}</Box>
+          <Box>Dinner: {menu.timing.dinner}</Box>
+        </Box>
+        <Box mt="4" fontSize="lg" fontWeight="bold">
+          Amount of One Meal : ₹{menu.amountOfOneMeal}
+        </Box>
+        <Box mt="5" fontSize="lg" display={'flex'} gap={'1rem'}>
+          <Box fontWeight="bold" mb="2">
+            Additional Details :
+          </Box>
+          {menu.remarks}
+        </Box>
       </Box>
-    </Container>
+      <Button mt="4" colorScheme="teal" onClick={generatePDF}>Download as PDF</Button>
+      <Box position='relative' paddingTop={'4rem'}>
+        <Divider />
+        <AbsoluteCenter bg={bgColor} color={textColor} px='6'>
+          <Heading textAlign="center" mb={4}>Update Menu for {updateFormData.monthOfMenu}</Heading>
+        </AbsoluteCenter>
+      </Box>
+      <Container maxW="container.xl" py={8}>
+        <Box bg={bgColor} color={textColor} borderRadius="lg" p={8} boxShadow="lg">
+          <VStack spacing={6}>
+            <FormControl>
+              <FormLabel>Remarks</FormLabel>
+              <Input
+                onChange={onRemarkOrTimingChange}
+                value={updateFormData.remarks || ''}
+                name='remarks'
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Timing (Breakfast)</FormLabel>
+              <Input
+                onChange={onRemarkOrTimingChange}
+                value={updateFormData.timing?.breakfast || ''}
+                name='timing_breakfast'
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Timing (Lunch)</FormLabel>
+              <Input
+                onChange={onRemarkOrTimingChange}
+                value={updateFormData.timing?.lunch || ''}
+                name='timing_lunch'
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Timing (Dinner)</FormLabel>
+              <Input
+                onChange={onRemarkOrTimingChange}
+                value={updateFormData.timing?.dinner || ''}
+                name='timing_dinner'
+              />
+            </FormControl>
+            {daysOfWeek.map(day => (
+              <Box key={day} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%" bg={useColorModeValue('white', 'gray.700')}>
+                <Heading size="lg" textTransform="capitalize" mb={2}>{day}</Heading>
+                <FormControl mb={4}>
+                  <FormLabel>Breakfast</FormLabel>
+                  <Input
+                    onChange={onChange}
+                    value={updateFormData[day]?.breakfast || ''}
+                    name={`${day}_breakfast`}
+                  />
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel>Lunch</FormLabel>
+                  <Input
+                    onChange={onChange}
+                    value={updateFormData[day]?.lunch || ''}
+                    name={`${day}_lunch`}
+                  />
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel>Dinner</FormLabel>
+                  <Input
+                    onChange={onChange}
+                    value={updateFormData[day]?.dinner || ''}
+                    name={`${day}_dinner`}
+                  />
+                </FormControl>
+              </Box>
+            ))}
+            <FormControl>
+              <FormLabel>Amount for one meal</FormLabel>
+              <Input
+                onChange={(e) => {
+                  setDisable(false);
+                  setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value })
+                }}
+                value={updateFormData.amountOfOneMeal || ''}
+                name='amountOfOneMeal'
+              />
+            </FormControl>
+          </VStack>
+          <Button
+            onClick={onUpdate}
+            width={'30%'}
+            display={'inline-block'}
+            alignSelf={'center'}
+            background={'teal'}
+            color={'white'}
+            fontSize={'1.5rem'}
+            _hover={{ background: 'teal.500' }}
+            isDisabled={disable}
+            mt={4}
+          >
+            Update Menu
+          </Button>
+        </Box>
+      </Container>
+    </Box>
   )
 }
 

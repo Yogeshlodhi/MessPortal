@@ -30,7 +30,9 @@ const Dashboard = () => {
         </Stat>
 
         <Stat flex="1" mr={4} bg="gray.100" p={4} borderRadius="md">
-          <StatLabel>Total Leaves</StatLabel>
+          <StatLabel>
+            Total Leaves
+          </StatLabel>
           <StatNumber fontSize="2xl">{dummyData.leaves.length}</StatNumber>
         </Stat>
 
@@ -48,8 +50,9 @@ const Dashboard = () => {
       <Divider mb={6} />
 
       <Box>
-        <Heading size="md" mb={4} fontSize="lg" fontWeight="bold" color="teal.500">
-          <FaLeaf /> Leaves
+        <Heading size="lg" mb={4} fontSize="lg" fontWeight="bold" color="teal.500">
+          {/* <FaLeaf />  */}
+          Leaves
         </Heading>
         {dummyData.leaves.map((leave, index) => (
           <Box key={index} mb={2} bg="gray.100" p={2} borderRadius="md">
@@ -61,8 +64,9 @@ const Dashboard = () => {
       <Divider my={6} />
 
       <Box>
-        <Heading size="md" mb={4} fontSize="lg" fontWeight="bold" color="teal.500">
-          <FaRegComment /> Feedbacks
+        <Heading size="lg" mb={4} fontSize="lg" fontWeight="bold" color="teal.500">
+          {/* <FaRegComment />  */}
+          Feedbacks
         </Heading>
         {dummyData.feedback.map((feedback, index) => (
           <Box key={index} mb={2} bg="gray.100" p={2} borderRadius="md">
@@ -74,8 +78,9 @@ const Dashboard = () => {
       <Divider my={6} />
 
       <Box>
-        <Heading size="md" mb={4} fontSize="lg" fontWeight="bold" color="teal.500">
-          <FaExclamationTriangle /> Complaints
+        <Heading size="lg" mb={4} fontSize="lg" fontWeight="bold" color="teal.500">
+          {/* <FaExclamationTriangle />  */}
+          Complaints
         </Heading>
         {dummyData.complaints.map((complaint, index) => (
           <Box key={index} mb={2} bg="gray.100" p={2} borderRadius="md">

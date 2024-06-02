@@ -28,17 +28,24 @@ const registerStudent = (req, res) => {
 
 const loginStudent = (req, res) => {
     const loginData = req.body;
-    studentLogin(loginData)
-        .then((data) => {
-            return res
-                .status(statusCode.ok)
-                .send({ message: "Student Logged In", data: data })
-        })
-        .catch((err) => {
-            return res
-                .status(statusCode.badRequest)
+    if(loginData){
+        studentLogin(loginData)
+            .then((data) => {
+                return res
+                    .status(statusCode.ok)
+                    .send({ message: "Student Logged In", data: data })
+            })
+            .catch((err) => {
+                return res
+                    .status(statusCode.badRequest)
+                    .send({ message: err.message })
+            })
+    }
+    else{
+        return res
+                .status(statusCode.incorrectCredential)
                 .send({ message: err.message })
-        })
+    }
 }
 
 const getProfile = (req, res) => {

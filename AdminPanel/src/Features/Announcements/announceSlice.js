@@ -14,7 +14,10 @@ export const getAnnouncementList = createAsyncThunk(
     'announcement/getAll',
     async (_, thunkAPI) => {
         try {
-            return await announceService.getAnnouncement();
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+            const adminType = state.auth.admin.adminType;
+            return await announceService.getAnnouncement({token, adminType});
         } catch (error) {
             console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -27,7 +30,10 @@ export const addAnnounce = createAsyncThunk(
     'announcement/addOne',
     async (data, thunkAPI) => {
         try {
-            return await announceService.addAnnouncement(data);
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+            const adminType = state.auth.admin.adminType;
+            return await announceService.addAnnouncement(data, token, adminType);
         } catch (error) {
             console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -40,7 +46,10 @@ export const deleteAnnounce = createAsyncThunk(
     'announcement/deleteOne',
     async (id, thunkAPI) => {
         try {
-            return await announceService.deleteAnnouncement(id);
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+            const adminType = state.auth.admin.adminType;
+            return await announceService.deleteAnnouncement(id, token, adminType);
         } catch (error) {
             console.error(error);
             const message = error.response?.data?.message || error.message || error.toString();

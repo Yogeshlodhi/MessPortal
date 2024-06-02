@@ -21,6 +21,7 @@ router
     .put(verifyToken, updateProfile)
 
 router.get('/leaves',verifyToken, getAllLeaves);
+
 router.post('/login', loginStudent);
 router.post('/submitFeedback', verifyToken, submitFeedback);
 router.post('/raise_complaint', verifyToken, addComplaint)

@@ -15,6 +15,15 @@ const complaintSchema = new Schema({
     roll: {
         type: String
     },
+    status: {
+        type: String,
+        enum: ["Solved", "In Progress", "Pending", "Rejected"],
+        default: "Pending"
+    },
+    // actionBy: {
+    //     type: String,
+    //     default: "Not Verified Yet"
+    // },
     // attachments: {
 
     // },

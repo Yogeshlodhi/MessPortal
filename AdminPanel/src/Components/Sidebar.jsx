@@ -1,6 +1,6 @@
 import { Box, Heading, Flex, Divider } from '@chakra-ui/react'
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import WindowIcon from '@mui/icons-material/Window';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import RateReviewIcon from '@mui/icons-material/RateReview';
@@ -59,7 +59,9 @@ function Sidebar() {
     return (
         <Box
             height={'100vh'}
-            boxShadow={'8px 2px 5px -7px rgba(0,0,0,0.45)'}
+            boxShadow="0px 0px 10px rgba(0,0,0,0.45)" 
+            position="relative"
+            width={'20vw'}
         >
             <Heading
                 minHeight={'3.5rem'}
@@ -107,4 +109,3 @@ function Sidebar() {
 }
 
 export default Sidebar
-

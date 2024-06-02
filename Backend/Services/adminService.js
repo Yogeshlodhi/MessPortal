@@ -6,6 +6,7 @@ import studentModel from "../Models/studentModel.js"
 import feedbackModel from '../Models/feedbackSuggestion.js'
 import { createToken, hashPassword } from '../Utils/createToken.js'
 import bcrypt from 'bcryptjs'
+import complaintModel from "../Models/complaintModel.js"
 
 const registerAdminService = async (registerData) => {
 
@@ -45,7 +46,10 @@ const loginAdminService = async (loginData) => {
     const isPasswordValid = await bcrypt.compare(loginData.password, admin.password);
     if (admin && isPasswordValid) {
         const { password, ...adminWithoutPassword } = admin.toObject();
-        return adminWithoutPassword;
+        return {
+            adminWithoutPassword,
+            token: createToken(admin._id)
+        }
     } else {
         throw { message: "Couldn't Log You In, Please Try Again" }
     }
@@ -184,6 +188,33 @@ const getMenuService = async () => {
     }
 }
 
+const complaintListService = async () => {
+    try{
+        const complaints = await complaintModel.find();
+        return complaints;
+    }
+    catch(error){
+        throw {message: error.message}
+    }
+}
+
+const complaintActionService = async (id, actionData, user) => {
+    try{
+        const updatedComplaint = await complaintModel.findOneAndUpdate(
+            { _id: id },
+            actionData,
+            { new: true, runValidators: true }
+        );
+        
+        return {
+            ...updatedComplaint._doc,
+            actionTakenBy: user,
+        }
+    }catch(error){
+        throw {message: error.message}
+    }
+}
+
 export {
     registerAdminService,
     loginAdminService,
@@ -196,5 +227,7 @@ export {
     getFeedbackService,
     getAnnounceService,
     deleteAnnounceService,
-    getMenuService
+    getMenuService,
+    complaintListService,
+    complaintActionService,
 }

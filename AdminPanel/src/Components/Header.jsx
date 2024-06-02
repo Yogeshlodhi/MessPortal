@@ -13,7 +13,9 @@ function Header() {
     // const bgColor = useColorModeValue('brand.100', 'brand.900');
     // const textColor = useColorModeValue('gray.800', 'white');
 
-    const { admin, isLoading } = useSelector((state) => state.auth)
+    let { admin } = useSelector((state) => state.auth)
+    admin = admin && admin.adminWithoutPassword;
+
 
     const logoutUser = () => {
         dispatch(reset());
@@ -35,6 +37,9 @@ function Header() {
             background={'white'}
             boxShadow={'4px 2px 5px 0px rgba(0,0,0,0.35)'}
             pr={4}
+            // width={'100%'}
+            width={'80vw'}
+            zIndex={100}
         >
             <Popover placement='top-start'>
                 <PopoverTrigger>

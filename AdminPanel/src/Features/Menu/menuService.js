@@ -2,18 +2,27 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:4000/api/admin';
 
-const getMenu = async (token) => {
+const getMenu = async ({token, adminType}) => {
     const config = {
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            // 'adminRole': adminType
         }
-    }
-    const response = await axios.get(`${API_URL}/getMenu`);
+    };
+    const response = await axios.get(`${API_URL}/getMenu`, config);
     return response.data.data[0];
 }
 
-const updateMenuService = async (month, updatedMenu) => {
-    const response = await axios.put(`${API_URL}/menu/${month}`, updatedMenu);
+const updateMenuService = async (month, updatedMenu, token, adminType) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            // 'adminRole': adminType
+        }
+    };
+    const response = await axios.put(`${API_URL}/menu/${month}`, updatedMenu, config);
     return response.data.data;
 }
 

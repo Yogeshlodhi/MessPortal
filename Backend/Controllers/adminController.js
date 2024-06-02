@@ -1,5 +1,7 @@
 import {
     announcementService,
+    complaintActionService,
+    complaintListService,
     deleteAnnounceService,
     getAllLeavesList, 
     getAllStudentsList, 
@@ -214,6 +216,38 @@ const getMenu = (req, res) => {
         })
 }
 
+const getComplaintsList = (req, res) => {
+    complaintListService()
+        .then((data) => {
+            return res
+                    .status(statusCode.ok)
+                    .send({message: 'Complaints List Received', data: data})
+        })
+        .catch((err) => {
+            return res
+                    .status(statusCode.badRequest)
+                    .send({message: err.message})
+        })
+}
+
+const takeAction = (req, res) => {
+    const id = req.params.id;
+    const actions = req.body;
+    const user = req.user.firstName;
+    // console.log(req.user);
+    complaintActionService(id, actions, user)
+        .then((data) => {
+            return res
+                    .status(statusCode.ok)
+                    .send({message: 'Action Updated Successfully', data: data});
+        })
+        .catch((err) => {
+            return res
+                    .status(statusCode.badRequest)
+                    .send({message: err.message, error: 'There is some error' })
+        })
+}
+
 export {
     registerAdmin,
     loginAdmin,
@@ -226,5 +260,7 @@ export {
     getFeedbacks,
     getAnnouncements,
     deleteAnnouncement,
-    getMenu
+    getMenu,
+    getComplaintsList,
+    takeAction
 }

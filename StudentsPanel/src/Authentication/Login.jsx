@@ -26,7 +26,7 @@ function Login() {
     const { emailId, password } = formData;
 
     const { student, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
-
+    console.log(student)
     useEffect(() => {
         if (isError) {
             toast({
@@ -37,15 +37,15 @@ function Login() {
         }
         if (isSuccess) {
             navigate('/')
-            if (isSuccess) {
-                toast({
-                    title: 'Successfully Logged In',
-                    duration: 3000,
-                    status: 'success',
-                    position: 'top',
-                    isClosable: true
-                })
-            }
+            // if (isSuccess) {
+            //     toast({
+            //         title: 'Successfully Logged In',
+            //         duration: 3000,
+            //         status: 'success',
+            //         position: 'top',
+            //         isClosable: true
+            //     })
+            // }
         }
         dispatch(reset());
     }, [student, navigate, isError, message, isSuccess, dispatch])

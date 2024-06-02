@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Button, IconButton, Heading, Grid, Icon } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, IconButton, Heading, Grid, Icon, ButtonGroup } from "@chakra-ui/react";
 import { MdClose } from "react-icons/md";
 
 const ComplaintsList = () => {
@@ -88,7 +88,10 @@ const ComplaintsList = () => {
               />
             </Flex>
             <Text>{complaint.description}</Text>
-            <Button mt={4} colorScheme="teal" onClick={handleResolve}>Resolve</Button>
+            <ButtonGroup>
+              <Button mt={4} colorScheme="yellow" onClick={handleResolve}>In Progress</Button>
+              <Button mt={4} colorScheme="orange" onClick={handleResolve}>Pending</Button>
+            </ButtonGroup>
           </Box>
         ))}
       </Grid>

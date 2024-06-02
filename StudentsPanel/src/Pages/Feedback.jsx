@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormLabel, Heading, Icon, IconButton, Image, Input, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react'
+import { Box, Button, Flex, FormControl, FormLabel, Heading, Icon, IconButton, Image, Input, Select, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import TelegramIcon from '@mui/icons-material/Telegram';
@@ -20,10 +20,11 @@ const Feedback = () => {
   const [feedbackForm, setFeedbackForm] = useState({
     feedback : null,
     feedbackDescription : '',
-    suggestion: ''
+    suggestion: '',
+    mealOfDay: ''
   })
 
-  const {feedback, feedbackDescription, suggestion} = feedbackForm;
+  const {feedback, feedbackDescription, suggestion, mealOfDay} = feedbackForm;
 
   const onChange = (e) => {
     setFeedbackForm((prev) => ({
@@ -51,7 +52,8 @@ const Feedback = () => {
     const feedbackData = {
       feedback,
       feedbackDescription,
-      suggestion
+      suggestion,
+      mealOfDay
     }
     dispatch(postFeedback(feedbackData));
     toast({
@@ -115,7 +117,7 @@ const Feedback = () => {
             </FormControl>
           </VStack>
         </Box>
-        <Box flex="1" ml={8} border={'1px solid black'} padding={'1rem'} borderRadius={'1rem'} height={'100%'}>
+        <Box flex="1"  ml={8} border={'1px solid black'} padding={'1rem'} borderRadius={'1rem'} height={'100%'}>
           <Box border="1px dotted black" p={4} borderRadius={'1rem'} height={'50% '} mt={6} overflow={'hidden'} borderWidth={'0.1rem'}>
             <VStack spacing={4} alignItems="center">
               <FormLabel fontSize={'2rem'} mt={6} htmlFor="imageUpload">Upload Image</FormLabel>
@@ -159,6 +161,20 @@ const Feedback = () => {
               </Flex>
             </VStack>
           </Box>
+          <Select 
+            variant='filled' 
+            placeholder='Select The Meal' 
+            paddingTop={'1rem'} 
+            cursor={'pointer'} 
+            value={mealOfDay} 
+            name='mealOfDay'
+            onChange={onChange}
+            isRequired={true}
+          >
+            <option value={'Breakfast'}>Breakfast</option>
+            <option value={'Lunch'}>Lunch</option>
+            <option value={'Dinner'}>Dinner</option>
+          </Select>
           <Button
             display="flex"
             alignItems="center"

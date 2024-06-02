@@ -21,6 +21,8 @@ function Login() {
     const { emailId, password } = formdata;
     const { admin, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
+    // console.log(admin)
+
     useEffect(() => {
         if (isError) {
             toast({

@@ -13,7 +13,10 @@ export const getLeavesList = createAsyncThunk(
     'leave/getAll',
     async (_, thunkAPI) => {
         try{
-            return await leaveService.getAllLeaves();
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+            const adminType = state.auth.admin.adminType;
+            return await leaveService.getAllLeaves({token, adminType});
         }catch(error){
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message); 

@@ -13,9 +13,10 @@ export const getStudentsList = createAsyncThunk(
     'students/getAll',
     async (_, thunkAPI) => {
         try{
-            const token = thunkAPI.getState().auth.admin;
-            // console.log(token);
-            return await studentService.getStudList();
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+            const adminType = state.auth.admin.adminType;
+            return await studentService.getStudList({token, adminType});
         }catch(error){
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message); 

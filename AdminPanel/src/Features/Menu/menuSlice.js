@@ -13,8 +13,10 @@ export const getMenu = createAsyncThunk(
     'mess/menu',
     async (_, thunkAPI) => {
         try {
-            // const token = thunkAPI.getState().auth.student.token;
-            return await menuService.getMenu();
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+            const adminType = state.auth.admin.adminType;
+            return await menuService.getMenu({token, adminType});
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
@@ -26,7 +28,10 @@ export const updateMenu = createAsyncThunk(
     'menu/update',
     async ({ month, updatedMenu }, thunkAPI) => {
         try {
-            return await menuService.updateMenuService(month, updatedMenu);
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+            const adminType = state.auth.admin.adminType;
+            return await menuService.updateMenuService(month, updatedMenu, token, adminType);
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);

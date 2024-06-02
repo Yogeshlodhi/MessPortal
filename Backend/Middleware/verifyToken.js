@@ -12,7 +12,7 @@ const verifyToken = async (req,res,next) => {
             if(!req.user){
                 res
                     .status(statusCode.notFound)
-                    .send({message: 'Student Not Found'})
+                    .send({message: 'User Not Found'})
             }
             next();
         } catch (error) {
