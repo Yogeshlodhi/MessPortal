@@ -25,7 +25,7 @@ const Dashboard = () => {
     dispatch(getLeavesList());
     dispatch(getAllFeedbacks());
     dispatch(getComplaintsList())
-  }, [dispatch, studentsList, LeavesList, feedbacks, complaints])
+  }, [dispatch])
 
 
   const isToday = (date) => {
@@ -51,22 +51,38 @@ const Dashboard = () => {
       <Heading mb={4} fontSize="2xl" fontWeight="bold" color="teal.500" textTransform={'uppercase'}>Mess Management Dashboard</Heading>
 
       <Flex mb={8}>
-        <Stat flex="1" mr={4} bg="gray.100" p={4} borderRadius="md">
+        <Stat flex="1" mr={4} 
+          // bg="gray.100" 
+          p={4} borderRadius="md"
+          border={'1px solid'}
+        >
           <StatLabel fontSize={'1.5rem'}>Total Students</StatLabel>
           {/* <StatNumber fontSize="1.5rem">{studentsList && studentsList.length}</StatNumber> */}
         </Stat>
 
-        <Stat flex="1" mr={4} bg="gray.100" p={4} borderRadius="md">
+        <Stat flex="1" mr={4} 
+          // bg="gray.100" 
+          p={4} borderRadius="md"
+          border={'1px solid'}
+        >
           <StatLabel fontSize={'1.5rem'}>Total Leaves</StatLabel>
           {/* <StatNumber fontSize={'1.5rem'}>{LeavesList && LeavesList.length}</StatNumber> */}
         </Stat>
 
-        <Stat flex="1" mr={4} bg="gray.100" p={4} borderRadius="md">
+        <Stat flex="1" mr={4} 
+          // bg="gray.100" 
+          p={4} borderRadius="md"
+          border={'1px solid'}
+        >
           <StatLabel fontSize={'1.5rem'}>Total Feedbacks</StatLabel>
           {/* <StatNumber fontSize={'1.5rem'}>{feedbacks && feedbacks.length}</StatNumber> */}
         </Stat>
 
-        <Stat flex="1" bg="gray.100" p={4} borderRadius="md">
+        <Stat flex="1" 
+          // bg="gray.100" 
+          p={4} borderRadius="md"
+          border={'1px solid'}
+        >
           <StatLabel fontSize={'1.5rem'}>Total Complaints</StatLabel>
           {/* <StatNumber fontSize={'1.5rem'}>{complaints && complaints.data.length}</StatNumber> */}
         </Stat>
@@ -77,25 +93,25 @@ const Dashboard = () => {
       <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} gap={'2rem'}>
         <Box width={'50%'}>
           <Heading size="lg" mb={4} fontSize="lg" fontWeight="bold" color="teal.500" textTransform={'uppercase'}>Leaves</Heading>
-          {filteredLeaves && filteredLeaves.slice(0, 5).map((leave, index) => (
+          {/* {filteredLeaves && filteredLeaves.slice(0, 5).map((leave, index) => (
             <Box key={index} mb={2} p={2} borderRadius="md" 
-              // background={leave.status === 'Pending' ? 'orange' :
-              //   leave.status === 'Approved' ? 'green' :
-              //     'red'
-              // }
+              background={leave.status === 'Pending' ? 'orange' :
+                leave.status === 'Approved' ? 'green' :
+                  'red'
+              }
             >
 
               <Text>{leave.studentRoll} - {UtilFunctions.formatDate(new Date(leave.startDate))}  to {UtilFunctions.formatDate(new Date(leave.endDate))} ({leave.status})</Text>
             </Box>
-          ))}
+          ))} */}
         </Box>
         <Box width={'50%'}>
           <Heading size="lg" mb={4} fontSize="lg" fontWeight="bold" color="teal.500" textTransform={'uppercase'}>Feedbacks</Heading>
-          {feedbacks && feedbacks.slice(0, 5).map((feedback, index) => (
+          {/* {feedbacks && feedbacks.slice(0, 5).map((feedback, index) => (
             <Box key={index} mb={2} p={2} borderRadius="md" color={'white'} background={feedback.feedback > 5 ? 'green' : 'red'}>
               <Text><strong>{feedback.studentRoll}</strong> ({feedback.mealOfDay}) {' '}:{' '}{feedback.feedbackDescription}</Text>
             </Box>
-          ))}
+          ))} */}
         </Box>
       </Box>
 
@@ -103,11 +119,11 @@ const Dashboard = () => {
 
       <Box>
         <Heading size="lg" mb={4} fontSize="lg" fontWeight="bold" color="teal.500" textTransform={'uppercase'}>Complaints</Heading>
-        {complaints && complaints.data.slice(0, 5).map((complaint, index) => (
+        {/* {complaints && complaints.data.slice(0, 5).map((complaint, index) => (
           <Box key={index} mb={2} bg="gray.100" p={2} borderRadius="md">
             <Text><strong>{complaint.roll}</strong> ({complaint.status}): {complaint.complaintAbout}</Text>
           </Box>
-        ))}
+        ))} */}
       </Box>
     </Box>
   );

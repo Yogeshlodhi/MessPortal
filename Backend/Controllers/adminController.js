@@ -8,6 +8,7 @@ import {
     getAnnounceService, 
     getFeedbackService, 
     getMenuService, 
+    getSingleComplaintService, 
     getStudentByEmailService, 
     loginAdminService, 
     registerAdminService, 
@@ -248,6 +249,22 @@ const takeAction = (req, res) => {
         })
 }
 
+const getSingleComplaint = (req, res) => {
+    const id = req.params.id;
+
+    getSingleComplaintService(id)
+        .then((data) => {
+            return res
+                    .status(statusCode.ok)
+                    .send({message: 'Complaint Received', data: data})
+        })
+        .catch((err) => {
+            return res
+                    .status(statusCode.badRequest)
+                    .send({message: err.message})
+        })
+}
+
 export {
     registerAdmin,
     loginAdmin,
@@ -262,5 +279,6 @@ export {
     deleteAnnouncement,
     getMenu,
     getComplaintsList,
-    takeAction
+    takeAction,
+    getSingleComplaint
 }

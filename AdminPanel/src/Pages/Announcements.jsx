@@ -68,7 +68,7 @@ const Announcements = () => {
   return (
     <Box>
       <Heading textAlign={'center'} mb={4}>Announcements</Heading>
-      <Button onClick={onOpen}>Add</Button>
+      <Button onClick={onOpen} colorScheme='blue'>Add</Button>
       <TableContainer>
         <Table variant='striped' colorScheme='teal'>
           <Thead>

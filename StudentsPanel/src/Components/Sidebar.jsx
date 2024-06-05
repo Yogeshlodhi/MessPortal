@@ -10,55 +10,54 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import { Link, NavLink } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
+const SidebarOptions = [
+  {
+    id: 1,
+    name: 'Dashboard',
+    path: '/',
+    icon: <DashboardIcon style={{ marginRight: '10px' }} />,
+  },
+  {
+    id: 2,
+    name: 'Apply-Leave',
+    path: '/apply-leave',
+    icon: <EventNoteIcon style={{ marginRight: '10px' }} />,
+  },
+  {
+    id: 3,
+    name: 'Feedback & Suggestion',
+    path: '/feedback',
+    icon: <RateReviewIcon style={{ marginRight: '10px' }} />,
+  },
+  {
+    id: 4,
+    name: 'Menu',
+    path: '/menu',
+    icon: <MenuBookIcon style={{ marginRight: '10px' }} />,
+  },
+  {
+    id: 5,
+    name: 'Announcements',
+    path: '/announcements',
+    icon: <CampaignIcon style={{ marginRight: '10px' }} />,
+  },
+  {
+    id: 6,
+    name: 'Complaints',
+    path: '/complaints',
+    icon: <ThumbDownOffAltIcon style={{ marginRight: '10px' }} />,
+  },
+  {
+    id: 7,
+    name: 'Payments',
+    path: '/payments',
+    icon: <PaymentIcon style={{ marginRight: '10px' }} />,
+  },
+]
 function Sidebar() {
   // const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
   // const textColor = useColorModeValue('lightMode.text', 'darkMode.text');
   // const headingColor = useColorModeValue('lightMode.heading', 'darkMode.heading');
-
-  const SidebarOptions = [
-    {
-      id: 1,
-      name: 'Dashboard',
-      path: '/',
-      icon: <DashboardIcon style={{ marginRight: '10px' }} />,
-    },
-    {
-      id: 2,
-      name: 'Apply-Leave',
-      path: '/apply-leave',
-      icon: <EventNoteIcon style={{ marginRight: '10px' }} />,
-    },
-    {
-      id: 3,
-      name: 'Feedback & Suggestion',
-      path: '/feedback',
-      icon: <RateReviewIcon style={{ marginRight: '10px' }} />,
-    },
-    {
-      id: 4,
-      name: 'Menu',
-      path: '/menu',
-      icon: <MenuBookIcon style={{ marginRight: '10px' }} />,
-    },
-    {
-      id: 5,
-      name: 'Announcements',
-      path: '/announcements',
-      icon: <CampaignIcon style={{ marginRight: '10px' }} />,
-    },
-    {
-      id: 6,
-      name: 'Complaints',
-      path: '/complaints',
-      icon: <ThumbDownOffAltIcon style={{ marginRight: '10px' }} />,
-    },
-    {
-      id: 7,
-      name: 'Payments',
-      path: '/payments',
-      icon: <PaymentIcon style={{ marginRight: '10px' }} />,
-    },
-  ]
 
   return (
     <Box
@@ -113,17 +112,6 @@ function Sidebar() {
           }
           )
         }
-        {/* <Box
-          display='flex'
-          flexDirection='column'
-          alignItems='flex-start'
-          paddingLeft='20px'
-          paddingTop='20px'
-        >
-        </Box> */}
-      </Box>
-      <Box alignSelf={'flex-end'} paddingBottom={'2rem'}>
-        <ThemeToggle />
       </Box>
     </Box>
   );

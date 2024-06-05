@@ -62,7 +62,8 @@ import {
     deleteAnnouncement,
     getMenu,
     getComplaintsList,
-    takeAction
+    takeAction,
+    getSingleComplaint
 } from "../Controllers/adminController.js";
 import authenticateAndCheckRole from "../Middleware/userPermission.js";
 
@@ -96,6 +97,7 @@ router.get('/getMenu', getMenu);
 router.get('/getComplaints', getComplaintsList);
 
 router.put('/complaint/takeAction/:id', takeAction);
+router.get('/complaints/:id', getSingleComplaint);
 
 
 router.delete('/announcement/:id',authenticateAndCheckRole(["Warden", "Mess Secretary"]), deleteAnnouncement);

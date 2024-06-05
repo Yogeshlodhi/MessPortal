@@ -16,6 +16,7 @@ const registerAdminService = async (registerData) => {
             throw { message: "Admin Already Exists" }
         }
         const hashedPassword = await hashPassword(registerData.password);
+
         let admin = await adminModel.create(
             {
                 ...registerData,
@@ -23,10 +24,9 @@ const registerAdminService = async (registerData) => {
             }
         )
         if (admin) {
-            return {
-                admin,
-                token: createToken(admin._id)
-            }
+            admin = admin.toObject();
+            admin.token = createToken(admin._id);
+            return admin;
         } else {
             throw { message: 'Unexpected Error Occured' }
         }
@@ -45,11 +45,9 @@ const loginAdminService = async (loginData) => {
 
     const isPasswordValid = await bcrypt.compare(loginData.password, admin.password);
     if (admin && isPasswordValid) {
-        const { password, ...adminWithoutPassword } = admin.toObject();
-        return {
-            adminWithoutPassword,
-            token: createToken(admin._id)
-        }
+        const { password, ...adminData } = admin.toObject();
+        adminData.token = createToken(admin._id);
+        return adminData;
     } else {
         throw { message: "Couldn't Log You In, Please Try Again" }
     }
@@ -208,6 +206,15 @@ const complaintActionService = async (id, actionData, user) => {
     }
 }
 
+const getSingleComplaintService = async(id) => {
+    try{
+        const complaint = await complaintModel.findById({_id: id});
+        return complaint;
+    }catch(error){
+        throw {message: error.message};
+    }
+}
+
 export {
     registerAdminService,
     loginAdminService,
@@ -223,4 +230,5 @@ export {
     getMenuService,
     complaintListService,
     complaintActionService,
+    getSingleComplaintService,
 }

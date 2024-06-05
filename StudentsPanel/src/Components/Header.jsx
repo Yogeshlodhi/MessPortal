@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Spinner, WrapItem, useColorModeValue } from '@chakra-ui/react'
+import { Avatar, Box, Button, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Spinner, Tooltip, WrapItem, useColorModeValue } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -47,14 +47,19 @@ function Header() {
             justifyContent={'flex-end'}
             height={'10%'}
             boxShadow={'4px 2px 5px 0px rgba(0,0,0,0.35)'}
-            background={'white'}
             pr={4}
-            // width={'80vw'}
             width={'100%'}
             zIndex={100}
+            gap={'1rem'}
         >
             {student &&
                 <Popover placement='top-start'>
+                    {/* <ThemeToggle /> */}
+                    <Tooltip label='Toggle Theme'>
+                        <WrapItem cursor={'pointer'}>
+                            <ThemeToggle />
+                        </WrapItem>
+                    </Tooltip>
                     <PopoverTrigger>
                         <WrapItem cursor={'pointer'}>
                             <Avatar name={student.studentName} src='https://bit.ly/tioluwani-kolawole' />

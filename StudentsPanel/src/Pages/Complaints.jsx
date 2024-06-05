@@ -82,6 +82,7 @@ const Complaint = () => {
           overflow={'hidden'} 
           borderWidth={'0.1rem'}
           width={'50%'}
+          alignSelf={'center'}
         >
           <VStack spacing={4} alignItems="center">
             <FormLabel fontSize={'2rem'} mt={6} htmlFor="imageUpload">Upload Image</FormLabel>
@@ -125,7 +126,7 @@ const Complaint = () => {
             </Flex>
           </VStack>
         </Box>
-        <Button type="submit" colorScheme="teal">
+        <Button type="submit" colorScheme="teal" width={'50%'} alignSelf={'center'}>
           Submit Complaint
         </Button>
       </Box>
