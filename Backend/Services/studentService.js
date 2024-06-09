@@ -73,8 +73,9 @@ const feedbackAndSuggestion = async (feedbackData, studentId) => {
           studentRoll: student.studentRoll,
           ...feedbackData,
         });
-    
+        // console.log(newFeedback)
         const savedFeedback = await newFeedback.save();
+        // console.log(savedFeedback)
         return savedFeedback;
       } catch (error) {
         // console.error(error);

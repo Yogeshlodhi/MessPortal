@@ -28,6 +28,9 @@ const studentSchema = new Schema(
         },
         ifsc: {
             type: String,
+        },
+        profileImage: {
+            type: String,
         }
     },
     {

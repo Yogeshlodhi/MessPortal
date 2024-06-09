@@ -23,6 +23,17 @@ const getMenu = async (token) => {
 }
 
 const postFeedback = async (token, feedbackData) => {
+    const formData = new FormData();
+
+    // Construct FormData manually
+    for (let key in feedbackData) {
+        if (key === 'image') {
+            formData.append(key, feedbackData[key]);
+        } else {
+            formData.set(key, feedbackData[key]);
+        }
+    }
+
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
@@ -33,10 +44,33 @@ const postFeedback = async (token, feedbackData) => {
     return response.data;
 }
 
+const postComplaint = async (token, complaintData) => {
+    const formData = new FormData();
+
+    // Construct FormData manually
+    for (let key in complaintData) {
+        if (key === 'image') {
+            formData.append(key, complaintData[key]);
+        } else {
+            formData.set(key, complaintData[key]);
+        }
+    }
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.post(`${API_URL}/raise_complaint`, complaintData, config);
+
+    return response.data;
+}
+
 const messService = {
     getAnnouncements,
     postFeedback,
-    getMenu
+    getMenu,
+    postComplaint
 }
 
 export default messService

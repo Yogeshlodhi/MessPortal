@@ -28,17 +28,17 @@ function Header() {
         }
     }, [navigate, student])
 
-    if (isLoading) {
-        return (
-            <Spinner
-                thickness='4px'
-                speed='0.65s'
-                emptyColor='gray.200'
-                color='blue.500'
-                size='xl'
-            />
-        )
-    }
+    // if (isLoading) {
+    //     return (
+    //         <Spinner
+    //             thickness='4px'
+    //             speed='0.65s'
+    //             emptyColor='gray.200'
+    //             color='blue.500'
+    //             size='xl'
+    //         />
+    //     )
+    // }
 
     return (
         <Box
@@ -62,7 +62,10 @@ function Header() {
                     </Tooltip>
                     <PopoverTrigger>
                         <WrapItem cursor={'pointer'}>
-                            <Avatar name={student.studentName} src='https://bit.ly/tioluwani-kolawole' />
+                            <Avatar 
+                                name={student.studentName} 
+                                src={student.profileImage ? student.profileImage : student.studentName}
+                            />
                         </WrapItem>
                     </PopoverTrigger>
                     <PopoverContent width={'12rem'}>
@@ -74,9 +77,6 @@ function Header() {
                         </Link>
                         <PopoverArrow />
                         <Box>
-                            {/* <PopoverBody>
-                                <ThemeToggle/>
-                            </PopoverBody> */}
                             <Link to={'/login'}>
                                 <PopoverFooter display={'flex'} justifyContent={'space-between'} onClick={logoutStudent}>
                                     Log Out

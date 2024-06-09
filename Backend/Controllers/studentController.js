@@ -1,4 +1,5 @@
 import { complaintService, feedbackAndSuggestion, getAnnouncementsService, getMenuService, getProfileService, studentLogin, studentRegister, updateProfileService } from '../Services/studentService.js';
+import uploadOnCloudinary from '../Utils/cloudinary.js';
 import { statusCode } from '../Utils/http.js';
 
 const registerStudent = (req, res) => {
@@ -28,7 +29,7 @@ const registerStudent = (req, res) => {
 
 const loginStudent = (req, res) => {
     const loginData = req.body;
-    if(loginData){
+    if (loginData) {
         studentLogin(loginData)
             .then((data) => {
                 return res
@@ -41,10 +42,10 @@ const loginStudent = (req, res) => {
                     .send({ message: err.message })
             })
     }
-    else{
+    else {
         return res
-                .status(statusCode.incorrectCredential)
-                .send({ message: err.message })
+            .status(statusCode.incorrectCredential)
+            .send({ message: err.message })
     }
 }
 
@@ -63,9 +64,19 @@ const getProfile = (req, res) => {
         })
 }
 
-const submitFeedback = (req, res) => {
+const submitFeedback = async (req, res) => {
     let feedbackData = req.body;
     const studentId = req.user.id;
+    const localFilePath = req.file ? req.file.path : null;
+
+    let imageUrl = null;
+    if (localFilePath) {
+        const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
+        imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
+    }
+
+    feedbackData.feedbackImage = imageUrl;
+    // console.log(feedbackData)
     feedbackAndSuggestion(feedbackData, studentId)
         .then((data) => {
             return res
@@ -79,9 +90,23 @@ const submitFeedback = (req, res) => {
         })
 }
 
-const addComplaint = (req, res) => {
+const addComplaint = async (req, res) => {
     const complaintData = req.body;
     const studentId = req.user.id;
+    const localFilePath = req.file ? req.file.path : null;
+
+    // console.log("Req.file : ",req.file)
+    // console.log("localfilePath : ",localFilePath)
+
+    let imageUrl = null;
+    if (localFilePath) {
+        const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
+        imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
+        // console.log("image url : ",imageUrl)
+    }
+
+    complaintData.attachment = imageUrl;
+    // console.log(complaintData)
 
     complaintService(complaintData, studentId)
         .then((data) => {
@@ -124,9 +149,19 @@ const getMenu = (req, res) => {
         })
 }
 
-const updateProfile = (req, res) => {
+const updateProfile = async (req, res) => {
     const userId = req.user.id
     const profileData = req.body
+    const localFilePath = req.file ? req.file.path : null;
+
+
+    let imageUrl = null;
+    if (localFilePath) {
+        const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
+        imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
+    }
+
+    profileData.profileImage = imageUrl;
 
     updateProfileService(userId, profileData)
         .then((data) => {

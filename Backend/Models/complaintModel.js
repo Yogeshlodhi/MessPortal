@@ -24,9 +24,9 @@ const complaintSchema = new Schema({
     //     type: String,
     //     default: "Not Verified Yet"
     // },
-    // attachments: {
-
-    // },
+    attachment: {
+        type: String
+    },
 },
 {
     timestamps: true

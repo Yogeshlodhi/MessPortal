@@ -14,8 +14,20 @@ const getAllLeaves = async ({token, adminType}) => {
     return response.data;
 }
 
+const leaveAction = async (token, actionData, id) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+    }
+    const response = await axios.put(`${API_URL}/leaves/takeAction/${id}`, actionData, config);
+    return response.data;
+}
+
 const leaveService = {
     getAllLeaves,
+    leaveAction,
 }
 
 export default leaveService;

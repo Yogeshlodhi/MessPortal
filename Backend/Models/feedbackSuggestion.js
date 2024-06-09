@@ -24,6 +24,9 @@ const feedBackSuggestion = new Schema(
             type: String,
             required: true,
             enum: ["Breakfast", "Lunch", "Dinner"],
+        },
+        feedbackImage : {
+            type: String,
         }
     },
     {

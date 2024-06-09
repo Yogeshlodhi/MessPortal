@@ -1,4 +1,8 @@
-import { Box, Flex, Text, Button, IconButton, Heading, Grid, Icon, ButtonGroup, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody } from "@chakra-ui/react";
+import {
+  Box, Flex, Text, Button, IconButton, Heading, Grid, Icon, ButtonGroup,
+  useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton,
+  ModalBody
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,46 +10,24 @@ import { getComplaintsList } from "../Features/Complaints/complaintSlice";
 import Spinner from "../Components/Spinner";
 
 const ComplaintsList = () => {
-
   const dispatch = useDispatch();
   const { complaints, isLoading } = useSelector(state => state.complaints);
-  const {admin} = useSelector(state => state.auth);
+  const { admin } = useSelector(state => state.auth);
 
   const [selectedComplaint, setSelectedComplaint] = useState(null);
-  const {isOpen, onOpen, onClose} = useDisclosure();
-
-  // const {complaint} = useSelector(state => state.singleComplaint)
-  const complaint = "yogesh";
-  useEffect(() => {
-      if(complaint){
-        setSelectedComplaint(complaint);
-        onOpen();
-      }
-  },[complaint, onOpen])
-
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     dispatch(getComplaintsList());
-  },[dispatch])
+  }, [dispatch]);
 
-
-// complaintAbout: "Hygeine"
-// createdAt: "2024-05-07T00:50:37.762Z"
-// description: "The food quality has been declining continuously"
-// roll: "2101CB61"
-// status: "Solved"
-// student: "Yogesh Kumar"
-// updatedAt: "2024-06-02T10:45:20.645Z"
-
-  const handleResolve = () => {
-    // Logic to handle resolving the complaint
+  const handleView = (complaint) => {
+    setSelectedComplaint(complaint);
+    onOpen();
   };
 
-  
-
-  if(isLoading){
-    return <Spinner message={'Loading Complaints....'}/>
+  if (isLoading) {
+    return <Spinner message={'Loading Complaints....'} />;
   }
 
   return (
@@ -61,73 +43,70 @@ const ComplaintsList = () => {
             borderRadius="lg"
             p={4}
             boxShadow="md"
-            // bg="white"
             _hover={{ boxShadow: "lg" }}
           >
             <Flex justify="space-between" align="center" mb={2}>
-              <Text fontWeight="bold" fontSize="lg">{complaint.complaintAbout}</Text>
-              {/* <Text fontSize={'smaller'}>{complaint.student}{' '}{`(${complaint.roll})`}</Text> */}
-              {admin.adminType === 'Warden' ? 
+              <Text fontWeight="bold" fontSize="lg" className="overflow-hidden overflow-ellipsis whitespace-nowrap">{complaint.complaintAbout}</Text>
+              {admin.adminType === 'Warden' && (
                 <IconButton
                   icon={<Icon as={MdClose} />}
                   variant="ghost"
                   colorScheme="red"
                   aria-label="Close"
-                  onClick={handleResolve}
-                /> : ''
-              }
+                  onClick={() => handleResolve(complaint)}
+                />
+              )}
             </Flex>
-            <Text>{complaint.description}</Text>
+            <Text className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+              {complaint.description}
+            </Text>
             <ButtonGroup>
-              <Button mt={4} colorScheme="blue" onClick={handleResolve}>View</Button>
-              <Button mt={4} colorScheme={complaint.status === 'In Progress' ? 'orange' :
-                complaint.status === 'Solved' ? 'green' :
-                  'red'
+              <Button mt={4} colorScheme="blue" onClick={() => handleView(complaint)}>
+                View
+              </Button>
+              <Button mt={4} colorScheme={
+                complaint.status === 'In Progress' ? 'orange' :
+                  complaint.status === 'Solved' ? 'green' :
+                    'red'
               }
-               onClick={handleResolve}>{complaint.status}</Button>
+              // onClick={handleResolve}
+              isDisabled
+              >
+                {complaint.status}
+              </Button>
             </ButtonGroup>
           </Box>
         ))}
       </Grid>
       {selectedComplaint && (
-        <Modal isOpen={isOpen} onClose={onClose} size={'lg'}>
-          <ModalOverlay
-             bg='blackAlpha.300'
-             backdropFilter='blur(10px)'
-          />
+        <Modal isOpen={isOpen} onClose={onClose} size="lg">
+          <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
           <ModalContent>
-            <ModalHeader>
-              {/* {selectedStudent.studentName}'s Profile */}
-              Complaint
-            </ModalHeader>
+            <ModalHeader>Complaint Details</ModalHeader>
             <ModalCloseButton />
-            <ModalBody display={'flex'} gap={'1rem'}>
-              {/* <VStack alignItems={'flex-start'} >
-                <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-                  <Heading fontSize={'medium'}>Roll No. : </Heading>
-                  <Text>{selectedStudent.studentRoll}</Text>
-                </Box>
-                <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-                  <Heading fontSize={'medium'}>Name : </Heading>
-                  <Text>{selectedStudent.studentName}</Text>
-                </Box>
-                <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-                  <Heading fontSize={'medium'}>Webmail : </Heading>
-                  <Text>{selectedStudent.emailId}</Text>
-                </Box>
-                <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-                  <Heading fontSize={'medium'}>Contact No. : </Heading>
-                  <Text>{selectedStudent.number}</Text>
-                </Box>
-                <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-                  <Heading fontSize={'medium'}>Bank Account No. : </Heading>
-                  <Text>{selectedStudent.bankAccount}</Text>
-                </Box>
-                <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-                  <Heading fontSize={'medium'}>IFSC Code : </Heading>
-                  <Text>{selectedStudent.ifsc}</Text>
-                </Box>
-              </VStack> */}
+            <ModalBody>
+              <Box mb={4}>
+                <Heading fontSize="md">Complaint About :</Heading>
+                <Text>{selectedComplaint.complaintAbout}</Text>
+              </Box>
+              <Box mb={4}>
+                <Heading fontSize="md">Description :</Heading>
+                <Text>{selectedComplaint.description}</Text>
+              </Box>
+              <Box mb={4} display={'flex'} alignItems={'center'} gap={'1rem'}>
+                <Heading fontSize="md">Status :</Heading>
+                <Text>{selectedComplaint.status}</Text>
+              </Box>
+              {/* Add more fields as needed */}
+              <Box mb={4}>
+                <img
+                  src={selectedComplaint.attachment}
+                  width={'100%'}
+                  height={'100%'}
+                  style={{ objectFit: 'contain', borderRadius: '0.5rem' }}
+                // style={{width: '12rem', height: '10rem', objectFit: 'contain'}}
+                />
+              </Box>
             </ModalBody>
           </ModalContent>
         </Modal>

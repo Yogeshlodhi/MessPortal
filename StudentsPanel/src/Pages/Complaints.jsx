@@ -12,39 +12,78 @@ import {
   Image,
   Text,
   Container,
+  useToast,
 } from '@chakra-ui/react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useDispatch } from 'react-redux';
+import { postComplaint } from '../Features/Mess/messSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const Complaint = () => {
+  const dispatch = useDispatch();
+  const toast = useToast()
+  const navigate = useNavigate();
+
   const [complaint, setComplaint] = useState({
     complaintAbout: '',
     description: '',
+    attachment: null
   });
 
+  const { complaintAbout, description, attachment } = complaint;
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setComplaint({
-      ...complaint,
-      [name]: value,
-    });
+    // const { name, value } = e.target;
+    setComplaint((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Send complaint data to backend
+
+    const formData = new FormData();
+    formData.append('complaintAbout', complaintAbout);
+    formData.append('description', description);
+    if (attachment) {
+      formData.append('image', attachment);
+    }
+
+    dispatch(postComplaint(formData))
+      .then(() => {
+        toast({
+          title: 'Complaint Submitted',
+          duration: 3000,
+          status: 'success',
+          isClosable: true,
+        });
+        navigate('/');
+      })
+      .catch((err) => {
+        toast({
+          title: 'Submission Failed',
+          description: err.message,
+          duration: 3000,
+          status: 'error',
+          isClosable: true,
+        });
+      });
     console.log(complaint);
-    // You can add API call here to submit complaint data
   };
 
-  const [image, setImage] = useState(null);
-  const [fileName, setFileName] = useState("No Files Selected")
-  const handleImageChange = ({ target: { files } }) => {
-    if (files.length > 0) {
-      setFileName(files[0].name);
-      setImage(URL.createObjectURL(files[0]));
-    }
-  };
+
+
+  // const [image, setImage] = useState(null);
+  // const [fileName, setFileName] = useState("No Files Selected")
+  // const handleImageChange = ({ target: { files } }) => {
+  //   if (files.length > 0) {
+  //     setFileName(files[0].name);
+  //     setImage(URL.createObjectURL(files[0]));
+  //   }
+  // };
 
   return (
     <Box p={4}>
@@ -73,13 +112,13 @@ const Complaint = () => {
             required
           />
         </FormControl>
-        <Box 
-          border="1px dotted black" 
-          p={4} 
-          borderRadius={'1rem'} 
-          height={'50% '} 
+        <Box
+          border="1px dotted black"
+          p={4}
+          borderRadius={'1rem'}
+          height={'50% '}
           // mt={6} 
-          overflow={'hidden'} 
+          overflow={'hidden'}
           borderWidth={'0.1rem'}
           width={'50%'}
           alignSelf={'center'}
@@ -90,7 +129,13 @@ const Complaint = () => {
               <Input
                 type="file"
                 id="imageUpload"
-                onChange={handleImageChange}
+                name='attachment'
+                onChange={(e) => {
+                  setComplaint((prev) => ({
+                    ...prev,
+                    attachment: e.target.files[0]
+                  }))
+                }}
                 style={{ display: 'none' }}
               />
               <Box
@@ -107,12 +152,12 @@ const Complaint = () => {
                   justifyContent="center"
                   _hover={{ borderColor: '#4A5568' }}
                 >
-                  {image ? (
+                  {attachment ? (
                     <Image
-                      src={image}
+                      src={URL.createObjectURL(attachment)}
                       width={150}
                       height={150}
-                      alt={fileName}
+                      alt={'Complaint Image'}
                       style={{ maxWidth: '100%', maxHeight: '100%' }}
                     />
                   ) : (
@@ -126,7 +171,13 @@ const Complaint = () => {
             </Flex>
           </VStack>
         </Box>
-        <Button type="submit" colorScheme="teal" width={'50%'} alignSelf={'center'}>
+        <Button
+          type="submit"
+          colorScheme="teal"
+          width={'50%'}
+          alignSelf={'center'}
+          onClick={handleSubmit}
+        >
           Submit Complaint
         </Button>
       </Box>

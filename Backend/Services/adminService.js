@@ -69,7 +69,6 @@ const getAllLeavesList = async () => {
             model: studentModel,
             select: 'studentRoll studentName',
         });
-        console.log(leaves)
         const updatedLeaves = leaves.map(leave => ({
             _id: leave._id,
             studentRoll: leave.studentRoll ? leave.studentRoll.studentRoll : 'Student Does Not Exist Anymore',
@@ -85,6 +84,23 @@ const getAllLeavesList = async () => {
         return updatedLeaves;
     } catch (error) {
         throw { message: error.message }
+    }
+}
+
+const leaveActionService = async (id, actionData, user) => {
+    try{
+        const updatedLeave = await LeaveModel.findOneAndUpdate(
+            { _id: id },
+            actionData,
+            { new: true, runValidators: true }
+        );
+        
+        return {
+            ...updatedLeave._doc,
+            actionTakenBy: user,
+        }
+    }catch(error){
+        throw {message: error.message}
     }
 }
 
@@ -231,4 +247,5 @@ export {
     complaintListService,
     complaintActionService,
     getSingleComplaintService,
+    leaveActionService
 }

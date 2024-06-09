@@ -24,6 +24,24 @@ export const getLeavesList = createAsyncThunk(
     }
 )
 
+export const takeAction = createAsyncThunk(
+    'leave/takeAction',
+    async (data, thunkAPI) => {
+        try {
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+   
+
+            const { leaveId, status } = data; // Assuming data contains leaveId and action
+            // console.log(leaveId)
+            // Call the service to take action on the leave request
+            return await leaveService.leaveAction(token, status, leaveId );
+        } catch (error) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+)
 
 const leaveSlice = createSlice({
     name: 'leave',
@@ -41,6 +59,25 @@ const leaveSlice = createSlice({
                 state.isSuccess = true,
                 state.LeavesList = action.payload.LeavesList,
                 state.message = action.payload
+            })
+            .addCase(getLeavesList.rejected, (state, action) => {
+                state.isLoading = false,
+                state.isSuccess = false,
+                state.message = action.payload
+            })
+            .addCase(takeAction.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(takeAction.fulfilled, (state, action) => {
+                const updatedLeave = action.payload;
+                const index = state.LeavesList.findIndex(leave => leave._id === updatedLeave._id);
+                if (index !== -1) {
+                    state.LeavesList[index] = updatedLeave;
+                }
+                state.isLoading = false;
+            })
+            .addCase(takeAction.rejected, (state) => {
+                state.isLoading = false
             })
     }
 })

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllFeedbacks } from '../Features/Feedback/feedBackSlice';
-import { Box, Input, Stack, Collapse, Button, Text, RadioGroup, Radio, HStack } from '@chakra-ui/react';
+import { Box, Input, Stack, Collapse, Button, Text, RadioGroup, Radio, HStack, Avatar, Heading } from '@chakra-ui/react';
 
 const Feedbacks = () => {
   const dispatch = useDispatch();
@@ -45,6 +45,8 @@ const Feedbacks = () => {
     setOpenFeedback(openFeedback === id ? null : id);
   };
 
+  // console.log(filteredFeedbacks)
+
   return (
     <Box>
       <HStack spacing={4} mb={4}>
@@ -83,14 +85,39 @@ const Feedbacks = () => {
                 justifyContent={'space-between'}
                 _hover={{background: 'teal'}}
               >
-                <Text>{feedback.student}</Text>
+                <Text>{feedback.student} ({feedback.studentRoll})</Text>
                 <Text fontSize="sm">{new Date(feedback.submissionDate).toLocaleDateString()}</Text>
               </Button>
-              <Collapse in={openFeedback === feedback._id}>
-                <Box mt={4}>
-                  <Text><strong>Feedback:</strong> {feedback.feedback}</Text>
-                  <Text><strong>Description:</strong> {feedback.feedbackDescription}</Text>
-                  <Text><strong>Suggestion:</strong> {feedback.suggestion}</Text>
+              <Collapse 
+                in={openFeedback === feedback._id} 
+                // style={{display: 'flex'}}
+                className='flex flex-col'
+              >
+                <Heading textAlign={'center'} mb={6} mt={4}>Feedback Details</Heading>
+                <Box display={'flex'} gap={'4rem'} height={'auto'}>
+                  <Box width={'40%'}>
+                    <Text>
+                      <strong>Feedback:</strong> {feedback.feedback}
+                    </Text>
+                    <Text>
+                      <strong>Meal : </strong> {feedback.mealOfDay}
+                    </Text>
+                    <Text>
+                      <strong>Description:</strong> {feedback.feedbackDescription}
+                    </Text>
+                    <Text>
+                      <strong>Suggestion:</strong> {feedback.suggestion}
+                    </Text>
+                  </Box>
+                  <Box width={'60%'} >
+                    <img
+                      src={feedback.feedbackImage}
+                      width={'100%'}
+                      height={'100%'}
+                      style={{objectFit: 'contain'}}
+                      // style={{width: '12rem', height: '10rem', objectFit: 'contain'}}
+                    />
+                  </Box>
                 </Box>
               </Collapse>
             </Box>

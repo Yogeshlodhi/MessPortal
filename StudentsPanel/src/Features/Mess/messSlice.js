@@ -5,6 +5,7 @@ const initialState = {
     announcements: [],
     feedback: [],
     menu: [],
+    coomplaints: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -51,6 +52,19 @@ export const postFeedback = createAsyncThunk(
     }
 )
 
+export const postComplaint = createAsyncThunk(
+    'mess/complaint',
+    async (data, thunkAPI) => {
+        try{
+            const token = thunkAPI.getState().auth.student.token;
+            return await messService.postComplaint(token, data);
+        }catch(error){
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+)
+
 const messSlice = createSlice({
     name: 'mess',
     initialState,
@@ -81,6 +95,19 @@ const messSlice = createSlice({
                 state.feedback = action.payload
             })
             .addCase(postFeedback.rejected, (state, action) => {
+                state.isError = true,
+                state.isLoading = false,
+                state.message = action.payload
+            })
+            .addCase(postComplaint.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(postComplaint.fulfilled, (state, action) => {
+                state.isLoading = false,
+                state.isSuccess = true,
+                state.coomplaints = action.payload
+            })
+            .addCase(postComplaint.rejected, (state, action) => {
                 state.isError = true,
                 state.isLoading = false,
                 state.message = action.payload

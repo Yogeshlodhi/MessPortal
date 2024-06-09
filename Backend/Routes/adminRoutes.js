@@ -63,7 +63,8 @@ import {
     getMenu,
     getComplaintsList,
     takeAction,
-    getSingleComplaint
+    getSingleComplaint,
+    leaveAction
 } from "../Controllers/adminController.js";
 import authenticateAndCheckRole from "../Middleware/userPermission.js";
 
@@ -87,6 +88,7 @@ router.use(wardenOrHigher);
 
 router.get('/students_list', getAllStudents);
 router.get('/leaves_list', getAllLeaves);
+router.put('/leaves/takeAction/:id', leaveAction);
 router.get('/student_profile', getStudentByEmail);
 
 router.post('/menu_upload', messSecretaryOrHigher, uploadMenu);

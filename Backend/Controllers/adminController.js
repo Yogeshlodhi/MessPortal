@@ -3,16 +3,17 @@ import {
     complaintActionService,
     complaintListService,
     deleteAnnounceService,
-    getAllLeavesList, 
-    getAllStudentsList, 
-    getAnnounceService, 
-    getFeedbackService, 
-    getMenuService, 
-    getSingleComplaintService, 
-    getStudentByEmailService, 
-    loginAdminService, 
-    registerAdminService, 
-    updateMenuService, 
+    getAllLeavesList,
+    getAllStudentsList,
+    getAnnounceService,
+    getFeedbackService,
+    getMenuService,
+    getSingleComplaintService,
+    getStudentByEmailService,
+    leaveActionService,
+    loginAdminService,
+    registerAdminService,
+    updateMenuService,
     uploadMenuService
 } from '../Services/adminService.js';
 import { statusCode } from '../Utils/http.js';
@@ -90,6 +91,23 @@ const getAllLeaves = (req, res) => {
         })
 }
 
+const leaveAction = (req, res) => {
+    const id = req.params.id;
+    const actions = req.body;
+    const user = req.user.firstName;
+    leaveActionService(id, actions, user)
+        .then((data) => {
+            return res
+                .status(statusCode.ok)
+                .send({ message: 'Action Updated Successfully', data: data });
+        })
+        .catch((err) => {
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message, error: 'There is some error' })
+        })
+}
+
 const uploadMenu = (req, res) => {
     const menuData = req.body;
     uploadMenuService(menuData)
@@ -147,13 +165,13 @@ const getAnnouncements = (req, res) => {
     getAnnounceService()
         .then((data) => {
             return res
-                    .status(statusCode.ok)
-                    .send({message: 'Announcements List Found', data: data});
+                .status(statusCode.ok)
+                .send({ message: 'Announcements List Found', data: data });
         })
         .catch((err) => {
             return res
-                    .status(statusCode.badRequest)
-                    .send({message: err.message})
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
         })
 }
 
@@ -179,11 +197,11 @@ const getFeedbacks = (req, res) => {
     getFeedbackService()
         .then((data) => {
             return res
-                    .status(statusCode.ok)
-                    .send({message: 'Feedbacks Received', data: data});
+                .status(statusCode.ok)
+                .send({ message: 'Feedbacks Received', data: data });
         })
         .catch((err) => {
-            return res.status(statusCode.badRequest).send({message: err.message})
+            return res.status(statusCode.badRequest).send({ message: err.message })
         })
 }
 
@@ -221,13 +239,13 @@ const getComplaintsList = (req, res) => {
     complaintListService()
         .then((data) => {
             return res
-                    .status(statusCode.ok)
-                    .send({message: 'Complaints List Received', data: data})
+                .status(statusCode.ok)
+                .send({ message: 'Complaints List Received', data: data })
         })
         .catch((err) => {
             return res
-                    .status(statusCode.badRequest)
-                    .send({message: err.message})
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
         })
 }
 
@@ -239,13 +257,13 @@ const takeAction = (req, res) => {
     complaintActionService(id, actions, user)
         .then((data) => {
             return res
-                    .status(statusCode.ok)
-                    .send({message: 'Action Updated Successfully', data: data});
+                .status(statusCode.ok)
+                .send({ message: 'Action Updated Successfully', data: data });
         })
         .catch((err) => {
             return res
-                    .status(statusCode.badRequest)
-                    .send({message: err.message, error: 'There is some error' })
+                .status(statusCode.badRequest)
+                .send({ message: err.message, error: 'There is some error' })
         })
 }
 
@@ -255,13 +273,13 @@ const getSingleComplaint = (req, res) => {
     getSingleComplaintService(id)
         .then((data) => {
             return res
-                    .status(statusCode.ok)
-                    .send({message: 'Complaint Received', data: data})
+                .status(statusCode.ok)
+                .send({ message: 'Complaint Received', data: data })
         })
         .catch((err) => {
             return res
-                    .status(statusCode.badRequest)
-                    .send({message: err.message})
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
         })
 }
 
@@ -280,5 +298,6 @@ export {
     getMenu,
     getComplaintsList,
     takeAction,
-    getSingleComplaint
+    getSingleComplaint,
+    leaveAction
 }
