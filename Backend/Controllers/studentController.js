@@ -95,9 +95,6 @@ const addComplaint = async (req, res) => {
     const studentId = req.user.id;
     const localFilePath = req.file ? req.file.path : null;
 
-    // console.log("Req.file : ",req.file)
-    // console.log("localfilePath : ",localFilePath)
-
     let imageUrl = null;
     if (localFilePath) {
         const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
