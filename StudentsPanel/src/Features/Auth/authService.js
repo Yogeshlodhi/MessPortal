@@ -21,9 +21,17 @@ const update = async (data, token) => {
         }
     }
     const response = await axios.put(`${API_URL}`, data, config);
-    // if (response.data && response.data.data) {
-    //     localStorage.setItem('student', JSON.stringify(response.data.data));
-    // }
+    return response.data;
+}
+
+const updateImage = async (data, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.put(`${API_URL}/updateImage`, data, config);
+    console.log(response)
     return response.data;
 }
 
@@ -35,7 +43,8 @@ const authService = {
     register,
     login,
     logout,
-    update
+    update,
+    updateImage
 }
 
 export default authService

@@ -18,6 +18,7 @@ import Profile from './Pages/Profile';
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth);
+  // console.log(isAuthenticated)
 
   return (
     <Router>

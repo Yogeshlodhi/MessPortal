@@ -11,10 +11,12 @@ function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const bgColor = useColorModeValue('brand.100', 'brand.900');
-    const textColor = useColorModeValue('gray.800', 'white');
+    // const bgColor = useColorModeValue('brand.100', 'brand.900');
+    // const textColor = useColorModeValue('gray.800', 'white');
 
-    const { student, isLoading } = useSelector((state) => state.auth)
+    const { student, dp } = useSelector((state) => state.auth)
+    // const { student } = useSelector((state) => state.auth)
+
 
     const logoutStudent = () => {
         dispatch(logout());
@@ -27,18 +29,6 @@ function Header() {
             navigate('/login')
         }
     }, [navigate, student])
-
-    // if (isLoading) {
-    //     return (
-    //         <Spinner
-    //             thickness='4px'
-    //             speed='0.65s'
-    //             emptyColor='gray.200'
-    //             color='blue.500'
-    //             size='xl'
-    //         />
-    //     )
-    // }
 
     return (
         <Box
@@ -64,8 +54,10 @@ function Header() {
                         <WrapItem cursor={'pointer'}>
                             <Avatar 
                                 name={student.studentName} 
-                                src={student.profileImage ? student.profileImage : student.studentName}
-                            />
+                                src={dp ? dp : student.studentName}
+                                // src={student.profileImage ? student.profileImage : student.studentName}
+                                />
+                                {/* {console.log(student.profileImage)} */}
                         </WrapItem>
                     </PopoverTrigger>
                     <PopoverContent width={'12rem'}>

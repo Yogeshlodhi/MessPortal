@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Text, useToast } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { login, reset } from '../Features/Auth/authSlice';
-import { InfinitySpin } from 'react-loader-spinner'
 import Spinner from '../Components/Spinner';
 
-
 function Login() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const toast = useToast();
 
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
-
-    const toast = useToast();
-
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
         emailId: '',
@@ -24,8 +19,8 @@ function Login() {
     })
 
     const { emailId, password } = formData;
-
     const { student, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+
     useEffect(() => {
         if (isError) {
             toast({
@@ -36,15 +31,6 @@ function Login() {
         }
         if (isSuccess) {
             navigate('/')
-            // if (isSuccess) {
-            //     toast({
-            //         title: 'Successfully Logged In',
-            //         duration: 3000,
-            //         status: 'success',
-            //         position: 'top',
-            //         isClosable: true
-            //     })
-            // }
         }
         dispatch(reset());
     }, [student, navigate, isError, message, isSuccess, dispatch])

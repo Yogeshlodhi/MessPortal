@@ -16,6 +16,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../Components/Spinner';
 import { getLeaves, reset } from '../Features/Leave/leaveSlice';
+import { getMessInfo } from '../Features/Mess/messSlice';
 import { useNavigate } from 'react-router-dom';
 import UtilFunctions from '../Utils/UtilFunctions';
 
@@ -27,6 +28,7 @@ function Dashboard() {
 
   const { student } = useSelector((state) => state.auth)
   const { leaves, isLoading, isError, message } = useSelector((state) => state.leave)
+  const { messInfo } = useSelector(state => state.mess);
 
   useEffect(() => {
 
@@ -38,6 +40,7 @@ function Dashboard() {
       navigate('/login')
     }
     else {
+      dispatch(getMessInfo())
       dispatch(getLeaves())
     }
 
@@ -50,26 +53,24 @@ function Dashboard() {
 
   if (isLoading) {
     return (
-      <Spinner message={'Fetching Leaves'}/>
+      <Spinner message={'Fetching Leaves'} />
     )
   }
 
   const leavesData = leaves && leaves.data;
-  const totalAmount = leavesData && leavesData.reduce((acc, leave) => acc + 1500, 0);
-  const totalDays = leavesData && leavesData.reduce((acc, leave) => acc + 1, 0);
+  const messAmount = messInfo && messInfo.data?.mealPrice;
+  const totalAmount = leavesData ? leavesData.reduce((acc, leave) => acc + messAmount * UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate)), 0) : 0;
 
-  
   return (
-    <Box 
+    <Box
       className='flex gap-8 flex-col'
-      >
+    >
 
       <Box className='flex gap-4' alignItems={'center'}>
         <TextSnippetIcon style={{ fontSize: '2rem' }} />
         <Heading fontSize={'2rem'}>Leave History</Heading>
       </Box>
       <Box
-        // overflowX={'hidden'}
       >
         <TableContainer>
           <Table variant='striped' colorScheme='teal'>
@@ -91,7 +92,7 @@ function Dashboard() {
                   <Td>{UtilFunctions.formatDate(new Date(leave.endDate))}</Td>
                   <Td>{UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))}</Td>
                   <Td>{leave.status}</Td>
-                  <Td>1500</Td>
+                  <Td>{messAmount * UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))}</Td>
                 </Tr>
               ))}
             </Tbody>

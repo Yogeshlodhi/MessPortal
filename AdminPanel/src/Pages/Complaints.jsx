@@ -99,13 +99,18 @@ const ComplaintsList = () => {
               </Box>
               {/* Add more fields as needed */}
               <Box mb={4}>
-                <img
-                  src={selectedComplaint.attachment}
-                  width={'100%'}
-                  height={'100%'}
-                  style={{ objectFit: 'contain', borderRadius: '0.5rem' }}
-                // style={{width: '12rem', height: '10rem', objectFit: 'contain'}}
-                />
+                {selectedComplaint.attachment ? (
+                  <img
+                    src={selectedComplaint.attachment}
+                    width={'100%'}
+                    height={'100%'}
+                    style={{ objectFit: 'contain', borderRadius: '0.5rem' }}
+                    alt="Can not fetch the Complaint Image"
+                  />
+                ) : (
+                  <Text color={'red'} fontWeight={'bold'}>No Image Was Attached With This Complaint</Text>
+                )
+              }
               </Box>
             </ModalBody>
           </ModalContent>

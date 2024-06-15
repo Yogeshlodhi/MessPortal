@@ -15,15 +15,18 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { postComplaint } from '../Features/Mess/messSlice';
 import { useNavigate } from 'react-router-dom';
+import Spinner from '../Components/Spinner'
 
 
 const Complaint = () => {
   const dispatch = useDispatch();
   const toast = useToast()
   const navigate = useNavigate();
+
+  const {isLoading} = useSelector(state => state.mess)
 
   const [complaint, setComplaint] = useState({
     complaintAbout: '',
@@ -34,7 +37,6 @@ const Complaint = () => {
   const { complaintAbout, description, attachment } = complaint;
 
   const handleChange = (e) => {
-    // const { name, value } = e.target;
     setComplaint((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -71,19 +73,12 @@ const Complaint = () => {
           isClosable: true,
         });
       });
-    console.log(complaint);
+    // console.log(complaint);
   };
 
-
-
-  // const [image, setImage] = useState(null);
-  // const [fileName, setFileName] = useState("No Files Selected")
-  // const handleImageChange = ({ target: { files } }) => {
-  //   if (files.length > 0) {
-  //     setFileName(files[0].name);
-  //     setImage(URL.createObjectURL(files[0]));
-  //   }
-  // };
+  if(isLoading){
+    return <Spinner message={'Submitting Your Complaint...'}/>
+  }
 
   return (
     <Box p={4}>
@@ -91,7 +86,7 @@ const Complaint = () => {
         Submit a Complaint
       </Heading>
       <Box gap={'1rem'} display={'flex'} flexDirection={'column'}>
-        <FormControl id="complaintAbout">
+        <FormControl isRequired>
           <FormLabel>Complaint About</FormLabel>
           <Input
             type="text"
@@ -102,7 +97,7 @@ const Complaint = () => {
             required
           />
         </FormControl>
-        <FormControl id="description">
+        <FormControl isRequired>
           <FormLabel>Description</FormLabel>
           <Textarea
             name="description"
@@ -155,10 +150,10 @@ const Complaint = () => {
                   {attachment ? (
                     <Image
                       src={URL.createObjectURL(attachment)}
-                      width={150}
-                      height={150}
+                      width={'100%'}
+                      height={'100%'}
                       alt={'Complaint Image'}
-                      style={{ maxWidth: '100%', maxHeight: '100%' }}
+                      style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                     />
                   ) : (
                     <>

@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import complaintModel from "../Models/complaintModel.js";
 import announcementModel from "../Models/announcementModel.js";
 import menuModel from '../Models/menuModel.js';
+import messInfoModel from "../Models/messInfoModel.js";
 
 const studentRegister = async (registrationData) => {
 
@@ -62,6 +63,20 @@ const studentLogin = async (loginData) => {
         };
     } else {
         throw {message: "Invalid Credentials"}
+    }
+}
+
+const getMessInfoService = async () => {
+    try {
+        const latestMessInfo = await messInfoModel.findOne().sort({ createdAt: -1 });
+        if (latestMessInfo) {
+            return latestMessInfo
+        } else {
+            return null;
+        }
+    } catch (err) {
+        console.log(err);
+        throw { message: 'Could Not Find the Informations', error: err }
     }
 }
 
@@ -132,7 +147,21 @@ const updateProfileService = async (userId, profileData) => {
 
         return updatedUser
     }catch(err){
+        throw {message: err.message}
+    }
+}
 
+const updateProfileImageService = async (userId, profileImage) => {
+    try{
+        const updatedUser = await studentModel.findByIdAndUpdate(userId, {profileImage: profileImage}, { new: true })
+        // console.log("Updated User : ",updatedUser)
+        if (!updatedUser) {
+            throw new Error('User not found');
+        }
+
+        return updatedUser.profileImage
+    }catch(err){
+        throw {message: err.message}
     }
 }
 
@@ -153,5 +182,7 @@ export {
     getAnnouncementsService,
     getMenuService,
     updateProfileService,
-    getProfileService
+    getProfileService,
+    getMessInfoService,
+    updateProfileImageService
 }

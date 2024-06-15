@@ -66,11 +66,17 @@ const postComplaint = async (token, complaintData) => {
     return response.data;
 }
 
+const getMessInfoService = async () => {
+    const response = await axios.get(`${API_URL}/messInfo`);
+    return response.data;
+}
+
 const messService = {
     getAnnouncements,
     postFeedback,
     getMenu,
-    postComplaint
+    postComplaint,
+    getMessInfoService
 }
 
 export default messService

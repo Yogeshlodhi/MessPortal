@@ -1,4 +1,5 @@
 import {
+    addMessInfoService,
     announcementService,
     complaintActionService,
     complaintListService,
@@ -8,6 +9,7 @@ import {
     getAnnounceService,
     getFeedbackService,
     getMenuService,
+    getMessInfoService,
     getSingleComplaintService,
     getStudentByEmailService,
     leaveActionService,
@@ -61,6 +63,44 @@ const loginAdmin = (req, res) => {
             .status(statusCode.incorrectCredential)
             .send({ message: err.message })
     }
+}
+
+const addMessInfo = (req, res) => {
+    const messData = req.body;
+    if (messData) {
+        addMessInfoService(messData)
+            .then((data) => {
+                return res
+                    .status(statusCode.ok)
+                    .send({ message: "Mess Information Added", data: data })
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(statusCode.badRequest)
+                    .send({ message: err.message })
+            })
+    }
+    else {
+        return res
+            .status(statusCode.incorrectCredential)
+            .send({ message: err.message })
+    }
+
+}
+const getMessInfo = (req, res) => {
+    getMessInfoService()
+        .then((data) => {
+            return res
+                .status(statusCode.ok)
+                .send({ message: "Mess Information Received", data: data })
+        })
+        .catch((err) => {
+            console.log(err);
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
+        })
 }
 
 const getAllStudents = (req, res) => {
@@ -299,5 +339,7 @@ export {
     getComplaintsList,
     takeAction,
     getSingleComplaint,
-    leaveAction
+    leaveAction,
+    addMessInfo,
+    getMessInfo
 }

@@ -3,15 +3,14 @@ import authService from "./authService";
 
 const student = JSON.parse(localStorage.getItem('student'));
   
-
 const initialState = {
     student : student ? student : null,
+    dp: student ? student.profileImage : null,
     isError: false,
     isSuccess: false,
     isLoading: false,
     message: ''
 }
-
 
 export const register = createAsyncThunk(
     'auth/register',
@@ -44,6 +43,20 @@ export const updateStudent = createAsyncThunk(
         try{
             const token = thunkAPI.getState().auth.student.token;
             return await authService.update(user, token);
+        }catch(error){
+            console.log(error.response.data.message)
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+)
+
+export const updateImage = createAsyncThunk(
+    'auth/updateImage',
+    async (user, thunkAPI) => {
+        try{
+            const token = thunkAPI.getState().auth.student.token;
+            return await authService.updateImage(user, token);
         }catch(error){
             console.log(error.response.data.message)
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -115,6 +128,19 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
                 state.student = null
+            })
+            .addCase(updateImage.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(updateImage.fulfilled, (state, action) => {
+                state.isLoading = false,
+                state.isSuccess = true,
+                state.dp = action.payload.data
+            })
+            .addCase(updateImage.rejected, (state, action) => {
+                state.isLoading = false,
+                state.isError = true
+                state.message = action.payload
             })
             .addCase(logout.fulfilled, (state) => {
                 state.isLoading = false,

@@ -7,6 +7,7 @@ import feedbackModel from '../Models/feedbackSuggestion.js'
 import { createToken, hashPassword } from '../Utils/createToken.js'
 import bcrypt from 'bcryptjs'
 import complaintModel from "../Models/complaintModel.js"
+import messInfoModel from '../Models/messInfoModel.js'
 
 const registerAdminService = async (registerData) => {
 
@@ -50,6 +51,38 @@ const loginAdminService = async (loginData) => {
         return adminData;
     } else {
         throw { message: "Couldn't Log You In, Please Try Again" }
+    }
+}
+
+const addMessInfoService = async (messInfo) => {
+    try {
+        let info = await messInfoModel.create(messInfo);
+        if (!info) {
+            throw { message: "Unexpected Error Occured" }
+        }
+        return info;
+    } catch (err) {
+        console.log(err);
+        throw { message: 'Could Not Upload the Informations', error: err }
+    }
+}
+
+const getMessInfoService = async () => {
+    try {
+        // let info = await messInfoModel.find();
+        // if (!info) {
+        //     throw { message: "Unexpected Error Occured" }
+        // }
+        // return info;
+        const latestMessInfo = await messInfoModel.findOne().sort({ createdAt: -1 });
+        if (latestMessInfo) {
+            return latestMessInfo
+        } else {
+            return null;
+        }
+    } catch (err) {
+        console.log(err);
+        throw { message: 'Could Not Find the Informations', error: err }
     }
 }
 
@@ -247,5 +280,7 @@ export {
     complaintListService,
     complaintActionService,
     getSingleComplaintService,
-    leaveActionService
+    leaveActionService,
+    addMessInfoService,
+    getMessInfoService
 }
