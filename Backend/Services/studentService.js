@@ -154,7 +154,6 @@ const updateProfileService = async (userId, profileData) => {
 const updateProfileImageService = async (userId, profileImage) => {
     try{
         const updatedUser = await studentModel.findByIdAndUpdate(userId, {profileImage: profileImage}, { new: true })
-        // console.log("Updated User : ",updatedUser)
         if (!updatedUser) {
             throw new Error('User not found');
         }

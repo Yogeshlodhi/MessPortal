@@ -28,6 +28,9 @@ const leaveApplicationSchema = new Schema({
         type: String,
         enum: ["Pending","Approved","Rejected"],
         default: "Pending",
+    },
+    actionTakenBy:{
+        type: String,
     }
 })
 

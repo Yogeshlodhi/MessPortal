@@ -135,6 +135,7 @@ const leaveAction = (req, res) => {
     const id = req.params.id;
     const actions = req.body;
     const user = req.user.firstName;
+    // console.log("Actions : ",actions)
     leaveActionService(id, actions, user)
         .then((data) => {
             return res

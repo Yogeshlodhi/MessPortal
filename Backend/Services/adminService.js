@@ -122,16 +122,18 @@ const getAllLeavesList = async () => {
 
 const leaveActionService = async (id, actionData, user) => {
     try{
+        actionData.actionTakenBy = user;
         const updatedLeave = await LeaveModel.findOneAndUpdate(
             { _id: id },
             actionData,
             { new: true, runValidators: true }
         );
-        
-        return {
-            ...updatedLeave._doc,
-            actionTakenBy: user,
-        }
+        return updatedLeave.toObject();
+        // const response = {
+        //     ...updatedLeave.toObject(),
+        //     actionTakenBy: user,
+        // };
+        // return response;
     }catch(error){
         throw {message: error.message}
     }

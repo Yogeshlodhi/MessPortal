@@ -31,7 +31,6 @@ const updateImage = async (data, token) => {
         }
     }
     const response = await axios.put(`${API_URL}/updateImage`, data, config);
-    console.log(response)
     return response.data;
 }
 

@@ -70,6 +70,7 @@ const leaveSlice = createSlice({
             })
             .addCase(takeAction.fulfilled, (state, action) => {
                 const updatedLeave = action.payload;
+                console.log("Updated Leave : ", action.payload)
                 const index = state.LeavesList.findIndex(leave => leave._id === updatedLeave._id);
                 if (index !== -1) {
                     state.LeavesList[index] = updatedLeave;

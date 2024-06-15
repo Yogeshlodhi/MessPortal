@@ -21,7 +21,8 @@ const leaveAction = async (token, actionData, id) => {
             'Content-Type': 'application/json',
         }
     }
-    const response = await axios.put(`${API_URL}/leaves/takeAction/${id}`, actionData, config);
+    console.log(actionData)
+    const response = await axios.put(`${API_URL}/leaves/takeAction/${id}`, {status : actionData}, config);
     return response.data;
 }
 

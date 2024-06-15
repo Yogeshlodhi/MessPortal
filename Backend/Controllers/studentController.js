@@ -109,20 +109,13 @@ const addComplaint = async (req, res) => {
     const complaintData = req.body;
     const studentId = req.user.id;
     const localFilePath = req.file ? req.file.path : null;
-
-    // console.log("Req.file : ",req.file)
-    // console.log("localfilePath : ",localFilePath)
-
     let imageUrl = null;
     if (localFilePath) {
         const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
         imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
-        // console.log("image url : ",imageUrl)
     }
 
     complaintData.attachment = imageUrl;
-    // console.log(complaintData)
-
     complaintService(complaintData, studentId)
         .then((data) => {
             return res
@@ -200,7 +193,6 @@ const updateProfileImage = async (req, res) => {
         const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
         imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
     }
-    // console.log("Profile Image : ", imageUrl)
 
     updateProfileImageService(userId, imageUrl)
         .then((data) => {
