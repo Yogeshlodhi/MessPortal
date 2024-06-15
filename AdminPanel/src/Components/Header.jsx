@@ -31,6 +31,8 @@ function Header() {
 
     const logoutUser = () => {
         dispatch(reset());
+        // localStorage.removeItem('admin')
+        localStorage.clear();
         navigate('/login');
     }
 
