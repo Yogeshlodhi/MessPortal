@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {
   Box, Heading, Container, Input, FormControl, FormLabel, useToast,
   Button, useColorModeValue, Image, VStack, Flex, Text,
-  ButtonGroup
+  ButtonGroup,
+  useMediaQuery
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -14,10 +15,11 @@ const Profile = () => {
   const bgColor = useColorModeValue('brand.100', 'brand.900');
   const textColor = useColorModeValue('gray.800', 'white');
   const { student, isLoading, dp } = useSelector(state => state.auth);
-  // console.log(dp);
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();
+
+  const [isMobile] = useMediaQuery('(max-width: 600px)')
 
   const [updateFormData, setUpdateFormData] = useState({
     emailId: student.emailId,
@@ -128,31 +130,48 @@ const Profile = () => {
   }
 
   return (
-    <Box padding={'2rem'} className='flex gap-4 flex-col' bg={bgColor} color={textColor}>
+    <Box 
+      // padding={'2rem'} 
+      className='flex gap-4 flex-col' 
+      bg={bgColor} 
+      color={textColor}
+    >
       <Heading>Hello ! <span style={{ color: randomColor }}>{studentName}</span></Heading>
-      <Container padding={'2rem'} maxW='70rem' centerContent>
-        <Box padding='4' w={'90%'} maxW='100%' className='grid grid-cols-2 gap-6'>
-          <FormControl>
+      <Container 
+        // padding={'2rem'} 
+        maxW='70rem' 
+        centerContent
+        // background={'green'}
+      >
+        <Box 
+          padding='4' 
+          w={'100%'} 
+          // maxW='100%' 
+          // background={'red'}
+          // className='grid grid-cols-2 gap-6'
+          className={isMobile ? '' : 'grid grid-cols-2 gap-6'}
+        >
+          <FormControl mt={4}>
             <FormLabel>Student Name</FormLabel>
             <Input onChange={onChange} value={studentName} name='studentName' />
           </FormControl>
-          <FormControl>
+          <FormControl mt={4}>
             <FormLabel>Student Roll No.</FormLabel>
             <Input onChange={onChange} value={studentRoll} name='studentRoll' />
           </FormControl>
-          <FormControl>
+          <FormControl mt={4}>
             <FormLabel>Webmail Id</FormLabel>
             <Input onChange={onChange} value={emailId} name='emailId' />
           </FormControl>
-          <FormControl>
+          <FormControl mt={4}>
             <FormLabel>Phone Number</FormLabel>
             <Input onChange={onChange} value={number} name='number' />
           </FormControl>
-          <FormControl>
+          <FormControl mt={4}>
             <FormLabel>Bank Account Number</FormLabel>
             <Input onChange={onChange} value={bankAccount} name='bankAccount' />
           </FormControl>
-          <FormControl>
+          <FormControl mt={4}>
             <FormLabel>IFSC Code</FormLabel>
             <Input onChange={onChange} value={ifsc} name='ifsc' />
           </FormControl>
@@ -163,9 +182,10 @@ const Profile = () => {
             overflow={'hidden'}
             borderWidth={'0.1rem'}
             alignSelf={'center'}
+            mt={4}
           >
             <VStack spacing={4} alignItems="center">
-              <FormLabel fontSize={'2rem'} mt={6} htmlFor="imageUpload">Update Profile Image</FormLabel>
+              <FormLabel fontSize={'2rem'} htmlFor="imageUpload">Update Profile Image</FormLabel>
               <Flex alignItems="center" mt={6}>
                 <Input
                   type="file"
@@ -173,7 +193,6 @@ const Profile = () => {
                   name='profile'
                   onChange={onImageChange}
                   style={{ display: 'none' }}
-                // value={}
                 />
                 <Box as="label" htmlFor="imageUpload" cursor="pointer">
                   <Box
@@ -211,7 +230,7 @@ const Profile = () => {
                 width={150}
                 height={150}
                 alt={'Profile Image'}
-                style={{ objectFit: 'contain', borderRadius: '0.5rem' }}
+                style={{ objectFit: 'contain', borderRadius: '0.5rem', marginTop: '2rem' }}
               />
             ) : (
               <>
@@ -220,10 +239,19 @@ const Profile = () => {
             }
           </Box>
         </Box>
-        <ButtonGroup alignSelf={'center'} width={'100%'} justifyContent={'center'} gap={'2rem'}>
+        <ButtonGroup 
+          display={isMobile ? 'flex' : ''}
+          // alignSelf={'center'} 
+          justifyContent={'space-between'} 
+          // background={'red'}
+          flexDirection={isMobile ? 'column' : 'row'}
+          width={'100%'} 
+          gap={'2rem'}
+          paddingLeft={isMobile ? '0' : '25%'}
+        >
           <Button
             onClick={onUpdate}
-            width={'30%'}
+            width={isMobile ? '100%' : '30%'}
             display={'inline-block'}
             alignSelf={'center'}
             background={'teal'}
@@ -236,14 +264,13 @@ const Profile = () => {
           </Button>
           <Button
             onClick={editImage}
-            width={'30%'}
+            width={isMobile ? '100%' : '30%'}
             display={'inline-block'}
             alignSelf={'center'}
             background={'teal'}
             color={'white'}
             fontSize={'1.5rem'}
             _hover={{ background: 'teal.500' }}
-          // isDisabled={disable}
           >
             Update Image
           </Button>
@@ -254,3 +281,7 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
+
+

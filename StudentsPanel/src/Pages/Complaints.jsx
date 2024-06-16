@@ -13,6 +13,7 @@ import {
   Text,
   Container,
   useToast,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useDispatch, useSelector } from 'react-redux';
@@ -75,6 +76,7 @@ const Complaint = () => {
       });
     // console.log(complaint);
   };
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
 
   if(isLoading){
     return <Spinner message={'Submitting Your Complaint...'}/>
@@ -82,7 +84,11 @@ const Complaint = () => {
 
   return (
     <Box p={4}>
-      <Heading as="h1" size="lg" mb={4}>
+      <Heading
+        size="lg" 
+        mb={4}
+        textAlign={isMobile ? 'center' : 'unset'}
+      >
         Submit a Complaint
       </Heading>
       <Box gap={'1rem'} display={'flex'} flexDirection={'column'}>
@@ -115,10 +121,10 @@ const Complaint = () => {
           // mt={6} 
           overflow={'hidden'}
           borderWidth={'0.1rem'}
-          width={'50%'}
+          width={isMobile ? '100%' : '50%'}
           alignSelf={'center'}
         >
-          <VStack spacing={4} alignItems="center">
+          <VStack spacing={4} alignItems="center" >
             <FormLabel fontSize={'2rem'} mt={6} htmlFor="imageUpload">Upload Image</FormLabel>
             <Flex alignItems="center" mt={6}>
               <Input
@@ -169,7 +175,7 @@ const Complaint = () => {
         <Button
           type="submit"
           colorScheme="teal"
-          width={'50%'}
+          width={isMobile ? '100%' : '50%'}
           alignSelf={'center'}
           onClick={handleSubmit}
         >
