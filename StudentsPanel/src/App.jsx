@@ -112,9 +112,6 @@ const App = () => {
 
 const AuthenticatedRoutes = () => {
   const [isMobile] = useMediaQuery('(max-width: 600px)');
-  const [isDrawerOpen, setDrawerOpen] = React.useState(false);
-
-  const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
 
   return (
     <Box
@@ -142,8 +139,6 @@ const AuthenticatedRoutes = () => {
         <Box
           overflow={'scroll'}
           height={'90%'}
-          // padding={'1rem'}
-          // paddingTop={'2rem'}
           padding={isMobile ? '1rem' : '1rem'}
           paddingTop={isMobile ? '1rem' : '2rem'}
         >

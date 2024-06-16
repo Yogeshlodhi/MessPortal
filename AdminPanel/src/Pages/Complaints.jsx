@@ -1,7 +1,7 @@
 import {
   Box, Flex, Text, Button, IconButton, Heading, Grid, Icon, ButtonGroup,
   useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton,
-  ModalBody
+  ModalBody, useMediaQuery
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
@@ -16,6 +16,8 @@ const ComplaintsList = () => {
 
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [isMobile] = useMediaQuery('(max-width : 600px)')
 
   useEffect(() => {
     dispatch(getComplaintsList());
@@ -79,7 +81,7 @@ const ComplaintsList = () => {
         ))}
       </Grid>
       {selectedComplaint && (
-        <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <Modal size={isMobile ? 'sm' : 'lg'} isOpen={isOpen} onClose={onClose}>
           <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
           <ModalContent>
             <ModalHeader>Complaint Details</ModalHeader>

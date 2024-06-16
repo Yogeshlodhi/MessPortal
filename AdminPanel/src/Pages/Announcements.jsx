@@ -9,7 +9,8 @@ import {
   Modal, ModalOverlay, ModalContent,
   ModalHeader, ModalFooter, ModalBody,
   ModalCloseButton, FormControl, FormLabel,
-  Input, useDisclosure, Textarea
+  Input, useDisclosure, Textarea,
+  useMediaQuery
 } from '@chakra-ui/react';
 import UtilFunctions from '../../../StudentsPanel/src/Utils/UtilFunctions';
 import Spinner from '../Components/Spinner'
@@ -17,6 +18,8 @@ import Spinner from '../Components/Spinner'
 const Announcements = () => {
   const dispatch = useDispatch();
   const { announcements, isLoading } = useSelector((state) => state.announcements);
+
+  const [isMobile] = useMediaQuery('(max-width: 600px)')
 
   useEffect(() => {
     dispatch(getAnnouncementList());
@@ -96,10 +99,12 @@ const Announcements = () => {
                         whiteSpace={'normal'} 
                         display={'flex'} 
                         justifyContent={'space-between'} 
+                        flexDirection={isMobile ? 'column' : 'row'}
                         alignItems={'center'}
+                        gap={'1rem'}
                       >
                         {row.description}
-                        <Button background={'red'} color={'white'}>
+                        <Button background={'red'} color={'white'} alignSelf={isMobile ? 'flex-start' : ''}>
                           Delete
                         </Button>
                       </Box>
@@ -112,7 +117,7 @@ const Announcements = () => {
         </Table>
       </TableContainer>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal  size={isMobile ? 'sm' : 'lg'}  isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add New Announcement</ModalHeader>

@@ -1,4 +1,4 @@
-import { Box, Heading, Flex, Divider } from '@chakra-ui/react'
+import { Box, Heading, Flex, Divider, useMediaQuery, WrapItem, Text } from '@chakra-ui/react'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import WindowIcon from '@mui/icons-material/Window';
@@ -8,8 +8,10 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ThemeToggle from '../Components/ThemeToggle'
 
 function Sidebar() {
+    const [isMobile] = useMediaQuery('(max-width: 600px)');
 
     const SidebarOptions = [
         {
@@ -58,10 +60,11 @@ function Sidebar() {
 
     return (
         <Box
-            height={'100vh'}
-            boxShadow="0px 0px 10px rgba(0,0,0,0.45)" 
-            position="relative"
-            // width={'20vw'}
+            // height={'100vh'}
+            // boxShadow="0px 0px 10px rgba(0,0,0,0.45)" 
+            // position="relative"
+            height={isMobile ? '' : '100vh'}
+            boxShadow={isMobile ? 'none' : "0px 0px 10px rgba(0,0,0,0.45)"}
         >
             <Heading
                 minHeight={'3.5rem'}
@@ -104,6 +107,10 @@ function Sidebar() {
                 }
                 )
             }
+            <WrapItem cursor={'pointer'} visibility={isMobile ? 'visible' : 'hidden'} alignItems={'center'} gap={'1rem'} justifyContent={'center'}>
+                <Text fontSize={'1.5rem'}>Change Theme</Text>
+                <ThemeToggle />
+            </WrapItem>
         </Box>
     )
 }

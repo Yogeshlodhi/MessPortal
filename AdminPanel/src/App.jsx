@@ -14,11 +14,11 @@ import Menu from './Pages/Menu';
 import MessLeaves from './Pages/MessLeaves';
 import Students from './Pages/Students';
 import Profile from './Pages/Profile';
+import { useMediaQuery } from '@chakra-ui/react';
 
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth);
-  // console.log(isAuthenticated)
 
   return (
     <Router>
@@ -31,44 +31,54 @@ function App() {
   );
 }
 
-const AuthenticatedRoutes = () => (
-  <Box
-    display={'flex'}
-    maxHeight={'90vh'}
-    height={'90vh'}
-  >
-    <Box flex={2}>
-      <Sidebar />
-    </Box>
+const AuthenticatedRoutes = () => {
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
+  return (
     <Box
-      flex={7}
       display={'flex'}
-      flexDirection={'column'}
-      height={'100vh'}
-      width={'80vw'}
+      maxHeight={'90vh'}
+      height={'90vh'}
     >
-      <Header />
+      {/* <Box flex={2}>
+        <Sidebar />
+      </Box> */}
+      {
+        !isMobile ? (
+          <Box flex={2}>
+            <Sidebar />
+          </Box>
+        ) : (
+          <></>
+        )
+      }
       <Box
-        overflow={'scroll'}
-        // overflowY={'scroll'}
-        height={'90%'}
-        padding={'1rem'}
-        paddingTop={'2rem'}
+        display={'flex'}
+        flexDirection={'column'}
+        height={'100vh'}
+        width={isMobile ? '100vw' : '80vw'}
       >
-        <Routes>
-          <Route index element={<Dashboard />} />
-          <Route path='/' element={<Dashboard />} />
-          <Route path='/announcements' element={<Announcements />} />
-          <Route path='/complaints' element={<Complaints />} />
-          <Route path='/feedbacks' element={<Feedbacks />} />
-          <Route path='/menu' element={<Menu />} />
-          <Route path='/leaves' element={<MessLeaves />} />
-          <Route path='/students' element={<Students />} />
-          {/* <Route path='/profile' element={<Profile/>}/> */}
-        </Routes>
+        <Header />
+        <Box
+          overflow={'scroll'}
+          height={'90%'}
+          padding={isMobile ? '1rem' : '1rem'}
+          paddingTop={isMobile ? '1rem' : '2rem'}
+        >
+          <Routes>
+            <Route index element={<Dashboard />} />
+            <Route path='/' element={<Dashboard />} />
+            <Route path='/announcements' element={<Announcements />} />
+            <Route path='/complaints' element={<Complaints />} />
+            <Route path='/feedbacks' element={<Feedbacks />} />
+            <Route path='/menu' element={<Menu />} />
+            <Route path='/leaves' element={<MessLeaves />} />
+            <Route path='/students' element={<Students />} />
+            {/* <Route path='/profile' element={<Profile/>}/> */}
+          </Routes>
+        </Box>
       </Box>
     </Box>
-  </Box>
-)
+  )
+}
 
 export default App;

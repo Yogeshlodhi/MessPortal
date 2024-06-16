@@ -6,7 +6,6 @@
 // import jsPDF from 'jspdf';
 // import html2canvas from 'html2canvas';
 
-
 // const Menu = () => {
 //   const bgColor = useColorModeValue('brand.100', 'brand.900');
 //   const textColor = useColorModeValue('gray.800', 'white');
@@ -39,10 +38,30 @@
 //     }));
 //   }
 
+//   const onRemarkOrTimingChange = (e) => {
+//     setDisable(false);
+//     const { name, value } = e.target;
+//     if (name.startsWith('timing_')) {
+//       const timingKey = name.split('_')[1];
+//       setUpdateFormData((prev) => ({
+//         ...prev,
+//         timing: {
+//           ...prev.timing,
+//           [timingKey]: value
+//         }
+//       }));
+//     } else {
+//       setUpdateFormData((prev) => ({
+//         ...prev,
+//         [name]: value
+//       }));
+//     }
+//   };
+
 //   const onUpdate = (e) => {
 //     e.preventDefault();
-//     const { monthOfMenu } = updateFormData; // Extract month from the form data
-//     dispatch(updateMenu({ month: monthOfMenu, updatedMenu: updateFormData })) // Pass month along with the updatedMenu
+//     const { monthOfMenu } = updateFormData;
+//     dispatch(updateMenu({ month: monthOfMenu, updatedMenu: updateFormData }))
 //       .unwrap()
 //       .then(() => {
 //         setDisable(true);
@@ -84,7 +103,6 @@
 //     return <Spinner message={'Loading Menu'} />;
 //   }
 
-
 //   const mealData = {
 //     weeklyMenu: {
 //       monday: menu.monday,
@@ -97,14 +115,12 @@
 //     }
 //   };
 
-
 //   return (
 //     <Box>
 //       <Box
 //         maxW="70rem"
 //         mx="auto"
 //         p="5"
-//         // bg="white" 
 //         bg={bgColor}
 //         color={textColor}
 //         borderRadius="md"
@@ -115,8 +131,6 @@
 //           textAlign={'center'}
 //           paddingTop={'0.5rem'}
 //           paddingBottom={'1.5rem'}
-//           // bg={bgColor}
-//           // color={textColor}
 //           background={'teal'}
 //           color={'white'}
 //         >
@@ -167,12 +181,11 @@
 //       </Box>
 //       <Container maxW="container.xl" py={8}>
 //         <Box bg={bgColor} color={textColor} borderRadius="lg" p={8} boxShadow="lg">
-//           {/* <Heading textAlign="center" mb={4}>Menu for {updateFormData.monthOfMenu}</Heading> */}
 //           <VStack spacing={6}>
 //             <FormControl>
 //               <FormLabel>Remarks</FormLabel>
 //               <Input
-//                 onChange={(e) => setUpdateFormData({ ...updateFormData, remarks: e.target.value })}
+//                 onChange={onRemarkOrTimingChange}
 //                 value={updateFormData.remarks || ''}
 //                 name='remarks'
 //               />
@@ -180,7 +193,7 @@
 //             <FormControl>
 //               <FormLabel>Timing (Breakfast)</FormLabel>
 //               <Input
-//                 onChange={(e) => setUpdateFormData({ ...updateFormData, timing: { ...updateFormData.timing, breakfast: e.target.value } })}
+//                 onChange={onRemarkOrTimingChange}
 //                 value={updateFormData.timing?.breakfast || ''}
 //                 name='timing_breakfast'
 //               />
@@ -188,7 +201,7 @@
 //             <FormControl>
 //               <FormLabel>Timing (Lunch)</FormLabel>
 //               <Input
-//                 onChange={(e) => setUpdateFormData({ ...updateFormData, timing: { ...updateFormData.timing, lunch: e.target.value } })}
+//                 onChange={onRemarkOrTimingChange}
 //                 value={updateFormData.timing?.lunch || ''}
 //                 name='timing_lunch'
 //               />
@@ -196,7 +209,7 @@
 //             <FormControl>
 //               <FormLabel>Timing (Dinner)</FormLabel>
 //               <Input
-//                 onChange={(e) => setUpdateFormData({ ...updateFormData, timing: { ...updateFormData.timing, dinner: e.target.value } })}
+//                 onChange={onRemarkOrTimingChange}
 //                 value={updateFormData.timing?.dinner || ''}
 //                 name='timing_dinner'
 //               />
@@ -233,7 +246,10 @@
 //             <FormControl>
 //               <FormLabel>Amount for one meal</FormLabel>
 //               <Input
-//                 onChange={(e) => setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value })}
+//                 onChange={(e) => {
+//                   setDisable(false);
+//                   setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value })
+//                 }}
 //                 value={updateFormData.amountOfOneMeal || ''}
 //                 name='amountOfOneMeal'
 //               />
@@ -262,8 +278,10 @@
 // export default Menu;
 
 
-import React, { useEffect, useState } from 'react'
-import { Box, Heading, Container, Input, FormControl, FormLabel, useToast, Divider, AbsoluteCenter, Button, VStack, HStack, useColorModeValue, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react';
+import {
+  Box, Heading, Container, Input, FormControl, FormLabel, useToast, Divider, AbsoluteCenter, Button, VStack, Table, Thead, Tr, Th, Tbody, Td, useColorModeValue, useMediaQuery
+} from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../Components/Spinner';
 import { getMenu, updateMenu } from '../Features/Menu/menuSlice';
@@ -275,6 +293,7 @@ const Menu = () => {
   const textColor = useColorModeValue('gray.800', 'white');
   const dispatch = useDispatch();
   const toast = useToast();
+  const [isMobile] = useMediaQuery("(max-width: 600px)");
 
   useEffect(() => {
     dispatch(getMenu());
@@ -300,7 +319,7 @@ const Menu = () => {
         [meal]: e.target.value
       }
     }));
-  }
+  };
 
   const onRemarkOrTimingChange = (e) => {
     setDisable(false);
@@ -346,7 +365,7 @@ const Menu = () => {
           duration: 3000
         });
       });
-  }
+  };
 
   const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
@@ -382,7 +401,7 @@ const Menu = () => {
   return (
     <Box>
       <Box
-        maxW="70rem"
+        maxW={isMobile ? "100%" : "70rem"}
         mx="auto"
         p="5"
         bg={bgColor}
@@ -390,6 +409,7 @@ const Menu = () => {
         borderRadius="md"
         boxShadow="md"
         id='table-content'
+        overflowX="auto"
       >
         <Heading
           textAlign={'center'}
@@ -439,7 +459,7 @@ const Menu = () => {
       <Button mt="4" colorScheme="teal" onClick={generatePDF}>Download as PDF</Button>
       <Box position='relative' paddingTop={'4rem'}>
         <Divider />
-        <AbsoluteCenter bg={bgColor} color={textColor} px='6'>
+        <AbsoluteCenter bg={bgColor} color={textColor} mt={10}>
           <Heading textAlign="center" mb={4}>Update Menu for {updateFormData.monthOfMenu}</Heading>
         </AbsoluteCenter>
       </Box>
@@ -521,7 +541,7 @@ const Menu = () => {
           </VStack>
           <Button
             onClick={onUpdate}
-            width={'30%'}
+            width={isMobile ? '100%' : '30%'}
             display={'inline-block'}
             alignSelf={'center'}
             background={'teal'}
@@ -536,7 +556,8 @@ const Menu = () => {
         </Box>
       </Container>
     </Box>
-  )
-}
+  );
+};
 
 export default Menu;
+

@@ -5,7 +5,8 @@ import {
   ModalHeader, ModalCloseButton, ModalBody, useDisclosure,
   Avatar,
   Text,
-  Heading
+  Heading,
+  useMediaQuery
 } from '@chakra-ui/react';
 import { getStudentsList } from '../Features/Students/studentSlice';
 import Spinner from '../Components/Spinner';
@@ -26,6 +27,8 @@ const Students = () => {
   const { studentsList, isLoading, isError, message } = useSelector((state) => state.students);
 
   const { student, isLoadingStudent } = useSelector((state) => state.studentProfile);
+
+  const [isMobile] = useMediaQuery('(max-width: 600px)')
 
   useEffect(() => {
     if (isError) {
@@ -137,7 +140,8 @@ const Students = () => {
           //     setSelectedStudent(null)
           // }} 
           onClose={onClose}
-          size={'xl'}
+          size={isMobile ? 'sm' : 'xl'}
+          // size={'xl'}
         >
           <ModalOverlay
             bg='blackAlpha.300'
@@ -148,12 +152,23 @@ const Students = () => {
               {selectedStudent.studentName}'s Profile
             </ModalHeader>
              <ModalCloseButton />
-            <ModalBody display={'flex'} gap={'1rem'}>
+            <ModalBody 
+              display={'flex'} 
+              flexDirection={isMobile ? 'column' : 'row'}
+              gap={'1rem'}
+            >
               <Box>
                 <Avatar
-                  style={{ width: '10rem', height: '10rem' }}
+                  style={{ 
+                    // width: '10rem', 
+                    // height: '10rem',
+                    width: isMobile ? '100%' : '10rem', 
+                    height: isMobile ? '100%' : '10rem',
+                    objectFit: 'cover'
+                  }}
                   name={selectedStudent.studentName}
-                  src={profile}
+                  // src={profile}
+                  src={selectedStudent.profileImage}
                   borderRadius="1rem"
                 />
               </Box>

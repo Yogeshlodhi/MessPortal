@@ -9,7 +9,15 @@ import {
     PopoverTrigger,
     WrapItem,
     useColorModeValue,
-    Tooltip
+    Tooltip,
+    useMediaQuery,
+    Drawer, 
+    DrawerBody, 
+    DrawerHeader, 
+    DrawerOverlay, 
+    DrawerContent, 
+    DrawerCloseButton, 
+    Button
 } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
@@ -18,10 +26,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, reset } from '../Features/Auth/authSlice';
 import ThemeToggle from '../Components/ThemeToggle'
+import { useState } from 'react';
+import MenuIcon from '@mui/icons-material/Menu';
+import Sidebar from './Sidebar';
 
 function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [isMobile] = useMediaQuery('(max-width: 600px)');
+    const [isDrawerOpen, setDrawerOpen] = useState(false);
+
+    const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
 
     // const bgColor = useColorModeValue('brand.100', 'brand.900');
     // const textColor = useColorModeValue('gray.800', 'white');
@@ -46,23 +61,47 @@ function Header() {
         <Box
             display={'flex'}
             alignItems={'center'}
-            justifyContent={'flex-end'}
+            justifyContent={isMobile ? 'space-between' : 'flex-end'}
             height={'10%'}
-            // background={'white'}
             boxShadow={'4px 2px 5px 0px rgba(0,0,0,0.35)'}
             pr={4}
-            width={'80vw'}
+            width={'100%'}
             zIndex={100}
             gap={'1rem'}
         >
             {
+                isMobile ? (
+                    <>
+                        <Button
+                            onClick={toggleDrawer}
+                            ml={4}
+                            zIndex="1000"
+                        >
+                            <MenuIcon />
+                        </Button>
+                        <Drawer isOpen={isDrawerOpen} placement="left" onClose={toggleDrawer}>
+                            <DrawerOverlay />
+                            <DrawerContent>
+                                <DrawerCloseButton marginTop={4} size={'lg'} />
+                                <DrawerBody>
+                                    <Sidebar />
+                                </DrawerBody>
+                            </DrawerContent>
+                        </Drawer>
+                    </>
+                ) : (
+                    <>
+                    </>
+                )
+            }
+            {
                 admin &&
                 <Popover placement='top-start'>
-                    <Tooltip label='Toggle Theme'>
+                    {/* <Tooltip label='Toggle Theme'>
                         <WrapItem cursor={'pointer'}>
                             <ThemeToggle />
                         </WrapItem>
-                    </Tooltip>
+                    </Tooltip> */}
                     <PopoverTrigger>
                         <WrapItem cursor={'pointer'}>
                             <Avatar name={admin.firstName} src='https://bit.ly/tioluwani-kolawole' />
