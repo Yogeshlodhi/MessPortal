@@ -1,50 +1,60 @@
-import { Avatar, Box, Button, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Spinner, Tooltip, WrapItem, useColorModeValue } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
+import { Avatar, 
+    Box, 
+    Popover, 
+    PopoverArrow, 
+    PopoverBody, 
+    PopoverContent, 
+    PopoverFooter, 
+    PopoverHeader, 
+    PopoverTrigger, 
+    Tooltip, 
+    WrapItem, 
+    useColorModeValue, 
+    useMediaQuery, 
+    Drawer, 
+    DrawerBody, 
+    DrawerHeader, 
+    DrawerOverlay, 
+    DrawerContent, 
+    DrawerCloseButton, 
+    Button } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
 import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, reset } from '../Features/Auth/authSlice';
 import ThemeToggle from './ThemeToggle';
+import MenuIcon from '@mui/icons-material/Menu';
+import Sidebar from './Sidebar';
 
 function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [isMobile] = useMediaQuery('(max-width: 600px)');
+    const [isDrawerOpen, setDrawerOpen] = React.useState(false);
 
-    const bgColor = useColorModeValue('brand.100', 'brand.900');
-    const textColor = useColorModeValue('gray.800', 'white');
+    const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
 
-    const { student, isLoading } = useSelector((state) => state.auth)
+    const { student, dp } = useSelector((state) => state.auth);
 
     const logoutStudent = () => {
         dispatch(logout());
         dispatch(reset());
         navigate('/login');
-    }
+    };
 
     useEffect(() => {
         if (!student) {
-            navigate('/login')
+            navigate('/login');
         }
-    }, [navigate, student])
-
-    // if (isLoading) {
-    //     return (
-    //         <Spinner
-    //             thickness='4px'
-    //             speed='0.65s'
-    //             emptyColor='gray.200'
-    //             color='blue.500'
-    //             size='xl'
-    //         />
-    //     )
-    // }
+    }, [navigate, student]);
 
     return (
         <Box
             display={'flex'}
             alignItems={'center'}
-            justifyContent={'flex-end'}
+            justifyContent={isMobile ? 'space-between' : 'flex-end'}
             height={'10%'}
             boxShadow={'4px 2px 5px 0px rgba(0,0,0,0.35)'}
             pr={4}
@@ -52,19 +62,43 @@ function Header() {
             zIndex={100}
             gap={'1rem'}
         >
-            {student &&
+            {
+                isMobile ? (
+                    <>
+                        <Button 
+                            onClick={toggleDrawer} 
+                            ml={4}
+                            zIndex="1000"
+                        >
+                            <MenuIcon />
+                        </Button>
+                        <Drawer isOpen={isDrawerOpen} placement="left" onClose={toggleDrawer}>
+                            <DrawerOverlay />
+                            <DrawerContent>
+                                <DrawerCloseButton marginTop={4} size={'lg'}/>
+                                <DrawerBody>
+                                    <Sidebar />
+                                </DrawerBody>
+                            </DrawerContent>
+                        </Drawer>
+                    </>
+                ) : (
+                    <>
+                    </>
+                )
+            }
+            {student && (
                 <Popover placement='top-start'>
-                    {/* <ThemeToggle /> */}
                     <Tooltip label='Toggle Theme'>
-                        <WrapItem cursor={'pointer'}>
+                        <WrapItem cursor={'pointer'} visibility={isMobile ? 'hidden' : 'visible'}>
                             <ThemeToggle />
                         </WrapItem>
                     </Tooltip>
                     <PopoverTrigger>
                         <WrapItem cursor={'pointer'}>
-                            <Avatar 
-                                name={student.studentName} 
-                                src={student.profileImage ? student.profileImage : student.studentName}
+                            <Avatar
+                                name={student.studentName}
+                                src={dp ? dp : student.studentName}
                             />
                         </WrapItem>
                     </PopoverTrigger>
@@ -86,10 +120,9 @@ function Header() {
                         </Box>
                     </PopoverContent>
                 </Popover>
-            }
-
+            )}
         </Box>
-    )
+    );
 }
 
-export default Header
+export default Header;

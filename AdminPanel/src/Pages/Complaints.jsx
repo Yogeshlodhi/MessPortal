@@ -1,7 +1,7 @@
 import {
   Box, Flex, Text, Button, IconButton, Heading, Grid, Icon, ButtonGroup,
   useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton,
-  ModalBody
+  ModalBody, useMediaQuery
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
@@ -16,6 +16,8 @@ const ComplaintsList = () => {
 
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [isMobile] = useMediaQuery('(max-width : 600px)')
 
   useEffect(() => {
     dispatch(getComplaintsList());
@@ -79,7 +81,7 @@ const ComplaintsList = () => {
         ))}
       </Grid>
       {selectedComplaint && (
-        <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <Modal size={isMobile ? 'sm' : 'lg'} isOpen={isOpen} onClose={onClose}>
           <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
           <ModalContent>
             <ModalHeader>Complaint Details</ModalHeader>
@@ -99,13 +101,18 @@ const ComplaintsList = () => {
               </Box>
               {/* Add more fields as needed */}
               <Box mb={4}>
-                <img
-                  src={selectedComplaint.attachment}
-                  width={'100%'}
-                  height={'100%'}
-                  style={{ objectFit: 'contain', borderRadius: '0.5rem' }}
-                // style={{width: '12rem', height: '10rem', objectFit: 'contain'}}
-                />
+                {selectedComplaint.attachment ? (
+                  <img
+                    src={selectedComplaint.attachment}
+                    width={'100%'}
+                    height={'100%'}
+                    style={{ objectFit: 'contain', borderRadius: '0.5rem' }}
+                    alt="Can not fetch the Complaint Image"
+                  />
+                ) : (
+                  <Text color={'red'} fontWeight={'bold'}>No Image Was Attached With This Complaint</Text>
+                )
+              }
               </Box>
             </ModalBody>
           </ModalContent>

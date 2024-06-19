@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllFeedbacks } from '../Features/Feedback/feedBackSlice';
-import { Box, Input, Stack, Collapse, Button, Text, RadioGroup, Radio, HStack, Avatar, Heading } from '@chakra-ui/react';
+import { Box, Input, Stack, Collapse, Button, Text, RadioGroup, Radio, HStack, Avatar, Heading, useMediaQuery } from '@chakra-ui/react';
 
 const Feedbacks = () => {
   const dispatch = useDispatch();
@@ -10,6 +10,8 @@ const Feedbacks = () => {
   const [filterDate, setFilterDate] = useState('');
   const [feedbackType, setFeedbackType] = useState('all');
   const [openFeedback, setOpenFeedback] = useState(null);
+
+  const [isMobile] = useMediaQuery('(max-width: 600px)')
 
   useEffect(() => {
     dispatch(getAllFeedbacks());
@@ -45,11 +47,10 @@ const Feedbacks = () => {
     setOpenFeedback(openFeedback === id ? null : id);
   };
 
-  // console.log(filteredFeedbacks)
 
   return (
     <Box>
-      <HStack spacing={4} mb={4}>
+      {/* <HStack spacing={4} mb={4}>
         <Input
           type="date"
           value={filterDate}
@@ -58,6 +59,27 @@ const Feedbacks = () => {
         />
         <RadioGroup onChange={handleFeedbackTypeChange} value={feedbackType}>
           <HStack spacing={4}>
+            <Radio value="all">All</Radio>
+            <Radio value="positive">Positive</Radio>
+            <Radio value="negative">Negative</Radio>
+          </HStack>
+        </RadioGroup>
+      </HStack> */}
+      <HStack
+        spacing={isMobile ? 2 : 4}
+        mb={4}
+        flexDirection={isMobile ? "column" : "row"}
+        alignItems="flex-start"
+      >
+        <Input
+          type="date"
+          value={filterDate}
+          onChange={handleDateChange}
+          placeholder="Filter by submission date"
+          mb={isMobile ? 2 : 0}
+        />
+        <RadioGroup onChange={handleFeedbackTypeChange} value={feedbackType}>
+          <HStack spacing={isMobile ? 2 : 4}>
             <Radio value="all">All</Radio>
             <Radio value="positive">Positive</Radio>
             <Radio value="negative">Negative</Radio>
@@ -72,7 +94,7 @@ const Feedbacks = () => {
               borderWidth="1px"
               borderRadius="lg"
               overflow="hidden"
-              width="80%"
+              width={isMobile ? '100%' : '80%'}
               p={4}
             >
               <Button
@@ -83,19 +105,26 @@ const Feedbacks = () => {
                 alignItems={'center'}
                 width={'100%'}
                 justifyContent={'space-between'}
-                _hover={{background: 'teal'}}
+                _hover={{ background: 'teal' }}
               >
                 <Text>{feedback.student} ({feedback.studentRoll})</Text>
                 <Text fontSize="sm">{new Date(feedback.submissionDate).toLocaleDateString()}</Text>
               </Button>
-              <Collapse 
-                in={openFeedback === feedback._id} 
-                // style={{display: 'flex'}}
+              <Collapse
+                in={openFeedback === feedback._id}
                 className='flex flex-col'
               >
                 <Heading textAlign={'center'} mb={6} mt={4}>Feedback Details</Heading>
-                <Box display={'flex'} gap={'4rem'} height={'auto'}>
-                  <Box width={'40%'}>
+                <Box
+                  display={'flex'}
+                  gap={'4rem'}
+                  height={'auto'}
+                  flexDirection={isMobile ? 'column' : 'row'}
+                >
+                  <Box
+                    // width={'40%'}
+                    width={isMobile ? '100%' : '60%'}
+                  >
                     <Text>
                       <strong>Feedback:</strong> {feedback.feedback}
                     </Text>
@@ -109,14 +138,23 @@ const Feedbacks = () => {
                       <strong>Suggestion:</strong> {feedback.suggestion}
                     </Text>
                   </Box>
-                  <Box width={'60%'} >
-                    <img
-                      src={feedback.feedbackImage}
-                      width={'100%'}
-                      height={'100%'}
-                      style={{objectFit: 'contain'}}
-                      // style={{width: '12rem', height: '10rem', objectFit: 'contain'}}
-                    />
+                  <Box
+                    // width={'60%'} 
+                    width={isMobile ? '100%' : '60%'}
+                  >
+                    {
+                      feedback.feedbackImage ? (
+                        <img
+                          src={feedback.feedbackImage}
+                          width={'100%'}
+                          height={'100%'}
+                          style={{ objectFit: 'contain' }}
+                        // style={{width: '12rem', height: '10rem', objectFit: 'contain'}}
+                        />
+                      ) : (
+                        <Text fontWeight={'bold'} textAlign={'center'} color={'red'}>No Image Was Attached</Text>
+                      )
+                    }
                   </Box>
                 </Box>
               </Collapse>

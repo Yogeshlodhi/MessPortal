@@ -21,8 +21,6 @@ function Login() {
     const { emailId, password } = formdata;
     const { admin, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
-    // console.log(admin)
-
     useEffect(() => {
         if (isError) {
             toast({
@@ -34,8 +32,7 @@ function Login() {
         if (isSuccess) {
             navigate('/')
         }
-
-        // dispatch(reset());
+        dispatch(reset());
     }, [admin, navigate, isError, message, isSuccess, dispatch])
 
     const onChange = (e) => {
@@ -69,18 +66,6 @@ function Login() {
                 padding={'0rem 2rem'}
             >
                 <Heading className="logo">Mess</Heading>
-                {/* <Box
-                    className="register-message"
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'space-between'}
-                    gap={5}
-                >
-                    <Text>Don't have an account?</Text>
-                    <Box color='#25659F'>
-                        <Link to='/register'>Register Now</Link>
-                    </Box>
-                </Box> */}
             </Box>
             <Box
                 className="login-container"

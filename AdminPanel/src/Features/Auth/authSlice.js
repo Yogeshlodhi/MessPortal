@@ -24,9 +24,12 @@ export const login = createAsyncThunk(
     }
 )
 
-// export const logout = createAsyncThunk(
-//     'auth/logout'
-// )
+export const logout = createAsyncThunk(
+    'auth/logout',
+    async () => {
+        await authService.logout()
+    }
+)
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -53,6 +56,14 @@ export const authSlice = createSlice({
                 state.message = action.payload
             })
             .addCase(login.pending, (state, action) => {
+                state.isLoading = true
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.isLoading = false,
+                state.isSuccess = true,
+                state.admin = null
+            })
+            .addCase(logout.pending, (state) => {
                 state.isLoading = true
             })
     }

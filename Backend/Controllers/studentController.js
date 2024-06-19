@@ -1,4 +1,4 @@
-import { complaintService, feedbackAndSuggestion, getAnnouncementsService, getMenuService, getProfileService, studentLogin, studentRegister, updateProfileService } from '../Services/studentService.js';
+import { complaintService, feedbackAndSuggestion, getAnnouncementsService, getMenuService, getMessInfoService, getProfileService, studentLogin, studentRegister, updateProfileImageService, updateProfileService } from '../Services/studentService.js';
 import uploadOnCloudinary from '../Utils/cloudinary.js';
 import { statusCode } from '../Utils/http.js';
 
@@ -49,6 +49,21 @@ const loginStudent = (req, res) => {
     }
 }
 
+const getMessInfo = (req, res) => {
+    getMessInfoService()
+        .then((data) => {
+            return res
+                .status(statusCode.ok)
+                .send({ message: "Mess Information Received", data: data })
+        })
+        .catch((err) => {
+            console.log(err);
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
+        })
+}
+
 const getProfile = (req, res) => {
     const userId = req.user.id;
     getProfileService(userId)
@@ -94,17 +109,17 @@ const addComplaint = async (req, res) => {
     const complaintData = req.body;
     const studentId = req.user.id;
     const localFilePath = req.file ? req.file.path : null;
+<<<<<<< HEAD
 
+=======
+>>>>>>> Responsiveness
     let imageUrl = null;
     if (localFilePath) {
         const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
         imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
-        // console.log("image url : ",imageUrl)
     }
 
     complaintData.attachment = imageUrl;
-    // console.log(complaintData)
-
     complaintService(complaintData, studentId)
         .then((data) => {
             return res
@@ -149,8 +164,33 @@ const getMenu = (req, res) => {
 const updateProfile = async (req, res) => {
     const userId = req.user.id
     const profileData = req.body
-    const localFilePath = req.file ? req.file.path : null;
+    // const localFilePath = req.file ? req.file.path : null;
 
+
+    // let imageUrl = null;
+    // if (localFilePath) {
+    //     const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
+    //     imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
+    // }
+
+    // profileData.profileImage = imageUrl;
+
+    updateProfileService(userId, profileData)
+        .then((data) => {
+            return res
+                .status(statusCode.ok)
+                .send({ message: 'Profile Updated Successfully', data: data })
+        })
+        .catch((err) => {
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
+        })
+}
+
+const updateProfileImage = async (req, res) => {
+    const userId = req.user.id
+    const localFilePath = req.file ? req.file.path : null;
 
     let imageUrl = null;
     if (localFilePath) {
@@ -158,13 +198,11 @@ const updateProfile = async (req, res) => {
         imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
     }
 
-    profileData.profileImage = imageUrl;
-
-    updateProfileService(userId, profileData)
+    updateProfileImageService(userId, imageUrl)
         .then((data) => {
             return res
                 .status(statusCode.ok)
-                .send({ message: 'Profile Updated Successfully', data: data })
+                .send({ message: 'Image Updated Successfully', data: data })
         })
         .catch((err) => {
             return res
@@ -182,4 +220,6 @@ export {
     getAnnouncements,
     getMenu,
     updateProfile,
+    getMessInfo,
+    updateProfileImage
 }

@@ -165,6 +165,7 @@ const LeaveAccordion = () => {
     const { LeavesList } = useSelector((state) => state.leaves);
 
     const leaveAction = (data) => {
+        // console.log(data)
         dispatch(takeAction(data));
     };
 
@@ -193,6 +194,12 @@ const LeaveAccordion = () => {
                                         {leave.status}
                                     </Text>
                                 </Box>
+                                <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
+                                    Approval Action By :
+                                    {leave.actionTakenBy}
+                                    {/* {console.log(leave.actionTakenBy ? leave.actionTakenBy : 'None')} */}
+                                    {console.log(leave)}
+                                </Box>
                             </AccordionDetails>
                             <AccordionActions>
                                 <ButtonGroup>
@@ -202,7 +209,7 @@ const LeaveAccordion = () => {
                                         borderRadius={'0.5rem'}
                                         size={'md'}
                                         onClick={() => {
-                                            leaveAction({ leaveId: leave._id, status: 'Reject' });
+                                            leaveAction({ leaveId: leave._id, status: 'Rejected' });
                                         }}
                                     >
                                         <CloseIcon />
@@ -214,7 +221,7 @@ const LeaveAccordion = () => {
                                         size={'md'}
                                         backgroundColor={'green'}
                                         onClick={() => {
-                                            leaveAction({ leaveId: leave._id, status: 'Approve' });
+                                            leaveAction({ leaveId: leave._id, status: 'Approved' });
                                         }}
                                     >
                                         <DoneIcon />

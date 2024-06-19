@@ -24,11 +24,15 @@ export const getSingleStudent = createAsyncThunk(
     }
 )
 
+
 const studentProfileSlice = createSlice({
     name: 'studentProfile',
     initialState,
     reducers: {
-        reset: (state) => initialState
+        reset: (state) => initialState,
+        clearStudent : (state) => {
+            state.student = null
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -49,5 +53,5 @@ const studentProfileSlice = createSlice({
     }
 })
 
-export const {reset} = studentProfileSlice.actions
+export const {reset, clearStudent} = studentProfileSlice.actions
 export default studentProfileSlice.reducer
