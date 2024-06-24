@@ -109,10 +109,7 @@ const addComplaint = async (req, res) => {
     const complaintData = req.body;
     const studentId = req.user.id;
     const localFilePath = req.file ? req.file.path : null;
-<<<<<<< HEAD
 
-=======
->>>>>>> Responsiveness
     let imageUrl = null;
     if (localFilePath) {
         const cloudinaryResponse = await uploadOnCloudinary(localFilePath);

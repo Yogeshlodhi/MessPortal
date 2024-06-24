@@ -183,10 +183,9 @@ import { useNavigate } from 'react-router-dom';
 import { applyLeave, reset } from '../Features/Leave/leaveSlice';
 
 function LeaveApplication() {
-  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  const bgColor = useColorModeValue('lightMode.cardBg', 'darkMode.bg');
   const textColor = useColorModeValue('lightMode.text', 'darkMode.text');
-  const btnColor = useColorModeValue('lightMode.btnTxt', 'darkMode.btnTxt');
-  const btnBg = useColorModeValue('lightMode.btnBg', 'darkMode.btnBg');
+
   const [isMobile] = useMediaQuery('(max-width: 600px)');
 
   const dispatch = useDispatch();
@@ -249,13 +248,15 @@ function LeaveApplication() {
   return (
     <Box
       className='flex gap-8 flex-col'
-      bg={bgColor}
       color={textColor}
-      // padding={{ base: '2rem', md: '4rem' }}
+      borderRadius={'1rem'}
+      padding={'0.5rem'}
+      boxShadow={
+        '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
     >
       <Heading 
         fontSize={'2rem'}
-        textAlign={isMobile ? 'center' : 'unset'}
+        textAlign={'center'}
       >
         Apply For Leave
       </Heading>
@@ -275,10 +276,7 @@ function LeaveApplication() {
       </List>
       <Container
         padding={isMobile ? '0' : '2rem'}
-        // maxW='70rem'
         maxW={isMobile ? '100%' : '70rem'}
-        // background={'red'}
-        // bg={bgColor}
         color={textColor}
         centerContent
         borderRadius={'1rem'}
@@ -300,7 +298,7 @@ function LeaveApplication() {
                 value={startDate}
                 name='startDate'
                 onChange={(e) => onFormChange(e, 'startDate')}
-              />
+                />
             </FormControl>
             <FormControl flex={1} isRequired>
               <FormLabel color={textColor}>To</FormLabel>
@@ -310,7 +308,7 @@ function LeaveApplication() {
                 value={endDate}
                 name='endDate'
                 onChange={(e) => onFormChange(e, 'endDate')}
-              />
+                />
             </FormControl>
           </Box>
           <FormControl w={'100%'} isRequired>
@@ -329,9 +327,10 @@ function LeaveApplication() {
             display={'inline-block'}
             width={{ base: '100%', md: '50%' }}
             marginTop={'1rem'}
-            color={'#2C3E50'}
             onClick={onApply}
-            // bg={btnBg}
+            background={'#FC476C'}
+            _hover={{backgroundColor: '#ff5274'}}
+            color={'white'}
           >
             Apply
           </Button>

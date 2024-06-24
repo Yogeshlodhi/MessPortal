@@ -149,6 +149,7 @@ import {
   Heading,
   useColorModeValue,
   useMediaQuery,
+  useTheme,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../Components/Spinner';
@@ -158,8 +159,6 @@ import { useNavigate } from 'react-router-dom';
 import UtilFunctions from '../Utils/UtilFunctions';
 
 function Dashboard() {
-  const bgColor = useColorModeValue('brand.100', 'brand.900');
-  const textColor = useColorModeValue('gray.800', 'white');
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -197,6 +196,8 @@ function Dashboard() {
     0
   );
 
+  // const bgColor = useColorModeValue('gray.50', 'gray.800');
+
   return (
     <Box className='flex gap-8 flex-col'>
       <Box className='flex gap-4' alignItems={'center'} justifyContent={isMobile ? 'center' : 'unset'}>
@@ -207,7 +208,11 @@ function Dashboard() {
       </Box>
       <Box>
         <TableContainer>
-          <Table variant='striped' colorScheme='teal'>
+          <Table 
+            variant='striped' 
+            // colorScheme='teal'
+            colorScheme='#1D1D1C'
+          >
             <Thead>
               <Tr>
                 <Th>Reason</Th>

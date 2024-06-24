@@ -14,6 +14,7 @@ import {
   Container,
   useToast,
   useMediaQuery,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,6 +35,8 @@ const Complaint = () => {
     description: '',
     attachment: null
   });
+
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
 
   const { complaintAbout, description, attachment } = complaint;
 
@@ -83,11 +86,17 @@ const Complaint = () => {
   }
 
   return (
-    <Box p={4}>
+    <Box 
+      p={4}
+      bg={bgColor}
+      borderRadius={'1rem'}
+      boxShadow="0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+    >
       <Heading
         size="lg" 
         mb={4}
-        textAlign={isMobile ? 'center' : 'unset'}
+        // textAlign={isMobile ? 'center' : 'unset'}
+        textAlign={'center'}
       >
         Submit a Complaint
       </Heading>
@@ -174,10 +183,13 @@ const Complaint = () => {
         </Box>
         <Button
           type="submit"
-          colorScheme="teal"
+          // colorScheme="teal"
           width={isMobile ? '100%' : '50%'}
           alignSelf={'center'}
           onClick={handleSubmit}
+          background={'#FC476C'}
+          color={'white'}
+          _hover={{backgroundColor: '#ff5274'}}
         >
           Submit Complaint
         </Button>

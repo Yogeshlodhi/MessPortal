@@ -14,11 +14,13 @@
 }
 .active{
     /* background-color: slateblue; */
-    background-color: teal;
+    background-color: #FC476C;
+    /* background-color: teal; */
     color: white;
 }
 .active:hover{
-    background-color: teal;
+    background-color: #ff5274;
+    /* background-color: teal; */
     color: white;
 }
 

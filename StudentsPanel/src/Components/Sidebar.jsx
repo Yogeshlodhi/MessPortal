@@ -56,13 +56,16 @@ const SidebarOptions = [
 ];
 
 function Sidebar() {
+  const boxShadow = useColorModeValue('0px 0px 10px rgba(0,0,0,0.45)', '0px 0px 5px #636368');
   const [isMobile] = useMediaQuery('(max-width: 600px)');
+  // const bgColor = useColorModeValue('lightMode.bg', 'darkMode.');
   return (
     <Box
-      // backgroundColor='#2C3E50'
+      // bg={bgColor}
       // height={'100vh'}
       height={isMobile ? '' : '100vh'}
-      boxShadow={isMobile ? 'none' : "0px 0px 10px rgba(0,0,0,0.45)"}
+      // boxShadow={isMobile ? 'none' : "0px 0px 10px rgba(0,0,0,0.45)"}
+      boxShadow={isMobile ? 'none' : boxShadow}
     // width={'20vw'}
     // position="relative"
     >

@@ -91,14 +91,13 @@ import Complaints from './Pages/Complaints';
 import Sidebar from './Components/Sidebar';
 import Header from './Components/Header';
 import Payments from './Pages/Payments';
-import { Box, useMediaQuery, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button } from '@chakra-ui/react';
+import { Box, useMediaQuery, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, useColorModeValue } from '@chakra-ui/react';
 // import { HamburgerIcon } from '@chakra-ui/icons';
 import MenuIcon from '@mui/icons-material/Menu';
 
 
 const App = () => {
   const isAuthenticated = useSelector((state) => state.auth);
-
   return (
     <Router>
       <Routes>
@@ -112,7 +111,7 @@ const App = () => {
 
 const AuthenticatedRoutes = () => {
   const [isMobile] = useMediaQuery('(max-width: 600px)');
-
+  
   return (
     <Box
       display="flex"

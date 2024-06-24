@@ -422,8 +422,9 @@ import { postFeedback } from '../Features/Mess/messSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Feedback = () => {
-  const bgColor = useColorModeValue('brand.100', 'brand.900');
+  // const bgColor = useColorModeValue('brand.100', 'brand.900');
   const textColor = useColorModeValue('gray.800', 'white');
+  const borderColor = useColorModeValue('black', 'white');
   const [isMobile] = useMediaQuery('(max-width: 600px)');
 
   const dispatch = useDispatch();
@@ -487,27 +488,24 @@ const Feedback = () => {
       });
   };
 
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+
   return (
     <Box 
       height={'100%'} 
-      // bg={bgColor}
       color={textColor} 
-      // p={{ base: '1rem', md: '2rem' }}
-      // background={'green'}
       margin={isMobile ? '0.5rem' : 0}
     >
-      <Flex 
+      <Flex
         align="flex-start" 
         justifyContent={'center'}
-        border={'2px solid black'} 
-        // p={{ base: '1rem', md: '2rem' }} 
+        borderRadius={'1rem'}
+        boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
         flexDir={{ base: 'column', md: 'row' }} 
         height={isMobile ? 'auto' : '100%'}
-        paddingTop={isMobile ? '0.5rem' : '1rem'}
-        paddingBottom={isMobile ? '0.5rem' : '1rem'}
-        paddingLeft={isMobile ? '0.5rem' : '1rem'}
-        paddingRight={isMobile ? '0.5rem' : '1rem'}
+        p={isMobile ? '0.5rem' : '1rem'}
         gap={'1rem'}
+        border={'0.2px solid #f3f3f3'}
       >
         <Box 
           flex="1" 
@@ -516,7 +514,7 @@ const Feedback = () => {
           // borderRadius={'1rem'} 
           p={isMobile ? 0 : '1rem'}
           borderRadius={isMobile ? '0' : '1rem'} 
-          border={isMobile ? 'none' : '1px solid black'} 
+          // border={isMobile ? 'none' : '1px solid black'} 
           height={'100%'} 
           // mb={{ base: '1rem', md: '0' }}
         >
@@ -569,18 +567,15 @@ const Feedback = () => {
         </Box>
         <Box 
           flex="1" 
-          // ml={{ base: '0', md: '8' }} 
           alignSelf={'center'}
           p={isMobile ? 0 : '1rem'}
           borderRadius={isMobile ? '0' : '1rem'} 
-          border={isMobile ? 'none' : '1px solid black'} 
           height={'100%'} 
-          // p={'1rem'} 
-          // borderRadius={'1rem'} 
-          // border={'1px solid black'} 
-          // height={'100%'}
         >
-          <Box border="1px dotted black" p={4} borderRadius={'1rem'} height={'50%'} mt={6} overflow={'hidden'} borderWidth={'0.1rem'}>
+          <Box 
+            border={`1px dotted ${borderColor}`} 
+            // border="1px dotted white" 
+            p={4} borderRadius={'1rem'} height={'50%'} mt={6} overflow={'hidden'} borderWidth={'0.1rem'}>
             <VStack spacing={4} alignItems="center">
               <FormLabel fontSize={'2rem'} mt={6} htmlFor="imageUpload">Upload Image</FormLabel>
               <Flex alignItems="center" mt={6}>
@@ -649,10 +644,13 @@ const Feedback = () => {
             justifyContent="center"
             width="100%"
             mt="4rem"
-            colorScheme="teal"
+            // colorScheme="teal"
+            background={'#FC476C'}
+            _hover={{backgroundColor: '#ff5274'}}
             variant="solid"
             gap="6"
             onClick={onSubmit}
+            color={'white'}
           >
             Submit
             <TelegramIcon />

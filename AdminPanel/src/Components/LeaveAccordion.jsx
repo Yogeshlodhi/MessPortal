@@ -198,7 +198,7 @@ const LeaveAccordion = () => {
                                     Approval Action By :
                                     {leave.actionTakenBy}
                                     {/* {console.log(leave.actionTakenBy ? leave.actionTakenBy : 'None')} */}
-                                    {console.log(leave)}
+                                    {/* {console.log(leave)} */}
                                 </Box>
                             </AccordionDetails>
                             <AccordionActions>

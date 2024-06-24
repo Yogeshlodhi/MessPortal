@@ -49,14 +49,16 @@ function Header() {
             navigate('/login');
         }
     }, [navigate, student]);
-
+    const boxShadow = useColorModeValue('4px 2px 5px 0px rgba(0,0,0,0.35)', '4px 0px 5px 0px #636368');
+    const bgColor = useColorModeValue('lightMode.bg', 'darkMode.primaryBg');
     return (
         <Box
             display={'flex'}
             alignItems={'center'}
             justifyContent={isMobile ? 'space-between' : 'flex-end'}
             height={'10%'}
-            boxShadow={'4px 2px 5px 0px rgba(0,0,0,0.35)'}
+            // boxShadow={'4px 2px 5px 0px rgba(0,0,0,0.35)'}
+            boxShadow={boxShadow}
             pr={4}
             width={'100%'}
             zIndex={100}
@@ -76,7 +78,7 @@ function Header() {
                             <DrawerOverlay />
                             <DrawerContent>
                                 <DrawerCloseButton marginTop={4} size={'lg'}/>
-                                <DrawerBody>
+                                <DrawerBody bg={bgColor}>
                                     <Sidebar />
                                 </DrawerBody>
                             </DrawerContent>
