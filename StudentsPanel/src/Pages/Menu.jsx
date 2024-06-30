@@ -53,15 +53,17 @@ const Menu = () => {
   };
 
   return (
-    <Box p={4}>
+    <Box 
+      p={4} 
+      bg={bgColor}
+      >
       <Box
         maxW="100%"
         mx="auto"
         p={4}
-        bg={bgColor}
         borderRadius="md"
         id="table-content"
-        boxShadow="0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+        boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
         overflowX="auto"
       >
         <Heading
@@ -75,8 +77,8 @@ const Menu = () => {
         </Heading>
         <Box overflowX="auto">
           <Table variant="striped" size="md" mt={4} whiteSpace="nowrap">
-            <Thead 
-              // bg={headerBgColor}
+            <Thead
+            // bg={headerBgColor}
             >
               <Tr>
                 <Th fontSize={{ base: 'md', md: 'lg' }} textAlign="center">Day</Th>
@@ -108,12 +110,12 @@ const Menu = () => {
         </Box>
         <Box mt={5} fontSize={{ base: 'sm', md: 'md' }} display="flex" gap="1rem" flexWrap="wrap" color={textColor}>
           <Box fontWeight="bold" mb={2}>
-            Additional Details : 
+            Additional Details :
           </Box>
           <Box>{menuData && menuData.remarks}</Box>
         </Box>
       </Box>
-      <Button mt={4} 
+      <Button mt={4}
         color={'white'}
         bg={'#FC476C'}
         onClick={generatePDF}

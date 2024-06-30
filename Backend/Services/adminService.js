@@ -257,6 +257,15 @@ const complaintActionService = async (id, actionData, user) => {
     }
 }
 
+const deleteComplaintService = async (id) => {
+    try {
+        const deletedComplaint = await complaintModel.findByIdAndDelete(id);
+        return deletedComplaint;
+    } catch (error) {
+        throw {message: error.message};
+    }
+}
+
 const getSingleComplaintService = async(id) => {
     try{
         const complaint = await complaintModel.findById({_id: id});
@@ -284,5 +293,6 @@ export {
     getSingleComplaintService,
     leaveActionService,
     addMessInfoService,
-    getMessInfoService
+    getMessInfoService,
+    deleteComplaintService
 }

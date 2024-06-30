@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout, reset } from '../Features/Auth/authSlice';
 import ThemeToggle from './ThemeToggle';
 import MenuIcon from '@mui/icons-material/Menu';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import Sidebar from './Sidebar';
 
 function Header() {
@@ -72,7 +73,7 @@ function Header() {
                             ml={4}
                             zIndex="1000"
                         >
-                            <MenuIcon />
+                            <MenuOpenIcon fontSize='large'/>
                         </Button>
                         <Drawer isOpen={isDrawerOpen} placement="left" onClose={toggleDrawer}>
                             <DrawerOverlay />

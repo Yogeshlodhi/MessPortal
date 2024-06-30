@@ -4,6 +4,7 @@ import {
     complaintActionService,
     complaintListService,
     deleteAnnounceService,
+    deleteComplaintService,
     getAllLeavesList,
     getAllStudentsList,
     getAnnounceService,
@@ -289,6 +290,28 @@ const getComplaintsList = (req, res) => {
         })
 }
 
+const deleteComplaint = (req, res) => {
+    const id = req.params.id;
+    deleteComplaintService(id)
+        .then((data) => {
+            if (!data) {
+                return res
+                    .status(statusCode.badRequest)
+                    .send({ message: 'Error Occurred'})
+            }
+            return res
+                .status(statusCode.ok)
+                .send({ message: 'Complaint Deleted', data: data })
+        })
+        .catch((err) => {
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
+        })
+}
+
+
+
 const takeAction = (req, res) => {
     const id = req.params.id;
     const actions = req.body;
@@ -341,5 +364,6 @@ export {
     getSingleComplaint,
     leaveAction,
     addMessInfo,
-    getMessInfo
+    getMessInfo,
+    deleteComplaint
 }

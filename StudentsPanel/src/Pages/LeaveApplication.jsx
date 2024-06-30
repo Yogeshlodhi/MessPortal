@@ -251,6 +251,7 @@ function LeaveApplication() {
       color={textColor}
       borderRadius={'1rem'}
       padding={'0.5rem'}
+      bg={bgColor}
       boxShadow={
         '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
     >

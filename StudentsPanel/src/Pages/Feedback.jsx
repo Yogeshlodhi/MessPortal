@@ -425,6 +425,7 @@ const Feedback = () => {
   // const bgColor = useColorModeValue('brand.100', 'brand.900');
   const textColor = useColorModeValue('gray.800', 'white');
   const borderColor = useColorModeValue('black', 'white');
+  // const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
   const [isMobile] = useMediaQuery('(max-width: 600px)');
 
   const dispatch = useDispatch();
@@ -492,37 +493,31 @@ const Feedback = () => {
 
   return (
     <Box 
-      height={'100%'} 
+      // height={'100%'} 
       color={textColor} 
       margin={isMobile ? '0.5rem' : 0}
+      bg={bgColor}
+      boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
+      gap={'1rem'}
+      borderRadius={'1rem'}
+      height={isMobile ? 'auto' : '100%'}
+      // border={'0.2px solid #f3f3f3'}
     >
       <Flex
         align="flex-start" 
         justifyContent={'center'}
-        borderRadius={'1rem'}
-        boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
         flexDir={{ base: 'column', md: 'row' }} 
-        height={isMobile ? 'auto' : '100%'}
         p={isMobile ? '0.5rem' : '1rem'}
-        gap={'1rem'}
-        border={'0.2px solid #f3f3f3'}
       >
         <Box 
           flex="1" 
-          // border={'1px solid black'} 
-          // p={'1rem'} 
-          // borderRadius={'1rem'} 
           p={isMobile ? 0 : '1rem'}
           borderRadius={isMobile ? '0' : '1rem'} 
-          // border={isMobile ? 'none' : '1px solid black'} 
           height={'100%'} 
-          // mb={{ base: '1rem', md: '0' }}
         >
-          <VStack 
-            // spacing={4} 
+          <VStack  
             spacing={isMobile ? '0' : '4'}
             align="center" 
-            // background={'red'}
           >
             <Heading size={'lg'}>Feedback Rating</Heading>
             <Flex wrap="wrap" justify="center">
@@ -571,11 +566,14 @@ const Feedback = () => {
           p={isMobile ? 0 : '1rem'}
           borderRadius={isMobile ? '0' : '1rem'} 
           height={'100%'} 
+          width={'100%'}
+          bg={bgColor}
         >
           <Box 
             border={`1px dotted ${borderColor}`} 
-            // border="1px dotted white" 
-            p={4} borderRadius={'1rem'} height={'50%'} mt={6} overflow={'hidden'} borderWidth={'0.1rem'}>
+            p={4} borderRadius={'1rem'} height={'50%'} mt={6} overflow={'hidden'} borderWidth={'0.1rem'}
+            bg={bgColor}
+          >
             <VStack spacing={4} alignItems="center">
               <FormLabel fontSize={'2rem'} mt={6} htmlFor="imageUpload">Upload Image</FormLabel>
               <Flex alignItems="center" mt={6}>
@@ -625,7 +623,7 @@ const Feedback = () => {
             </VStack>
           </Box>
           <Select
-            variant='filled'
+            // variant='filled'
             placeholder='Select The Meal'
             pt={'1rem'}
             cursor={'pointer'}
@@ -633,6 +631,7 @@ const Feedback = () => {
             name='mealOfDay'
             onChange={onChange}
             isRequired={true}
+            width={'75%'}
           >
             <option value={'Breakfast'}>Breakfast</option>
             <option value={'Lunch'}>Lunch</option>

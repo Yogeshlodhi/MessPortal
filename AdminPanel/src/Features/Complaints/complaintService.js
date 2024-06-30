@@ -14,8 +14,21 @@ const getComplaints = async (token, adminType) => {
     return response.data.data;
 }
 
-const complaintService =  {
+const deleteComplaint = async (token, complaintId) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+    };
+    const response = await axios.delete(`${API_URL}/complaints/${complaintId}`, config);
+    return response.data.data;
+}
+
+
+const complaintService = {
     getComplaints,
+    deleteComplaint
 }
 
 export default complaintService
