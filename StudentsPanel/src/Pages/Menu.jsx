@@ -53,33 +53,41 @@ const Menu = () => {
   };
 
   return (
-    <Box 
-      p={4} 
+    <Box
+      p={4}
       bg={bgColor}
-      >
+      borderRadius={'1rem'}
+      padding={'0.5rem'}
+      border={'3px solid rgba(0, 0, 0, 0.05)'}
+      boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
+    >
       <Box
         maxW="100%"
         mx="auto"
         p={4}
         borderRadius="md"
         id="table-content"
-        boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
+        // boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
         overflowX="auto"
       >
         <Heading
-          textAlign="center"
-          py={4}
-          bg="#FC476C"
-          color="white"
           borderRadius="md"
+          py={4}
+          background={'#005252'}
+          color="white"
+          fontSize={'2rem'}
+          textAlign={'center'}
+          textTransform={'uppercase'}
         >
           Weekly Mess Schedule
         </Heading>
         <Box overflowX="auto">
-          <Table variant="striped" size="md" mt={4} whiteSpace="nowrap">
-            <Thead
-            // bg={headerBgColor}
-            >
+          <Table 
+            variant="striped" 
+            whiteSpace="nowrap"
+            colorScheme='#1D1D1C'
+          >
+            <Thead>
               <Tr>
                 <Th fontSize={{ base: 'md', md: 'lg' }} textAlign="center">Day</Th>
                 <Th fontSize={{ base: 'md', md: 'lg' }} textAlign="center">Breakfast</Th>
@@ -117,7 +125,8 @@ const Menu = () => {
       </Box>
       <Button mt={4}
         color={'white'}
-        bg={'#FC476C'}
+        background={'#005252'}
+        _hover={{ backgroundColor: 'teal' }}
         onClick={generatePDF}
       >
         Download as PDF

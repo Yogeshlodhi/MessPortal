@@ -12,7 +12,7 @@ import Spinner from '../Components/Spinner';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const Profile = () => {
-  const bgColor = useColorModeValue('brand.100', 'brand.900');
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
   const textColor = useColorModeValue('gray.800', 'white');
   const { student, isLoading, dp } = useSelector(state => state.auth);
   const dispatch = useDispatch();
@@ -131,26 +131,16 @@ const Profile = () => {
 
   return (
     <Box 
-      // padding={'2rem'} 
       className='flex gap-4 flex-col' 
       bg={bgColor} 
-      color={textColor}
+      border={'2px solid  rgba(0, 0, 0, 0.05)'}
+      p={4}
+      borderRadius={'1rem'}
+      boxShadow="0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
     >
       <Heading>Hello ! <span style={{ color: randomColor }}>{studentName}</span></Heading>
-      <Container 
-        // padding={'2rem'} 
-        maxW='70rem' 
-        centerContent
-        // background={'green'}
-      >
-        <Box 
-          padding='4' 
-          w={'100%'} 
-          // maxW='100%' 
-          // background={'red'}
-          // className='grid grid-cols-2 gap-6'
-          className={isMobile ? '' : 'grid grid-cols-2 gap-6'}
-        >
+      <Container maxW='70rem' centerContent>
+        <Box padding='4' w={'100%'} className={isMobile ? '' : 'grid grid-cols-2 gap-6'}>
           <FormControl mt={4}>
             <FormLabel>Student Name</FormLabel>
             <Input onChange={onChange} value={studentName} name='studentName' />

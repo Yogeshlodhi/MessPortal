@@ -17,7 +17,7 @@ export const getAnnouncementList = createAsyncThunk(
             const state = thunkAPI.getState();
             const token = state.auth.admin.token;
             const adminType = state.auth.admin.adminType;
-            return await announceService.getAnnouncement({token, adminType});
+            return await announceService.getAnnouncement({ token, adminType });
         } catch (error) {
             console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -49,7 +49,10 @@ export const deleteAnnounce = createAsyncThunk(
             const state = thunkAPI.getState();
             const token = state.auth.admin.token;
             const adminType = state.auth.admin.adminType;
-            return await announceService.deleteAnnouncement(id, token, adminType);
+            await announceService.deleteAnnouncement(id, token, adminType);
+            const updatedAnnouncements = await announceService.getAnnouncement({ token, adminType });
+            thunkAPI.dispatch(setAnnounceList(updatedAnnouncements));
+            return id;
         } catch (error) {
             console.error(error);
             const message = error.response?.data?.message || error.message || error.toString();
@@ -62,7 +65,15 @@ const announceSlice = createSlice({
     name: 'announcement',
     initialState,
     reducers: {
-        reset: (state) => initialState
+        reset: (state) => initialState,
+        setAnnounceList: (state, action) => {
+            state.announcements = action.payload;
+        },
+        removeAnnouncement: (state, action) => {
+            state.announcements = state.announcements.filter(
+                (announcement) => announcement.id !== action.payload
+            );
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -109,5 +120,5 @@ const announceSlice = createSlice({
     }
 })
 
-export const { reset } = announceSlice.actions;
+export const { reset, setAnnounceList, removeAnnouncement } = announceSlice.actions;
 export default announceSlice.reducer;

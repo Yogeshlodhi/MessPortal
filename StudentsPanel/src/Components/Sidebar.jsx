@@ -47,12 +47,12 @@ const SidebarOptions = [
     path: '/complaints',
     icon: <ThumbDownOffAltIcon style={{ marginRight: '10px' }} />,
   },
-  {
-    id: 7,
-    name: 'Payments',
-    path: '/payments',
-    icon: <PaymentIcon style={{ marginRight: '10px' }} />,
-  },
+  // {
+  //   id: 7,
+  //   name: 'Payments',
+  //   path: '/payments',
+  //   icon: <PaymentIcon style={{ marginRight: '10px' }} />,
+  // },
 ];
 
 function Sidebar() {

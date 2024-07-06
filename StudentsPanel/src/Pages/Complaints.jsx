@@ -87,18 +87,21 @@ const Complaint = () => {
 
   return (
     <Box 
-      p={4}
-      bg={bgColor}
+      // p={6}
       borderRadius={'1rem'}
-      boxShadow="0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
-    >
-      <Heading
-        size="lg" 
-        mb={4}
-        // textAlign={isMobile ? 'center' : 'unset'}
-        textAlign={'center'}
+      padding={'1rem'}
+      bg={bgColor}
+      border={'3px solid rgba(0, 0, 0, 0.05)'}
+      boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
+      // height={'100%'}
       >
-        Submit a Complaint
+      <Heading
+        mb={6}
+        fontSize={'2rem'}
+        textAlign={'center'}
+        textTransform={'uppercase'}
+      >
+        Submit Complaint
       </Heading>
       <Box gap={'1rem'} display={'flex'} flexDirection={'column'}>
         <FormControl isRequired>
@@ -110,6 +113,7 @@ const Complaint = () => {
             onChange={handleChange}
             placeholder="Enter the issue you want to complain about"
             required
+            focusBorderColor='#B5B4B4'
           />
         </FormControl>
         <FormControl isRequired>
@@ -120,6 +124,7 @@ const Complaint = () => {
             onChange={handleChange}
             placeholder="Describe the issue in detail"
             required
+            focusBorderColor='#B5B4B4'
           />
         </FormControl>
         <Box
@@ -187,9 +192,9 @@ const Complaint = () => {
           width={isMobile ? '100%' : '50%'}
           alignSelf={'center'}
           onClick={handleSubmit}
-          background={'#FC476C'}
           color={'white'}
-          _hover={{backgroundColor: '#ff5274'}}
+          background={'#005252'}
+            _hover={{backgroundColor: 'teal'}}
         >
           Submit Complaint
         </Button>

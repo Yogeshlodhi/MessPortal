@@ -14,8 +14,7 @@ const colors = {
     900: '#1e2540',
   },
   darkMode: {
-    primaryBg: '#1D1D1C',
-    // secondaryBg: '#15583A',
+    primaryBg: '#1F1F1F',
     secondaryBg: '#FF416E',
     cardBg: '#232323',
     primaryTxt: '#ECEDEC',
@@ -23,8 +22,9 @@ const colors = {
     boxShadow: '4px 2px 5px 0px #9F9FA6',
     cardBoxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
 
-    bg: '#313135',
-    // bg: '#39383C',
+    
+    bg: '#272727',
+    // bg: '#006060',
     text: '#E0E0E0',
     heading: '#FFFFFF',
     btnBg: '#1F6FEB',
@@ -39,7 +39,6 @@ const colors = {
     cardBg: '#f3f3f3',
     // cardBg: '#e8e8e8',
     cardBoxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-
     bg: 'white',
     text: '#333333',
     heading: '#111111',
@@ -69,7 +68,7 @@ const theme = extendTheme({
           tbody: {
             tr: {
               '&:nth-of-type(odd)': {
-                bg: colors.darkMode.secondaryBg,
+                bg: '#005252',
                 // bg: props.colorMode === 'light' ? colors.lightMode.tableStripedBg : colors.darkMode.secondaryBg,
                 color: 'white',
               },

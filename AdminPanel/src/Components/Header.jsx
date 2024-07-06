@@ -98,11 +98,11 @@ function Header() {
             {
                 admin &&
                 <Popover placement='top-start'>
-                    {/* <Tooltip label='Toggle Theme'>
-                        <WrapItem cursor={'pointer'}>
+                    <Tooltip label='Toggle Theme'>
+                        <WrapItem cursor={'pointer'} visibility={isMobile ? 'hidden' : 'visible'}>
                             <ThemeToggle />
                         </WrapItem>
-                    </Tooltip> */}
+                    </Tooltip>
                     <PopoverTrigger>
                         <WrapItem cursor={'pointer'}>
                             <Avatar name={admin.firstName} src='https://bit.ly/tioluwani-kolawole' />

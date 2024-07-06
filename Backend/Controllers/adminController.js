@@ -120,10 +120,10 @@ const getAllStudents = (req, res) => {
 
 const getAllLeaves = (req, res) => {
     getAllLeavesList()
-        .then((data) => {
+    .then((data) => {
             return res
                 .status(statusCode.ok)
-                .send({ message: 'Leaves List Received', LeavesList: data })
+                .send({ message: 'Leaves List Received', data: data })
         })
         .catch((err) => {
             return res
@@ -138,6 +138,7 @@ const leaveAction = (req, res) => {
     const user = req.user.firstName;
     leaveActionService(id, actions, user)
         .then((data) => {
+            // console.log(data)
             return res
                 .status(statusCode.ok)
                 .send({ message: 'Action Updated Successfully', data: data });

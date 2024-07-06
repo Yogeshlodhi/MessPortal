@@ -14,7 +14,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { clearStudent, getSingleStudent } from '../Features/Students/studentProfileSlice';
-import profile from '../../../profile.jpg';
 import * as XLSX from 'xlsx';
 
 const Students = () => {

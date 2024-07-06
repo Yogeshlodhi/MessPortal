@@ -111,7 +111,8 @@ const getAllLeavesList = async () => {
             reason: leave.reason,
             status: leave.status,
             appliedDate: leave.appliedDate,
-            __v: leave.__v
+            __v: leave.__v,
+            actionTakenBy: leave.actionTakenBy
         }));
 
         return updatedLeaves;
@@ -123,17 +124,21 @@ const getAllLeavesList = async () => {
 const leaveActionService = async (id, actionData, user) => {
     try{
         actionData.actionTakenBy = user;
+        // console.log(actionData)
         const updatedLeave = await LeaveModel.findOneAndUpdate(
             { _id: id },
             actionData,
             { new: true, runValidators: true }
         );
-        return updatedLeave.toObject();
-        // const response = {
-        //     ...updatedLeave.toObject(),
-        //     actionTakenBy: user,
-        // };
-        // return response;
+        // return updatedLeave.toObject();
+        // console.log('Updated Leave:', updatedLeave);
+        const response = {
+            ...updatedLeave.toObject({ getters: true }), // Include getters
+            actionTakenBy: user,
+        };
+        // console.log('response : ', response);
+        
+        return response;
     }catch(error){
         throw {message: error.message}
     }
