@@ -14,7 +14,6 @@ import Sidebar from './Components/Sidebar';
 import Header from './Components/Header';
 import Payments from './Pages/Payments';
 import { Box, useMediaQuery, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, useColorModeValue } from '@chakra-ui/react';
-// import { HamburgerIcon } from '@chakra-ui/icons';
 import MenuIcon from '@mui/icons-material/Menu';
 
 

@@ -37,14 +37,11 @@ import { statusCode } from '../Utils/http.js';
 
 const authenticateAndCheckRole = (adminType) => async (req,res,next) => {
     const token = req.headers.authorization;
-    // console.log(token)
     if(token && token.startsWith('Bearer')){
         try {
             let tokenValue = token.split(' ')[1];
-            // console.log(tokenValue)
             const decoded = jwt.verify(tokenValue,process.env.JWT_SECRET);
             req.user = await adminModel.findById(decoded.data).select('-password');
-            // console.log(req.user)
             if(!req.user){
                 return res
                         .status(statusCode.notFound)

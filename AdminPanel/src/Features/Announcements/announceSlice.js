@@ -6,7 +6,7 @@ const initialState = {
     isLoading: false,
     isSuccess: false,
     isError: false,
-    message: ''
+    message: '',
 }
 
 
@@ -19,7 +19,7 @@ export const getAnnouncementList = createAsyncThunk(
             const adminType = state.auth.admin.adminType;
             return await announceService.getAnnouncement({ token, adminType });
         } catch (error) {
-            console.log(error.response.data.message);
+            // console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
         }
@@ -35,8 +35,10 @@ export const addAnnounce = createAsyncThunk(
             const adminType = state.auth.admin.adminType;
             return await announceService.addAnnouncement(data, token, adminType);
         } catch (error) {
-            console.log(error.response.data.message);
-            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            if (error.response && error.response.status === 403) {
+                return thunkAPI.rejectWithValue('You do not have permission to add announcements.');
+            }
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);
         }
     }
@@ -52,6 +54,7 @@ export const deleteAnnounce = createAsyncThunk(
             await announceService.deleteAnnouncement(id, token, adminType);
             const updatedAnnouncements = await announceService.getAnnouncement({ token, adminType });
             thunkAPI.dispatch(setAnnounceList(updatedAnnouncements));
+            
             return id;
         } catch (error) {
             console.error(error);
@@ -91,19 +94,22 @@ const announceSlice = createSlice({
                     state.isSuccess = true,
                     state.announcements = action.payload.data
             })
+            .addCase(setAnnounceList, (state, action) => {
+                state.announcements = action.payload;
+            })            
             .addCase(addAnnounce.pending, (state) => {
                 state.isLoading = true
             })
             .addCase(addAnnounce.rejected, (state, action) => {
                 state.isLoading = false,
-                    state.isError = false,
-                    state.message = action.payload
+                state.isError = true,
+                state.message = action.payload
             })
             .addCase(addAnnounce.fulfilled, (state, action) => {
                 state.isLoading = false,
-                    state.isError = false,
-                    state.isSuccess = true,
-                    state.announcements.push(action.payload.data);
+                state.isSuccess = true,
+                state.isError = false,
+                state.announcements.push(action.payload.data);
             })
             .addCase(deleteAnnounce.pending, (state) => {
                 state.isLoading = true;
@@ -115,7 +121,7 @@ const announceSlice = createSlice({
             })
             .addCase(deleteAnnounce.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.announcements = state.announcements.filter(announcement => announcement.id !== action.meta.arg);
+                // state.announcements = state.announcements.filter(announcement => announcement.id !== action.payload);
             });
     }
 })

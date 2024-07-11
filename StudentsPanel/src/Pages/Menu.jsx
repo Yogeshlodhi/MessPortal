@@ -98,10 +98,10 @@ const Menu = () => {
             <Tbody bg={tableRowBgColor}>
               {Object.keys(mealData.weeklyMenu).map((day) => (
                 <Tr key={day}>
-                  <Td textAlign="center" fontSize={{ base: 'sm', md: 'md' }} color={textColor}>{day.charAt(0).toUpperCase() + day.slice(1)}</Td>
-                  <Td textAlign="center" fontSize={{ base: 'sm', md: 'md' }} color={textColor}>{mealData.weeklyMenu[day].breakfast}</Td>
-                  <Td textAlign="center" fontSize={{ base: 'sm', md: 'md' }} color={textColor}>{mealData.weeklyMenu[day].lunch}</Td>
-                  <Td textAlign="center" fontSize={{ base: 'sm', md: 'md' }} color={textColor}>{mealData.weeklyMenu[day].dinner}</Td>
+                  <Td textAlign="center" fontSize={{ base: 'sm', md: 'md' }}>{day.charAt(0).toUpperCase() + day.slice(1)}</Td>
+                  <Td textAlign="center" fontSize={{ base: 'sm', md: 'md' }}>{mealData.weeklyMenu[day].breakfast}</Td>
+                  <Td textAlign="center" fontSize={{ base: 'sm', md: 'md' }} >{mealData.weeklyMenu[day].lunch}</Td>
+                  <Td textAlign="center" fontSize={{ base: 'sm', md: 'md' }} >{mealData.weeklyMenu[day].dinner}</Td>
                 </Tr>
               ))}
             </Tbody>

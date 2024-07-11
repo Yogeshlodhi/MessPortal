@@ -97,6 +97,7 @@ function Sidebar() {
               borderRadius: '0.5rem',
             }}
             activeclassname="active"
+            className="link"
           >
             {item.icon}
             {item.name}

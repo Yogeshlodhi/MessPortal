@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import LeaveAccordion from '../Components/LeaveAccordion'
-import { Box, Heading } from '@chakra-ui/react'
+import { Box, Heading, useColorModeValue } from '@chakra-ui/react'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Accordion from '@mui/material/Accordion';
 import AccordionActions from '@mui/material/AccordionActions';
@@ -18,99 +18,138 @@ import DoneIcon from '@mui/icons-material/Done';
 import { takeAction } from '../Features/Leaves/leaveSlice';
 import Spinner from '../Components/Spinner'
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: 'rgb(0,128,128)',
+    },
+    secondary: {
+      main: 'rgb(0,128,128)',
+    },
+  },
+  components: {
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#f5f5f5',
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#005252',
+        },
+      },
+    },
+  },
+});
+
+
 const MessLeaves = () => {
   const dispatch = useDispatch();
-  const { LeavesList, isLoading, isSuccess, isError, message } = useSelector((state) => state.leaves);
-
-  // const dispatch = useDispatch();
-  //   const { LeavesList } = useSelector((state) => state.leaves);
-
+  const { LeavesList, isLoading } = useSelector((state) => state.leaves);
   const leaveAction = (data) => {
-    // console.log(data)
     dispatch(takeAction(data));
   };
-
 
   useEffect(() => {
     dispatch(getLeavesList());
   }, [dispatch]);
 
-  // console.log(LeavesList)
   if (isLoading) {
     return <Spinner message={'Getting Leaves.....'} />
   }
 
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+
   return (
-    <Box>
-      <LeaveAccordion />
+    <Box
+      border={'3px solid rgba(0, 0, 0, 0.05)'}
+      // color={textColor}
+      // margin={isMobile ? '0.5rem' : 0}
+      bg={bgColor}
+      boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
+      gap={'1rem'}
+      borderRadius={'1rem'}
+      // height={isMobile ? 'auto' : '100%'}
+      padding={'1rem'}
+    >
+      <Heading
+        fontSize={'2rem'}
+        textAlign={'center'}
+        textTransform={'uppercase'}
+        mb={6}
+      >
+        Students Leaves</Heading>
+      <ThemeProvider theme={theme}>
+        <Box>
+          {LeavesList.data && LeavesList.data.length > 0 ? (
+            LeavesList.data.filter((leave) => {
+              return leave.studentName !== "Student Does Not Exist Anymore";
+            }).map((leave) => (
+              <Accordion key={leave._id} style={{ marginBottom: '1rem', color: 'white', borderRadius: '0.5rem' }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon style={{ color: 'white ' }} />}
+                  aria-controls="panel3-content"
+                  id="panel3-header"
+                >
+                  {`${leave.studentName} (No. Of Days: ${UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))})`}
+                </AccordionSummary>
+                <AccordionDetails style={{ color: 'black' }}>
+                  {leave.reason}
+                  <Text>Start Date: {UtilFunctions.formatDate(new Date(leave.startDate))}</Text>
+                  <Text>End Date: {UtilFunctions.formatDate(new Date(leave.endDate))}</Text>
+                  <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
+                    Approval Status :
+                    <Text color={leave.status === 'Pending' ? 'orange' : (leave.status === 'Approved' ? 'green' : 'red')}>
+                      {leave.status}
+                    </Text>
+                  </Box>
+                  <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
+                    Approval Action By :
+                    {leave.actionTakenBy}
+                  </Box>
+                </AccordionDetails>
+                <AccordionActions>
+                  <ButtonGroup>
+                    <Button
+                      background={'red'}
+                      padding={'0.5rem'}
+                      borderRadius={'0.5rem'}
+                      size={'md'}
+                      onClick={() => {
+                        leaveAction({ leaveId: leave._id, status: 'Rejected' });
+                      }}
+                    >
+                      <CloseIcon />
+                      Reject
+                    </Button>
+                    <Button
+                      padding={'0.5rem'}
+                      borderRadius={'0.5rem'}
+                      size={'md'}
+                      backgroundColor={'green'}
+                      onClick={() => {
+                        leaveAction({ leaveId: leave._id, status: 'Approved' });
+                      }}
+                    >
+                      <DoneIcon />
+                      Approve
+                    </Button>
+                  </ButtonGroup>
+                </AccordionActions>
+              </Accordion>
+            ))
+            // {
+            // }
+          ) : (
+            <Heading>No Leaves Found...</Heading>
+          )
+          }
+        </Box>
+      </ThemeProvider>
     </Box>
-    // <Box>
-    //   {LeavesList.data && LeavesList.data.length > 0 ? (
-    //     LeavesList.data.filter((leave) => {
-    //       return leave.studentName !== "Student Does Not Exist Anymore";
-    //     }).map((leave) => (
-    //       <Accordion key={leave._id} style={{ marginBottom: '1rem', color: 'white', borderRadius: '0.5rem' }}>
-    //         <AccordionSummary
-    //           expandIcon={<ExpandMoreIcon style={{ color: 'white ' }} />}
-    //           aria-controls="panel3-content"
-    //           id="panel3-header"
-    //         >
-    //           {`${leave.studentName} (No. Of Days: ${UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))})`}
-    //         </AccordionSummary>
-    //         <AccordionDetails style={{ color: 'black' }}>
-    //           {leave.reason}
-    //           <Text>Start Date: {UtilFunctions.formatDate(new Date(leave.startDate))}</Text>
-    //           <Text>End Date: {UtilFunctions.formatDate(new Date(leave.endDate))}</Text>
-    //           <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-    //             Approval Status:
-    //             <Text color={leave.status === 'Pending' ? 'orange' : (leave.status === 'Approved' ? 'green' : 'red')}>
-    //               {leave.status}
-    //             </Text>
-    //           </Box>
-    //           <Box display={'flex'} alignItems={'center'} gap={'0.5rem'}>
-    //             Approval Action By :
-    //             {leave.actionTakenBy}
-    //             {/* {console.log(leave.actionTakenBy ? leave.actionTakenBy : 'None')} */}
-    //             {/* {console.log(leave)} */}
-    //           </Box>
-    //         </AccordionDetails>
-    //         <AccordionActions>
-    //           <ButtonGroup>
-    //             <Button
-    //               background={'red'}
-    //               padding={'0.5rem'}
-    //               borderRadius={'0.5rem'}
-    //               size={'md'}
-    //               onClick={() => {
-    //                 leaveAction({ leaveId: leave._id, status: 'Rejected' });
-    //               }}
-    //             >
-    //               <CloseIcon />
-    //               Reject
-    //             </Button>
-    //             <Button
-    //               padding={'0.5rem'}
-    //               borderRadius={'0.5rem'}
-    //               size={'md'}
-    //               backgroundColor={'green'}
-    //               onClick={() => {
-    //                 leaveAction({ leaveId: leave._id, status: 'Approved' });
-    //               }}
-    //             >
-    //               <DoneIcon />
-    //               Approve
-    //             </Button>
-    //           </ButtonGroup>
-    //         </AccordionActions>
-    //       </Accordion>
-    //     ))
-    //     // {
-    //     // }
-    //   ) : (
-    //     <Heading>No Leaves Found...</Heading>
-    //   )
-    //   }
-    // </Box>
   )
 }
 

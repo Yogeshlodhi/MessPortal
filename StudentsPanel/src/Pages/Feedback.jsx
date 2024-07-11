@@ -90,9 +90,12 @@ const Feedback = () => {
       height={isMobile ? 'auto' : '100%'}
       padding={'1rem'}
     >
-      <Heading fontSize={'2rem'}
+      <Heading 
+        fontSize={'2rem'}
         textAlign={'center'}
-        textTransform={'uppercase'}>Feedback Rating</Heading>
+        textTransform={'uppercase'}
+      >
+        Feedback Rating</Heading>
       <Flex
         align="flex-start"
         justifyContent={'center'}

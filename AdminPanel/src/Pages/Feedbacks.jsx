@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllFeedbacks } from '../Features/Feedback/feedBackSlice';
-import { Box, Input, Stack, Collapse, Button, Text, RadioGroup, Radio, HStack, Avatar, Heading, useMediaQuery } from '@chakra-ui/react';
+import { Box, Input, Stack,useColorModeValue, Collapse, Button, Text, RadioGroup, Radio, HStack, Avatar, Heading, useMediaQuery } from '@chakra-ui/react';
 
 const Feedbacks = () => {
   const dispatch = useDispatch();
@@ -47,24 +47,27 @@ const Feedbacks = () => {
     setOpenFeedback(openFeedback === id ? null : id);
   };
 
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
 
   return (
-    <Box>
-      {/* <HStack spacing={4} mb={4}>
-        <Input
-          type="date"
-          value={filterDate}
-          onChange={handleDateChange}
-          placeholder="Filter by submission date"
-        />
-        <RadioGroup onChange={handleFeedbackTypeChange} value={feedbackType}>
-          <HStack spacing={4}>
-            <Radio value="all">All</Radio>
-            <Radio value="positive">Positive</Radio>
-            <Radio value="negative">Negative</Radio>
-          </HStack>
-        </RadioGroup>
-      </HStack> */}
+    <Box
+      border={'3px solid rgba(0, 0, 0, 0.05)'}
+      // color={textColor}
+      // margin={isMobile ? '0.5rem' : 0}
+      bg={bgColor}
+      boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
+      gap={'1rem'}
+      borderRadius={'1rem'}
+      // height={isMobile ? 'auto' : '100%'}
+      padding={'1rem'}
+    >
+      <Heading
+        fontSize={'2rem'}
+        textAlign={'center'}
+        textTransform={'uppercase'}
+        mb={6}
+      >
+        Feedback & Suggestions</Heading>
       <HStack
         spacing={isMobile ? 2 : 4}
         mb={4}

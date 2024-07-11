@@ -1,4 +1,4 @@
-import { Box, Heading, Flex, Divider, useMediaQuery, WrapItem, Text } from '@chakra-ui/react'
+import { Box, Heading, Flex, Divider, useColorModeValue, useMediaQuery, WrapItem, Text } from '@chakra-ui/react'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import WindowIcon from '@mui/icons-material/Window';
@@ -58,11 +58,15 @@ function Sidebar() {
         },
     ]
 
+    const bgColor = useColorModeValue('lightMode.bg', 'darkMode.primaryBg');
+
     return (
         <Box
             // height={'100vh'}
             // boxShadow="0px 0px 10px rgba(0,0,0,0.45)" 
             // position="relative"
+            // color={textColor}
+            bg={bgColor}
             height={isMobile ? '' : '100vh'}
             boxShadow={isMobile ? 'none' : "0px 0px 10px rgba(0,0,0,0.45)"}
         >

@@ -58,7 +58,6 @@ function Header() {
             alignItems={'center'}
             justifyContent={isMobile ? 'space-between' : 'flex-end'}
             height={'10%'}
-            // boxShadow={'4px 2px 5px 0px rgba(0,0,0,0.35)'}
             boxShadow={boxShadow}
             pr={4}
             width={'100%'}

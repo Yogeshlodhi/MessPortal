@@ -7,17 +7,19 @@ import feedBackSlice from '../Features/Feedback/feedBackSlice';
 import announceSlice from '../Features/Announcements/announceSlice';
 import menuSlice from '../Features/Menu/menuSlice';
 import complaintSlice from '../Features/Complaints/complaintSlice';
+import dashboardSlice from '../Features/Dashboad/dashboardSlice';
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
+        dashboard: dashboardSlice,
         students: studentReducer,
         studentProfile: studentProfileReducer,
         leaves: leaveReducer,
         feedbacks: feedBackSlice,
         announcements: announceSlice,
         menu: menuSlice,
-        complaints: complaintSlice
+        complaints: complaintSlice,
     },
     devTools: process.env.NODE_ENV !== 'production',
 })
