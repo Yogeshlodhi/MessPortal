@@ -65,14 +65,16 @@ const Feedback = () => {
       toast({
         title: feedbackMessage,
         duration: 3000,
-        status: 'error'
+        status: 'error',
+        isClosable: true
       })
     }
     if (isFeedbackSuccess) {
       toast({
         title: feedbackMessage,
         duration: 3000,
-        status: 'success'
+        status: 'success',
+        isClosable: true
       })
       navigate('/')
       dispatch(reset());

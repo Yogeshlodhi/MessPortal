@@ -101,7 +101,7 @@ const submitFeedback = async (req, res) => {
         .catch((err) => {
             return res
                 .status(statusCode.badRequest)
-                .send({ message: 'Bad Request', error: err.message })
+                .send({ message: 'Bad Request, Try Again', error: err.message })
         })
 }
 
@@ -126,7 +126,7 @@ const addComplaint = async (req, res) => {
         .catch((err) => {
             return res
                 .status(statusCode.badRequest)
-                .send({ message: err.message })
+                .send({ message: 'Bad Request, Try Again..', error: err.message })
         })
 }
 

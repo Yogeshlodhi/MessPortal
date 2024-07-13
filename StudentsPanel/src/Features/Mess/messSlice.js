@@ -4,17 +4,27 @@ import messService from './messService';
 const initialState = {
     announcements: [],
     menu: [],
-    complaints: [],
     messInfo: '',
     isError: false,
     isSuccess: false,
     isLoading: false,
     message: '',
+
+    // complaints state
+    complaints: [],
+    isPostingComplaint: false,
+    complaintMessage: '',
+    isComplaintError: false,
+    isComplaintSuccess: false,
+    // complaints state
+
+    // feedback state
     feedback: [],
     isPostingFeedback: false,
     feedbackMessage: '',
     isFeedbackError: false,
     isFeedbackSuccess: false,
+    // feedback state
 }
 
 
@@ -117,20 +127,24 @@ const messSlice = createSlice({
                 state.isFeedbackError = true
                 state.isPostingFeedback = false,
                 state.isFeedbackSuccess = false,
-                state.feedbackMessage = action.payload.message
+                state.feedbackMessage = action.payload
             })
             .addCase(postComplaint.pending, (state) => {
-                state.isLoading = true
+                state.isPostingComplaint = true
             })
             .addCase(postComplaint.fulfilled, (state, action) => {
-                state.isLoading = false,
-                state.isSuccess = true,
-                state.complaints = action.payload
+                state.isPostingComplaint = false,
+                state.isComplaintSuccess = true,
+                state.complaints = action.payload,
+                state.complaintMessage = action.payload.message,
+                state.isComplaintError = false
             })
             .addCase(postComplaint.rejected, (state, action) => {
-                state.isError = true,
-                state.isLoading = false,
-                state.message = action.payload
+                state.isComplaintError = true,
+                state.isPostingComplaint = false,
+                state.isComplaintSuccess = false,
+                console.log(action.payload)
+                state.complaintMessage = action.payload
             })
             .addCase(getMenu.pending, (state) => {
                 state.isLoading = true
