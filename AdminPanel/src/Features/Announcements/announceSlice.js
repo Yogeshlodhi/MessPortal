@@ -70,7 +70,7 @@ const announceSlice = createSlice({
     reducers: {
         reset: (state) => initialState,
         setAnnounceList: (state, action) => {
-            state.announcements = action.payload;
+            state.announcements = action.payload.data;
         },
         removeAnnouncement: (state, action) => {
             state.announcements = state.announcements.filter(
@@ -95,7 +95,7 @@ const announceSlice = createSlice({
                     state.announcements = action.payload.data
             })
             .addCase(setAnnounceList, (state, action) => {
-                state.announcements = action.payload;
+                state.announcements = action.payload.data;
             })            
             .addCase(addAnnounce.pending, (state) => {
                 state.isLoading = true
@@ -117,7 +117,7 @@ const announceSlice = createSlice({
             .addCase(deleteAnnounce.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload;
+                state.message = action.payload.message;
             })
             .addCase(deleteAnnounce.fulfilled, (state, action) => {
                 state.isLoading = false;

@@ -11,6 +11,7 @@ const getAllLeaves = async ({token, adminType}) => {
         }
     };
     const response = await axios.get(`${API_URL}/leaves_list`, config);
+    // console.log(response.data)
     return response.data;
 }
 

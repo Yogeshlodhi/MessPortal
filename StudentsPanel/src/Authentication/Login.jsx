@@ -61,14 +61,14 @@ import {
     }
   
     return (
-      <Box display="flex" flexDirection="column" height="100vh">
+      <Box display="flex" flexDirection="column" boxSizing='border-box' height={'95vh'}>
         <Box
           className="header"
           flex={1}
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          padding={{ base: '1rem', md: '2rem' }}
+          padding={'0rem 2rem'}
         >
           <Heading className="logo">Mess</Heading>
           <Box

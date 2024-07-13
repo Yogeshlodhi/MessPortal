@@ -11,7 +11,7 @@ const getComplaints = async (token, adminType) => {
         }
     };
     const response = await axios.get(`${API_URL}/getComplaints`, config);
-    return response.data.data;
+    return response.data;
 }
 
 const deleteComplaint = async (token, complaintId) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box, Heading, Container, Input, FormControl, FormLabel, useToast, Divider, AbsoluteCenter, Button, VStack, Table, Thead, Tr, Th, Tbody, Td, useColorModeValue, useMediaQuery
+  Box, Heading, Container, Input, FormControl, FormLabel, useToast, Divider, Button, VStack, Table, Thead, Tr, Th, Tbody, Td, useColorModeValue, useMediaQuery
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../Components/Spinner';
@@ -14,18 +14,19 @@ const Menu = () => {
   const dispatch = useDispatch();
   const toast = useToast();
   const [isMobile] = useMediaQuery("(max-width: 600px)");
+  
+  const { menu, isLoading } = useSelector(state => state.menu);
 
   useEffect(() => {
     dispatch(getMenu());
   }, [dispatch]);
 
-  const { isLoading, menu } = useSelector(state => state.menu);
   const [updateFormData, setUpdateFormData] = useState(null);
   const [disable, setDisable] = useState(true);
 
   useEffect(() => {
-    if (menu) {
-      setUpdateFormData(menu);
+    if (menu && menu.length > 0) {
+      setUpdateFormData(menu[0]);
     }
   }, [menu]);
 
@@ -102,32 +103,30 @@ const Menu = () => {
     });
   };
 
-  if (isLoading || !updateFormData) {
-    return <Spinner message={'Loading Menu'} />;
-  }
-
-  const mealData = {
+  const mealData = menu && menu.length > 0 ? {
     weeklyMenu: {
-      monday: menu.monday,
-      tuesday: menu.tuesday,
-      wednesday: menu.wednesday,
-      thursday: menu.thursday,
-      friday: menu.friday,
-      saturday: menu.saturday,
-      sunday: menu.sunday,
+      monday: menu[0].monday,
+      tuesday: menu[0].tuesday,
+      wednesday: menu[0].wednesday,
+      thursday: menu[0].thursday,
+      friday: menu[0].friday,
+      saturday: menu[0].saturday,
+      sunday: menu[0].sunday,
     }
-  };
+  } : {};
+
+  if (isLoading || !updateFormData) {
+    return <Spinner message={'Loading Menu....'} />;
+  }
 
   return (
     <Box
       border={'3px solid rgba(0, 0, 0, 0.05)'}
       color={textColor}
-      // margin={isMobile ? '0.5rem' : 0}
       bg={bgColor}
       boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
       gap={'1rem'}
       borderRadius={'1rem'}
-      // height={isMobile ? 'auto' : '100%'}
       padding={'1rem'}
     >
       <Box
@@ -137,7 +136,6 @@ const Menu = () => {
         bg={bgColor}
         color={textColor}
         borderRadius="md"
-        // boxShadow="md"
         id='table-content'
         overflowX="auto"
       >
@@ -152,47 +150,49 @@ const Menu = () => {
         >
           Weekly Mess Schedule
         </Heading>
-        <Table variant="striped"
-          whiteSpace="nowrap"
-          colorScheme='#1D1D1C'>
-          <Thead height={'4rem'}>
-            <Tr>
-              <Th fontSize={'1.5rem'} textAlign="center">Day</Th>
-              <Th fontSize={'1.5rem'} textAlign="center">Breakfast</Th>
-              <Th fontSize={'1.5rem'} textAlign="center">Lunch</Th>
-              <Th fontSize={'1.5rem'} textAlign="center">Dinner</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {Object.keys(mealData.weeklyMenu).map((day) => (
-              <Tr key={day}>
-                <Td textAlign="center" fontSize={'1.5rem'}>{day.charAt(0).toUpperCase() + day.slice(1)}</Td>
-                <Td textAlign="center">{mealData.weeklyMenu[day].breakfast}</Td>
-                <Td textAlign="center">{mealData.weeklyMenu[day].lunch}</Td>
-                <Td textAlign="center">{mealData.weeklyMenu[day].dinner}</Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-        <Box mt="6" fontSize="lg">
-          <Box fontWeight="bold" mb="2">Meal Timing:</Box>
-          <Box>Breakfast: {menu.timing.breakfast}</Box>
-          <Box>Lunch: {menu.timing.lunch}</Box>
-          <Box>Dinner: {menu.timing.dinner}</Box>
-        </Box>
-        <Box mt="4" fontSize="lg" fontWeight="bold">
-          Amount of One Meal : ₹{menu.amountOfOneMeal}
-        </Box>
-        <Box mt="5" fontSize="lg" display={'flex'} gap={'1rem'}>
-          <Box fontWeight="bold" mb="2">
-            Additional Details :
-          </Box>
-          {menu.remarks}
-        </Box>
+        {menu && menu.length > 0 ? (
+          <>
+            <Table variant="striped" whiteSpace="nowrap" colorScheme='#1D1D1C'>
+              <Thead height={'4rem'}>
+                <Tr>
+                  <Th fontSize={'1.5rem'} textAlign="center">Day</Th>
+                  <Th fontSize={'1.5rem'} textAlign="center">Breakfast</Th>
+                  <Th fontSize={'1.5rem'} textAlign="center">Lunch</Th>
+                  <Th fontSize={'1.5rem'} textAlign="center">Dinner</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {Object.keys(mealData.weeklyMenu).map((day) => (
+                  <Tr key={day}>
+                    <Td textAlign="center" fontSize={'1.5rem'}>{day.charAt(0).toUpperCase() + day.slice(1)}</Td>
+                    <Td textAlign="center">{mealData.weeklyMenu[day].breakfast}</Td>
+                    <Td textAlign="center">{mealData.weeklyMenu[day].lunch}</Td>
+                    <Td textAlign="center">{mealData.weeklyMenu[day].dinner}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+            <Box mt="6" fontSize="lg">
+              <Box fontWeight="bold" mb="2">Meal Timing:</Box>
+              <Box>Breakfast: {menu[0].timing.breakfast}</Box>
+              <Box>Lunch: {menu[0].timing.lunch}</Box>
+              <Box>Dinner: {menu[0].timing.dinner}</Box>
+            </Box>
+            <Box mt="4" fontSize="lg" fontWeight="bold">
+              Amount of One Meal : ₹{menu[0].amountOfOneMeal}
+            </Box>
+            <Box mt="5" fontSize="lg" display={'flex'} gap={'1rem'}>
+              <Box fontWeight="bold" mb="2">
+                Additional Details :
+              </Box>
+              {menu[0].remarks}
+            </Box>
+          </>
+        ) : (<Heading>No Menu Approved So Far...</Heading>)}
       </Box>
-      <Button mt="4" color={'white'}
-        background={'#005252'}
-        _hover={{ backgroundColor: 'teal' }} onClick={generatePDF}>Download as PDF</Button>
+      <Button mt="4" color={'white'} background={'#005252'} _hover={{ backgroundColor: 'teal' }} onClick={generatePDF}>
+        Download as PDF
+      </Button>
       <Box position='relative' paddingTop={'4rem'}>
         <Divider />
         <Heading
@@ -205,19 +205,9 @@ const Menu = () => {
         </Heading>
       </Box>
       <Container maxW="container.xl" py={8}>
-        <Box
-          bg={bgColor}
-          color={textColor}
-          borderRadius="lg"
-        >
+        <Box bg={bgColor} color={textColor} borderRadius="lg">
           <VStack>
-            <Box
-              borderWidth="1px"
-              borderRadius="lg"
-              overflow="hidden"
-              p={4}
-              w="100%"
-            >
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%">
               <Heading size="lg" textTransform="uppercase" mb={2}>Additional Info</Heading>
               <FormControl>
                 <FormLabel>Remarks</FormLabel>
@@ -257,15 +247,7 @@ const Menu = () => {
               </FormControl>
             </Box>
             {daysOfWeek.map(day => (
-              <Box
-                key={day}
-                borderWidth="1px"
-                borderRadius="lg"
-                overflow="hidden"
-                p={4}
-                w="100%"
-              // bg={useColorModeValue('white', 'gray.700')}
-              >
+              <Box key={day} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%">
                 <Heading size="lg" textTransform="uppercase" mb={2}>{day}</Heading>
                 <FormControl mb={4}>
                   <FormLabel>Breakfast</FormLabel>
@@ -301,7 +283,7 @@ const Menu = () => {
               <Input
                 onChange={(e) => {
                   setDisable(false);
-                  setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value })
+                  setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value });
                 }}
                 value={updateFormData.amountOfOneMeal || ''}
                 name='amountOfOneMeal'
@@ -330,4 +312,3 @@ const Menu = () => {
 };
 
 export default Menu;
-

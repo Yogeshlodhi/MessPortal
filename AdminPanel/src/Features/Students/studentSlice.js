@@ -2,14 +2,14 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import studentService from './studentService';
 
 const initialState = {
-    studentsList: [],
-    isLoading: false,
+    students: [],
+    isLoadingStudents: false,
     isSuccess: false,
     isError: false,
-    message: ''
+    studentsMessage: ''
 }
 
-export const getStudentsList = createAsyncThunk(
+export const getdata = createAsyncThunk(
     'students/getAll',
     async (_, thunkAPI) => {
         try{
@@ -32,19 +32,19 @@ const studentSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getStudentsList.pending, (state, action) => {
-                state.isLoading = true
+            .addCase(getdata.pending, (state, action) => {
+                state.isLoadingStudents = true
             })
-            .addCase(getStudentsList.fulfilled, (state, action) => {
-                state.isLoading = false,
+            .addCase(getdata.fulfilled, (state, action) => {
+                state.isLoadingStudents = false,
                 state.isSuccess = true,
-                state.studentsList = action.payload.StudentsList,
-                state.message = action.payload.message
+                state.students = action.payload.data,
+                state.studentsMessage = action.payload.message
             })
-            .addCase(getStudentsList.rejected, (state, action) => {
-                state.isLoading = false,
+            .addCase(getdata.rejected, (state, action) => {
+                state.isLoadingStudents = false,
                 state.isError = true,
-                state.message = action.payload
+                state.studentsMessage = action.payload.message
             })
     }
 })

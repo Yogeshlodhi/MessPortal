@@ -57,7 +57,7 @@ const getMessInfo = (req, res) => {
                 .send({ message: "Mess Information Received", data: data })
         })
         .catch((err) => {
-            console.log(err);
+            // console.log(err);
             return res
                 .status(statusCode.badRequest)
                 .send({ message: err.message })

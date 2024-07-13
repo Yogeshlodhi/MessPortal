@@ -43,7 +43,15 @@ const ComplaintsList = () => {
   const textColor = useColorModeValue('gray.800', 'white');
 
   return (
-    <Box>
+    <Box
+      border={'3px solid rgba(0, 0, 0, 0.05)'}
+      bg={bgColor}
+      boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
+      gap={'1rem'}
+      borderRadius={'1rem'}
+      padding={'1rem'}
+      height={'100%'}
+    >
       <Heading
         mb={4}
         fontSize={'2rem'}
@@ -53,7 +61,7 @@ const ComplaintsList = () => {
         Complaints
       </Heading>
       {complaints.length === 0 ? (
-        <Heading textAlign={'center'} color={'red'} fontSize={'medium'}>No Complaints Available....</Heading>
+        <Text color={'red'}>No Complaints Available....</Text>
       ) : (
         <Grid templateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={4}>
           {complaints.map((complaint, index) => (

@@ -3,10 +3,10 @@ import complaintService from './complaintService';
 
 const initialState = {
     complaints: [],
-    isLoading: false,
+    isLoadingComplaints: false,
     isSuccess: false,
     isError: false,
-    message: ''
+    complaintsMessage: ''
 }
 
 
@@ -19,7 +19,7 @@ export const getComplaintsList = createAsyncThunk(
             const adminType = state.auth.admin.adminType;
             return await complaintService.getComplaints(token, adminType);
         } catch (error) {
-            console.log(error.response.data.message);
+            // console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
         }
@@ -37,7 +37,7 @@ export const deleteComplaint = createAsyncThunk(
             thunkAPI.dispatch(setComplaintsList(updatedComplaints)); 
             return complaintId;
         } catch (error) {
-            console.log(error.response.data.message);
+            // console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);
         }
@@ -51,7 +51,7 @@ const complaintSlice = createSlice({
     reducers: {
         reset: (state) => initialState,
         setComplaintsList: (state, action) => {
-            state.complaints = action.payload;
+            state.complaints = action.payload.data;
         },
         removeComplaint: (state, action) => {
             state.complaints = state.complaints.filter(
@@ -62,18 +62,20 @@ const complaintSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getComplaintsList.fulfilled, (state, action) => {
-                state.complaints = action.payload,
-                    state.isLoading = false,
-                    state.isSuccess = true
+                state.complaints = action.payload.data,
+                state.isLoadingComplaints = false,
+                state.isSuccess = true
+                state.complaintsMessage = action.payload.message
             })
             .addCase(getComplaintsList.pending, (state, action) => {
-                state.isLoading = true
+                state.isLoadingComplaints = true
             })
             .addCase(getComplaintsList.rejected, (state, action) => {
                 state.complaints = [],
-                    state.isLoading = false,
-                    state.isError = true,
-                    state.message = action.payload
+                state.isLoadingComplaints = false,
+                state.isError = true,
+                state.complaintsMessage = action.payload.message
+                // state.complaintsMessage = action.payload.message
             })
             .addCase(deleteComplaint.fulfilled, (state, action) => {
                 state.complaints = state.complaints.filter(
@@ -82,7 +84,8 @@ const complaintSlice = createSlice({
             })
             .addCase(deleteComplaint.rejected, (state, action) => {
                 state.isError = true;
-                state.message = action.payload;
+                state.complaintsMessage = action.payload.message;
+                // state.complaintsMessage = action.payload.message;
             });
     }
 })

@@ -12,7 +12,8 @@ import {
   FormLabel, Input, useDisclosure,
   Textarea,
   useColorModeValue,
-  useToast
+  useToast,
+  Text
 } from '@chakra-ui/react';
 import UtilFunctions from '../../../StudentsPanel/src/Utils/UtilFunctions';
 import Spinner from '../Components/Spinner';
@@ -22,9 +23,10 @@ import AddIcon from '@mui/icons-material/Add';
 const Announcements = () => {
   const dispatch = useDispatch();
   const toast = useToast();
-  const { announcements, isLoading } = useSelector((state) => state.announcements);
-  const {admin} = useSelector((state) => state.auth)
-  // console.log(admin)
+  const { announcements, isLoading, isError, message } = useSelector((state) => state.announcements);
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  const textColor = useColorModeValue('gray.800', 'white');
+
   const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure();
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
 
@@ -34,7 +36,6 @@ const Announcements = () => {
 
   const [openRowId, setOpenRowId] = useState(null);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-
 
   const [formData, setFormData] = useState({
     heading: '',
@@ -78,6 +79,18 @@ const Announcements = () => {
       description: '',
     });
   };
+
+  useEffect(() => {
+    if(isError){
+      toast({
+        title: message,
+        status: 'error',
+        duration: 3000
+      })
+    }
+  }, [isError])
+
+
   const toggleRow = (id) => {
     setOpenRowId(openRowId === id ? null : id);
   };
@@ -90,9 +103,6 @@ const Announcements = () => {
   if (isLoading) {
     return <Spinner message={'Please Wait .....'} />;
   }
-
-  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
-  const textColor = useColorModeValue('gray.800', 'white');
 
   return (
     <Box
@@ -115,60 +125,66 @@ const Announcements = () => {
         colorScheme='green'
       >
         <AddIcon />
-        {/* Add */}
       </Button>
       <TableContainer>
-        <Table variant='striped' colorScheme='#1D1D1C'>
-          <Thead>
-            <Tr>
-              <Th>Heading</Th>
-              <Th>Date</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {announcements && announcements.map((row, id) => (
-              <React.Fragment key={id}>
-                <Tr onClick={() => toggleRow(id)} cursor={'pointer'}>
-                  <Td>{row.heading}</Td>
-                  <Td>{UtilFunctions.formatDate(new Date(row.createdAt))}</Td>
-                </Tr>
-                <Tr>
-                  <Td colSpan={2} style={{ overflowX: 'hidden' }}>
-                    <Collapse in={openRowId === id} width={'100%'} animateOpacity>
-                      <Box
-                        p='4'
-                        bg='teal.500'
-                        rounded='md'
-                        shadow='md'
-                        color='white'
-                        whiteSpace={'normal'}
-                        display={'flex'}
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
-                      >
-                        {row.description}
-                        <Button
-                          background="#ff0101"
-                          _hover={{ background: '#d80000' }}
-                          color={'white'} onClick={() => handleDeleteClick(row)}
-                        >
-                          Delete
-                        </Button>
-                      </Box>
-                    </Collapse>
-                  </Td>
-                </Tr>
-              </React.Fragment>
-            ))}
-          </Tbody>
-        </Table>
+        {announcements && announcements.length === 0 ? (
+          <Text textAlign={'center'} mt={4} color={'red'}>No Announcements Made Till Now....</Text>
+        ) : (
+
+          <Table variant='striped' colorScheme='#1D1D1C'>
+            <Thead>
+              <Tr>
+                <Th>Heading</Th>
+                <Th>Date</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {
+                announcements && announcements.map((row, id) => (
+                  <React.Fragment key={id}>
+                    <Tr onClick={() => toggleRow(id)} cursor={'pointer'}>
+                      <Td>{row.heading}</Td>
+                      <Td>{UtilFunctions.formatDate(new Date(row.createdAt))}</Td>
+                    </Tr>
+                    <Tr>
+                      <Td colSpan={2} style={{ overflowX: 'hidden' }}>
+                        <Collapse in={openRowId === id} width={'100%'} animateOpacity>
+                          <Box
+                            p='4'
+                            bg='teal.500'
+                            rounded='md'
+                            shadow='md'
+                            color='white'
+                            whiteSpace={'normal'}
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            alignItems={'center'}
+                          >
+                            {row.description}
+                            <Button
+                              background="#ff0101"
+                              _hover={{ background: '#d80000' }}
+                              color={'white'} onClick={() => handleDeleteClick(row)}
+                            >
+                              Delete
+                            </Button>
+                          </Box>
+                        </Collapse>
+                      </Td>
+                    </Tr>
+                  </React.Fragment>
+                ))
+              }
+            </Tbody>
+          </Table>
+        )
+        }
       </TableContainer>
 
       {/* Add Announcement Modal */}
       <Modal isOpen={isAddOpen} onClose={handleModalClose}>
         <ModalOverlay />
-        <ModalContent bg={bgColor}
-          color={textColor}>
+        <ModalContent bg={bgColor} color={textColor}>
           <ModalHeader>Add New Announcement</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -206,15 +222,9 @@ const Announcements = () => {
       </Modal>
 
       {/* Delete Confirmation Modal */}
-      <Modal
-        isOpen={isDeleteOpen}
-        onClose={onDeleteClose}
-      >
+      <Modal isOpen={isDeleteOpen} onClose={onDeleteClose}>
         <ModalOverlay />
-        <ModalContent
-          bg={bgColor}
-          color={textColor}
-        >
+        <ModalContent bg={bgColor} color={textColor}>
           <ModalHeader>Delete Announcement</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

@@ -7,12 +7,12 @@ import feedBackSlice from '../Features/Feedback/feedBackSlice';
 import announceSlice from '../Features/Announcements/announceSlice';
 import menuSlice from '../Features/Menu/menuSlice';
 import complaintSlice from '../Features/Complaints/complaintSlice';
-import dashboardSlice from '../Features/Dashboad/dashboardSlice';
+// import dashboardSlice from '../Features/Dashboad/dashboardSlice';
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
-        dashboard: dashboardSlice,
+        // dashboard: dashboardSlice,
         students: studentReducer,
         studentProfile: studentProfileReducer,
         leaves: leaveReducer,

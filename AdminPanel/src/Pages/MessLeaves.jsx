@@ -8,10 +8,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Button, ButtonGroup, Text } from '@chakra-ui/react';
-// import { Box } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import UtilFunctions from '../../../StudentsPanel/src/Utils/UtilFunctions';
-// import { useDispatch, useSelector } from 'react-redux';
 import { getLeavesList } from '../Features/Leaves/leaveSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
@@ -48,7 +46,8 @@ const theme = createTheme({
 
 const MessLeaves = () => {
   const dispatch = useDispatch();
-  const { LeavesList, isLoading } = useSelector((state) => state.leaves);
+  const { leaves, isLoadingLeaves } = useSelector((state) => state.leaves);
+
   const leaveAction = (data) => {
     dispatch(takeAction(data));
   };
@@ -57,7 +56,7 @@ const MessLeaves = () => {
     dispatch(getLeavesList());
   }, [dispatch]);
 
-  if (isLoading) {
+  if (isLoadingLeaves) {
     return <Spinner message={'Getting Leaves.....'} />
   }
 
@@ -66,14 +65,12 @@ const MessLeaves = () => {
   return (
     <Box
       border={'3px solid rgba(0, 0, 0, 0.05)'}
-      // color={textColor}
-      // margin={isMobile ? '0.5rem' : 0}
       bg={bgColor}
       boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
       gap={'1rem'}
-      borderRadius={'1rem'}
-      // height={isMobile ? 'auto' : '100%'}
+      borderRadius={'0.5rem'}
       padding={'1rem'}
+      height={'100%'}
     >
       <Heading
         fontSize={'2rem'}
@@ -84,8 +81,8 @@ const MessLeaves = () => {
         Students Leaves</Heading>
       <ThemeProvider theme={theme}>
         <Box>
-          {LeavesList.data && LeavesList.data.length > 0 ? (
-            LeavesList.data.filter((leave) => {
+          {leaves && leaves?.length > 0 ? (
+            leaves.filter((leave) => {
               return leave.studentName !== "Student Does Not Exist Anymore";
             }).map((leave) => (
               <Accordion key={leave._id} style={{ marginBottom: '1rem', color: 'white', borderRadius: '0.5rem' }}>
@@ -141,10 +138,8 @@ const MessLeaves = () => {
                 </AccordionActions>
               </Accordion>
             ))
-            // {
-            // }
           ) : (
-            <Heading>No Leaves Found...</Heading>
+            <Heading>No Leaves Applied So Far...</Heading>
           )
           }
         </Box>

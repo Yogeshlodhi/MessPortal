@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllFeedbacks } from '../Features/Feedback/feedBackSlice';
-import { Box, Input, Stack,useColorModeValue, Collapse, Button, Text, RadioGroup, Radio, HStack, Avatar, Heading, useMediaQuery } from '@chakra-ui/react';
+import { Box, Input, Stack, useColorModeValue, Collapse, Button, Text, RadioGroup, Radio, HStack, Avatar, Heading, useMediaQuery } from '@chakra-ui/react';
+
+import Spinner from '../Components/Spinner';
 
 const Feedbacks = () => {
   const dispatch = useDispatch();
-  const { feedbacks } = useSelector((state) => state.feedbacks);
+  const { feedbacks, isLoadingFeedbacks } = useSelector((state) => state.feedbacks);
   const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
   const [filterDate, setFilterDate] = useState('');
   const [feedbackType, setFeedbackType] = useState('all');
   const [openFeedback, setOpenFeedback] = useState(null);
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
 
   const [isMobile] = useMediaQuery('(max-width: 600px)')
 
@@ -47,7 +50,9 @@ const Feedbacks = () => {
     setOpenFeedback(openFeedback === id ? null : id);
   };
 
-  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  if (isLoadingFeedbacks) {
+    return <Spinner message={'Loading Feedbacks....'} />
+  }
 
   return (
     <Box

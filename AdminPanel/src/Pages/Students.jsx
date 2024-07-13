@@ -9,7 +9,7 @@ import {
   useMediaQuery,
   useColorModeValue
 } from '@chakra-ui/react';
-import { getStudentsList } from '../Features/Students/studentSlice';
+import { getdata } from '../Features/Students/studentSlice';
 import Spinner from '../Components/Spinner';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -24,9 +24,10 @@ const Students = () => {
   const [search, setSearch] = useState('');
   const [selectedStudent, setSelectedStudent] = useState(null);
 
-  const { studentsList, isLoading, isError, message } = useSelector((state) => state.students);
-
+  const { students, isLoading, isError, message } = useSelector((state) => state.students);
+  
   const { student, isLoadingStudent } = useSelector((state) => state.studentProfile);
+
 
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
   const [isMobile] = useMediaQuery('(max-width: 600px)')
@@ -35,7 +36,7 @@ const Students = () => {
     if (isError) {
       console.log(message);
     }
-    dispatch(getStudentsList());
+    dispatch(getdata());
   }, [navigate, isError, dispatch, message]);
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const Students = () => {
   };
 
   const handleExportToExcel = () => {
-    const data = studentsList.map((student, index) => ({
+    const data = data.map((student, index) => ({
       'Sr. No': index + 1,
       'Student Roll': student.studentRoll,
       'Student Name': student.studentName,
@@ -110,7 +111,7 @@ const Students = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {studentsList
+            {students
               .filter((student) => {
                 const searchLower = search.toLowerCase();
                 return searchLower === ''

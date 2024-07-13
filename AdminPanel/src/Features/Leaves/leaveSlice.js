@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import leaveService from './leaveService';
 
 const initialState = {
-    LeavesList: [],
-    isLoading: false,
+    leaves: [],
+    isLoadingLeaves: false,
     isSuccess: false,
     isError: false,
-    message: ''
+    leavesMessage: ''
 }
 
 export const getLeavesList = createAsyncThunk(
@@ -16,8 +16,6 @@ export const getLeavesList = createAsyncThunk(
             const state = thunkAPI.getState();
             const token = state.auth.admin.token;
             const adminType = state.auth.admin.adminType;
-            // const leaves = await leaveService.getAllLeaves({ token, adminType });
-            // console.log("Leaves Data : ", leaves.data);
             return await leaveService.getAllLeaves({ token, adminType });
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
@@ -56,10 +54,10 @@ const leaveSlice = createSlice({
     reducers: {
         reset: (state) => initialState,
         setLeavesList: (state, action) => {
-            state.LeavesList = action.payload;
+            state.leaves = action.payload.data;
         },
         removeLeave: (state, action) => {
-            state.LeavesList = state.LeavesList.filter(
+            state.leaves = state.leaves.filter(
                 (leave) => leave._id !== action.payload
             );
         },
@@ -67,37 +65,38 @@ const leaveSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getLeavesList.fulfilled, (state, action) => {
-                state.LeavesList = action.payload;
-                state.isLoading = false;
+                state.leaves = action.payload.data;
+                state.isLoadingLeaves = false;
                 state.isSuccess = true;
+                state.leavesMessage = action.payload.message;
             })
             .addCase(getLeavesList.pending, (state) => {
-                state.isLoading = true;
+                state.isLoadingLeaves = true;
             })
             .addCase(getLeavesList.rejected, (state, action) => {
-                state.LeavesList = [];
-                state.isLoading = false;
+                state.leaves = [];
+                state.isLoadingLeaves = false;
                 state.isError = true;
-                state.message = action.payload;
+                state.leavesMessage = action.payload.message;
             })
             .addCase(takeAction.pending, (state) => {
-                state.isLoading = true;
+                state.isLoadingLeaves = true;
             })
 
             .addCase(takeAction.fulfilled, (state, action) => {
                 const updatedLeave = action.payload;
-                if (Array.isArray(state.LeavesList)) {
-                    const index = state.LeavesList.findIndex(leave => leave._id === updatedLeave._id);
+                if (Array.isArray(state.leaves)) {
+                    const index = state.leaves.findIndex(leave => leave._id === updatedLeave._id);
                     if (index !== -1) {
-                        state.LeavesList[index] = updatedLeave;
+                        state.leaves[index] = updatedLeave;
                     }
                 }
-                state.isLoading = false;
+                state.isLoadingLeaves = false;
             })
             .addCase(takeAction.rejected, (state, action) => {
-                state.isLoading = false;
+                state.isLoadingLeaves = false;
                 state.isError = true;
-                state.message = action.payload;
+                state.leavesMessage = action.payload.message;
             });
     }
 });

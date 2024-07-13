@@ -45,6 +45,7 @@ const loginAdminService = async (loginData) => {
     }
 
     const isPasswordValid = await bcrypt.compare(loginData.password, admin.password);
+    
     if (admin && isPasswordValid) {
         const { password, ...adminData } = admin.toObject();
         adminData.token = createToken(admin._id);
@@ -86,7 +87,7 @@ const getMessInfoService = async () => {
     }
 }
 
-const getAllStudentsList = async () => {
+const getAlldata = async () => {
     try {
         const students = await studentModel.find().select('-password');
         return students;
@@ -122,7 +123,7 @@ const getAllLeavesList = async () => {
 }
 
 const leaveActionService = async (id, actionData, user) => {
-    try{
+    try {
         actionData.actionTakenBy = user;
         // console.log(actionData)
         const updatedLeave = await LeaveModel.findOneAndUpdate(
@@ -137,10 +138,10 @@ const leaveActionService = async (id, actionData, user) => {
             actionTakenBy: user,
         };
         // console.log('response : ', response);
-        
+
         return response;
-    }catch(error){
-        throw {message: error.message}
+    } catch (error) {
+        throw { message: error.message }
     }
 }
 
@@ -185,12 +186,12 @@ const announcementService = async (announcementData) => {
 }
 
 const getAnnounceService = async () => {
-    try{
+    try {
         const announcements = await announcementModel.find();
         return announcements;
-    }catch(err){    
+    } catch (err) {
         console.log(err);
-        throw {message: err.message}
+        throw { message: err.message }
     }
 }
 
@@ -220,45 +221,45 @@ const getFeedbackService = async () => {
     try {
         const feedbacks = await feedbackModel.find();
         return feedbacks;
-        
+
     } catch (error) {
         throw { message: error.message }
     }
 }
 
 const getMenuService = async () => {
-    try{
+    try {
         const response = await menuModel.find();
         return response;
-    }catch(err){
-        throw {message: err.message}
+    } catch (err) {
+        throw { message: err.message }
     }
 }
 
 const complaintListService = async () => {
-    try{
+    try {
         const complaints = await complaintModel.find();
         return complaints;
     }
-    catch(error){
-        throw {message: error.message}
+    catch (error) {
+        throw { message: error.message }
     }
 }
 
 const complaintActionService = async (id, actionData, user) => {
-    try{
+    try {
         const updatedComplaint = await complaintModel.findOneAndUpdate(
             { _id: id },
             actionData,
             { new: true, runValidators: true }
         );
-        
+
         return {
             ...updatedComplaint._doc,
             actionTakenBy: user,
         }
-    }catch(error){
-        throw {message: error.message}
+    } catch (error) {
+        throw { message: error.message }
     }
 }
 
@@ -267,23 +268,23 @@ const deleteComplaintService = async (id) => {
         const deletedComplaint = await complaintModel.findByIdAndDelete(id);
         return deletedComplaint;
     } catch (error) {
-        throw {message: error.message};
+        throw { message: error.message };
     }
 }
 
-const getSingleComplaintService = async(id) => {
-    try{
-        const complaint = await complaintModel.findById({_id: id});
+const getSingleComplaintService = async (id) => {
+    try {
+        const complaint = await complaintModel.findById({ _id: id });
         return complaint;
-    }catch(error){
-        throw {message: error.message};
+    } catch (error) {
+        throw { message: error.message };
     }
 }
 
 export {
     registerAdminService,
     loginAdminService,
-    getAllStudentsList,
+    getAlldata,
     getAllLeavesList,
     uploadMenuService,
     updateMenuService,
