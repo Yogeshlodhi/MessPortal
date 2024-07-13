@@ -40,9 +40,6 @@ function Header() {
 
     const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
 
-    // const bgColor = useColorModeValue('brand.100', 'brand.900');
-    // const textColor = useColorModeValue('gray.800', 'white');
-
     let { admin } = useSelector((state) => state.auth)
 
 

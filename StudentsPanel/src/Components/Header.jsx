@@ -38,6 +38,7 @@ function Header() {
     const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
 
     const { student, dp } = useSelector((state) => state.auth);
+    // console.log(dp)
 
     const logoutStudent = () => {
         dispatch(logout());

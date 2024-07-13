@@ -3,14 +3,18 @@ import messService from './messService';
 
 const initialState = {
     announcements: [],
-    feedback: [],
     menu: [],
-    coomplaints: [],
+    complaints: [],
     messInfo: '',
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ''
+    message: '',
+    feedback: [],
+    isPostingFeedback: false,
+    feedbackMessage: '',
+    isFeedbackError: false,
+    isFeedbackSuccess: false,
 }
 
 
@@ -92,25 +96,28 @@ const messSlice = createSlice({
             .addCase(getAnnouncements.fulfilled, (state, action) => {
                 state.isLoading = false,
                 state.isSuccess = true,
-                state.announcements = action.payload
+                state.announcements = action.payload.data
             })
             .addCase(getAnnouncements.rejected, (state, action) => {
                 state.isError = true,
                 state.isLoading = false,
-                state.message = action.payload
+                state.message = action.payload.message
             })
             .addCase(postFeedback.pending, (state) => {
-                state.isLoading = true
+                state.isPostingFeedback = true
             })
             .addCase(postFeedback.fulfilled, (state, action) => {
-                state.isLoading = false,
-                state.isSuccess = true,
-                state.feedback = action.payload
+                state.isPostingFeedback = false,
+                state.isFeedbackSuccess = true,
+                state.feedback = action.payload,
+                state.feedbackMessage = action.payload.message
+                state.isFeedbackError = false
             })
             .addCase(postFeedback.rejected, (state, action) => {
-                state.isError = true,
-                state.isLoading = false,
-                state.message = action.payload
+                state.isFeedbackError = true
+                state.isPostingFeedback = false,
+                state.isFeedbackSuccess = false,
+                state.feedbackMessage = action.payload.message
             })
             .addCase(postComplaint.pending, (state) => {
                 state.isLoading = true
@@ -118,7 +125,7 @@ const messSlice = createSlice({
             .addCase(postComplaint.fulfilled, (state, action) => {
                 state.isLoading = false,
                 state.isSuccess = true,
-                state.coomplaints = action.payload
+                state.complaints = action.payload
             })
             .addCase(postComplaint.rejected, (state, action) => {
                 state.isError = true,

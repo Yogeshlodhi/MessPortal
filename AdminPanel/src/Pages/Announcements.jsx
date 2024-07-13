@@ -112,7 +112,7 @@ const Announcements = () => {
       gap={'1rem'}
       borderRadius={'1rem'}
       padding={'1rem'}
-      height={'100%'}
+      // height={'100%'}
     >
       <Heading
         mb={4}

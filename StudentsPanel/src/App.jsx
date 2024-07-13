@@ -18,13 +18,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 
 const App = () => {
-  const isAuthenticated = useSelector((state) => state.auth);
+  const {student, isAuthenticated} = useSelector((state) => state.auth);
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/*" element={isAuthenticated ? <AuthenticatedRoutes /> : <Navigate to="/login" replace />} />
+        <Route path="/*" element={student ? <AuthenticatedRoutes /> : <Navigate to="/login" replace />} />
+        {/* <Route path="/*" element={isAuthenticated ? <AuthenticatedRoutes /> : <Navigate to="/login" replace />} /> */}
       </Routes>
     </Router>
   );

@@ -89,7 +89,7 @@ const Students = () => {
       width={'100%'}
       gap={'2rem'}
       bg={bgColor}
-      height={'100%'}
+      // height={'100%'}
       padding={'0.5rem'}
     >
       <Box width={'100%'}>

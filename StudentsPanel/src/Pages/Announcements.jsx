@@ -1,4 +1,4 @@
-import { Table, Thead, Tbody, Tr, Td, Th, TableContainer, Box, Collapse, Heading, useColorModeValue } from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tr, Td, Th, TableContainer, Box, Collapse, Heading, useColorModeValue, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnnouncements, reset } from '../Features/Mess/messSlice';
@@ -6,11 +6,7 @@ import { InfinitySpin } from 'react-loader-spinner';
 import UtilFunctions from '../Utils/UtilFunctions';
 
 const Announcements = () => {
-  // const bgColor = useColorModeValue('brand.100', 'brand.900');
   const textColor = useColorModeValue('gray.800', 'white');
-  const headingBgColor = useColorModeValue('gray.200', 'gray.700');
-  const descriptionBgColor = useColorModeValue('teal.100', 'teal.600');
-  const tableRowBgColor = useColorModeValue('gray.50', 'darkMode.primaryBg');
 
   const [openRowId, setOpenRowId] = useState(null);
   const toggleRow = (id) => {
@@ -20,12 +16,14 @@ const Announcements = () => {
   const dispatch = useDispatch();
   const { announcements, isError, isLoading, message } = useSelector((state) => state.mess);
 
+  // console.log(announcements)
+
+
   useEffect(() => {
     if (isError) {
       console.log(message);
     }
     dispatch(getAnnouncements());
-
     return () => {
       dispatch(reset());
     };
@@ -40,7 +38,6 @@ const Announcements = () => {
     );
   }
 
-  const announcementList = announcements && announcements.data;
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
   return (
     <Box
@@ -50,7 +47,7 @@ const Announcements = () => {
       bg={bgColor}
       border={'3px solid rgba(0, 0, 0, 0.05)'}
       boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
-      height={'100%'}
+      // height={'100%'}
     >
       <Heading
         fontSize={'2rem'}
@@ -60,43 +57,43 @@ const Announcements = () => {
         Announcements
       </Heading>
       <TableContainer bg={bgColor} borderRadius="md">
-        <Table
-          variant="striped"
-          colorScheme='#1D1D1C'
-        >
-          <Thead
-          // bg={headingBgColor}
-          >
-            <Tr>
-              <Th fontSize="lg">Title</Th>
-              <Th fontSize="lg">Date</Th>
-            </Tr>
-          </Thead>
-          <Tbody
-          // bg={tableRowBgColor}
-          >
-            {announcementList?.map((row, id) => (
-              <React.Fragment key={id}>
-                <Tr onClick={() => toggleRow(id)} cursor="pointer">
-                  <Td>{row.heading}</Td>
-                  <Td>{UtilFunctions.formatDate(new Date(row.createdAt))}</Td>
-                </Tr>
+        {
+          announcements && announcements.length === 0 ? (
+            <Text mt={4} color={'red'}>No Announcements Made Till Now....</Text>
+          ) : (
+            <Table
+              variant="striped"
+              colorScheme='#1D1D1C'
+            >
+              <Thead>
                 <Tr>
-                  <Td colSpan={2} style={{ overflowX: 'hidden' }}>
-                    <Collapse in={openRowId === id} width="100%" animateOpacity>
-                      <Box p={4}
-                        // bg={'#FC476C'} 
-                        // bg={descriptionBgColor} 
-                        rounded="md" shadow="md" color={textColor} whiteSpace="normal">
-                        {row.description}
-                      </Box>
-                    </Collapse>
-                  </Td>
+                  <Th fontSize="lg">Title</Th>
+                  <Th fontSize="lg">Date</Th>
                 </Tr>
-              </React.Fragment>
-            ))}
-          </Tbody>
-        </Table>
+              </Thead>
+              <Tbody>
+                {announcements && announcements?.map((row, id) => (
+                  <React.Fragment key={id}>
+                    <Tr onClick={() => toggleRow(id)} cursor="pointer">
+                      <Td>{row.heading}</Td>
+                      <Td>{UtilFunctions.formatDate(new Date(row.createdAt))}</Td>
+                    </Tr>
+                    <Tr>
+                      <Td colSpan={2} style={{ overflowX: 'hidden' }}>
+                        <Collapse in={openRowId === id} width="100%" animateOpacity>
+                          <Box p={4}
+                            rounded="md" shadow="md" color={textColor} whiteSpace="normal">
+                            {row.description}
+                          </Box>
+                        </Collapse>
+                      </Td>
+                    </Tr>
+                  </React.Fragment>
+                ))}
+              </Tbody>
+            </Table>
+          )
+        }
       </TableContainer>
     </Box>
   );

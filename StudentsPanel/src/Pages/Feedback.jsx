@@ -1,18 +1,17 @@
 import {
   Box, Button, Flex, FormControl, FormLabel, Heading, Image, Input, Select, Text, Textarea, VStack, useColorModeValue, useMediaQuery, useToast
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import TelegramIcon from '@mui/icons-material/Telegram';
-import { useDispatch } from 'react-redux';
-import { postFeedback } from '../Features/Mess/messSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { postFeedback, reset } from '../Features/Mess/messSlice';
 import { useNavigate } from 'react-router-dom';
+import Spinner from '../Components/Spinner'
 
 const Feedback = () => {
-  // const bgColor = useColorModeValue('brand.100', 'brand.900');
   const textColor = useColorModeValue('gray.800', 'white');
   const borderColor = useColorModeValue('black', 'white');
-  // const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
   const [isMobile] = useMediaQuery('(max-width: 600px)');
 
   const dispatch = useDispatch();
@@ -28,6 +27,8 @@ const Feedback = () => {
   });
 
   const { feedback, feedbackDescription, suggestion, mealOfDay, feedbackImage } = feedbackForm;
+
+  const { isPostingFeedback, isFeedbackError, feedbackMessage, isFeedbackSuccess } = useSelector((state) => state.mess)
 
   const onChange = (e) => {
     setFeedbackForm((prev) => ({
@@ -52,31 +53,35 @@ const Feedback = () => {
     formData.append('suggestion', suggestion);
     formData.append('mealOfDay', mealOfDay);
     if (feedbackImage) {
-      formData.append('image', feedbackImage); // Match the backend field name
+      formData.append('image', feedbackImage);
     }
-
     dispatch(postFeedback(formData))
-      .then(() => {
-        toast({
-          title: 'Feedback Submitted',
-          duration: 3000,
-          status: 'success',
-          isClosable: true
-        });
-        navigate('/');
-      })
-      .catch((err) => {
-        toast({
-          title: 'Submission Failed',
-          description: err.message,
-          duration: 3000,
-          status: 'error',
-          isClosable: true
-        });
-      });
   };
 
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+
+  useEffect(() => {
+    if (isFeedbackError) {
+      toast({
+        title: feedbackMessage,
+        duration: 3000,
+        status: 'error'
+      })
+    }
+    if (isFeedbackSuccess) {
+      toast({
+        title: feedbackMessage,
+        duration: 3000,
+        status: 'success'
+      })
+      navigate('/')
+      dispatch(reset());
+    }
+  }, [isFeedbackError, isFeedbackSuccess])
+
+  if (isPostingFeedback) {
+    return <Spinner message={'Posting Your Feedback...'} />
+  }
 
   return (
     <Box
@@ -90,7 +95,7 @@ const Feedback = () => {
       height={isMobile ? 'auto' : '100%'}
       padding={'1rem'}
     >
-      <Heading 
+      <Heading
         fontSize={'2rem'}
         textAlign={'center'}
         textTransform={'uppercase'}
@@ -253,6 +258,3 @@ const Feedback = () => {
 };
 
 export default Feedback;
-
-
-// Responsiveness Code

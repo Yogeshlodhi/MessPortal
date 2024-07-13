@@ -70,7 +70,7 @@ const MessLeaves = () => {
       gap={'1rem'}
       borderRadius={'0.5rem'}
       padding={'1rem'}
-      height={'100%'}
+      // height={'100%'}
     >
       <Heading
         fontSize={'2rem'}

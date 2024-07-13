@@ -8,7 +8,8 @@ const login = async (data) => {
 }
 
 const logout = () => {
-    localStorage.removeItem('admin');
+    localStorage.clear();
+    // localStorage.removeItem('admin');
 }
 
 

@@ -34,6 +34,18 @@ function LeaveApplication() {
 
   const { student } = useSelector((state) => state.auth);
 
+  const {isLoading, message, isError} = useSelector((state) => state.leave);
+
+  useEffect(() => {
+    if(isError){
+      toast({
+        title: message,
+        duration: 3000,
+        status: 'error'
+      })
+    }
+  })
+
   const [leaveForm, setLeaveForm] = useState({
     studentRoll: student && student.studentRoll,
     startDate: '',
@@ -84,6 +96,10 @@ function LeaveApplication() {
     });
     navigate('/');
   };
+
+  if(isLoading){
+    return <Spinner message={'Please wait....'}/>
+  }
 
   return (
     <Box

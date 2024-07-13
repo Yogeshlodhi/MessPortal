@@ -69,11 +69,13 @@ const studentLogin = async (loginData) => {
 const getMessInfoService = async () => {
     try {
         const latestMessInfo = await messInfoModel.findOne().sort({ createdAt: -1 });
-        if (latestMessInfo) {
-            return latestMessInfo
-        } else {
-            return null;
-        }
+        return latestMessInfo;
+        // console.log(latestMessInfo)
+        // if (latestMessInfo) {
+        //     return latestMessInfo
+        // } else {
+        //     return null;
+        // }
     } catch (err) {
         console.log(err);
         throw { message: 'Could Not Find the Informations', error: err }

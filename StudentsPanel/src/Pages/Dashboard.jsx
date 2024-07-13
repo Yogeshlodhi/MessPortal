@@ -13,7 +13,7 @@ import {
   Heading,
   useColorModeValue,
   useMediaQuery,
-  useTheme,
+  useToast,
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../Components/Spinner';
@@ -23,18 +23,25 @@ import { useNavigate } from 'react-router-dom';
 import UtilFunctions from '../Utils/UtilFunctions';
 
 function Dashboard() {
+  const toast = useToast();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  
 
   const { student } = useSelector((state) => state.auth);
   const { leaves, isLoading, isError, message } = useSelector((state) => state.leave);
   const { messInfo } = useSelector((state) => state.mess);
 
-  const [isMobile] = useMediaQuery('(max-width: 600px)');
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
+      toast({
+        title: message,
+        status: 'error',
+        duration: 3000,
+      })
     }
 
     if (!student) {
@@ -47,7 +54,7 @@ function Dashboard() {
     return () => {
       dispatch(reset());
     };
-  }, [student, navigate, dispatch, isError, message]);
+  }, [student,dispatch]);
 
   if (isLoading) {
     return <Spinner message={'Fetching Leaves'} />;
@@ -55,12 +62,12 @@ function Dashboard() {
 
   const leavesData = leaves?.data || [];
   const messAmount = messInfo?.data?.mealPrice || 0;
+  // console.log(messInfo)
   const totalAmount = leavesData.reduce(
     (acc, leave) => acc + messAmount * UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate)),
     0
   );
 
-  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
 
   return (
     <Box 
@@ -70,7 +77,7 @@ function Dashboard() {
       bg={bgColor}
       border={'3px solid rgba(0, 0, 0, 0.05)'}
       boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
-      height={'100%'}
+      // height={'100%'}
     >
       <Box className='flex gap-4' alignItems={'center'} justifyContent={isMobile ? 'center' : 'unset'}>
         <TextSnippetIcon style={{ fontSize: '2rem' }} />

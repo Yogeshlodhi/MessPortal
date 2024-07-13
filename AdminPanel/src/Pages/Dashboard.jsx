@@ -8,13 +8,15 @@ import { getLeavesList } from '../Features/Leaves/leaveSlice';
 import { getComplaintsList } from '../Features/Complaints/complaintSlice';
 import UtilFunctions from '../Utils/UtilFunctions';
 
+
 const Dashboard = () => {
   const dispatch = useDispatch();
 
-  const {students, isLoadingStudents, studentsMessage} = useSelector((state) => state.students);
-  const {leaves, isLoadingLeaves, leavesMessage} = useSelector((state) => state.leaves);
-  const {feedbacks, isLoadingFeedbacks, feedbackMessage} = useSelector((state) => state.feedbacks);
-  const {complaints, isLoadingComplaints, complaintsMessage} = useSelector((state) => state.complaints);
+  const { students, isLoadingStudents, studentsMessage } = useSelector((state) => state.students);
+  const { leaves, isLoadingLeaves, leavesMessage } = useSelector((state) => state.leaves);
+  const { feedbacks, isLoadingFeedbacks, feedbackMessage } = useSelector((state) => state.feedbacks);
+  const { complaints, isLoadingComplaints, complaintsMessage } = useSelector((state) => state.complaints);
+
 
   useEffect(() => {
     dispatch(getdata());
@@ -28,22 +30,10 @@ const Dashboard = () => {
   }
 
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  const filteredLeaves = UtilFunctions.filterLeavesByToday(leaves || []);
+  const filteredFeedbacks = UtilFunctions.filterFeedbacksByToday(feedbacks || []);
 
-  const filteredLeaves = leaves && leaves.filter(leave => {
-    const appliedDate = new Date(leave.appliedDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return UtilFunctions.areDatesEqual(appliedDate, today);
-  });
-  
-  const filteredFeedbacks = feedbacks && feedbacks.filter(feedback => {
-      const appliedDate = new Date(feedback.submissionDate);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return UtilFunctions.areDatesEqual(appliedDate, today);
-    });
-    // console.log(filteredFeedbacks)
-    
+
   return (
     <Box
       p={4}
@@ -52,7 +42,7 @@ const Dashboard = () => {
       bg={bgColor}
       border={'3px solid rgba(0, 0, 0, 0.05)'}
       boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
-      height={'100%'}
+      // height={'100%'}
     >
       <Heading
         mb={4}
