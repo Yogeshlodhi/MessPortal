@@ -2,14 +2,21 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authService";
 
 const student = JSON.parse(localStorage.getItem('student'));
-  
+
 const initialState = {
-    student : student ? student : null,
+    student: student ? student : null,
     dp: student ? student.profileImage : null,
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ''
+    message: '',
+    
+    // update profile states
+    isLoadingUpdate: false,
+    isUpdateSuccess: false,
+    isUpdateError: false,
+    updateMessage: '',
+    // update profile states
 }
 
 export const register = createAsyncThunk(
@@ -40,11 +47,11 @@ export const login = createAsyncThunk(
 export const updateStudent = createAsyncThunk(
     'auth/update',
     async (user, thunkAPI) => {
-        try{
+        try {
             const token = thunkAPI.getState().auth.student.token;
-            console.log(user)
+            // console.log(user)
             return await authService.update(user, token);
-        }catch(error){
+        } catch (error) {
             console.log(error.response.data.message)
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
@@ -55,10 +62,10 @@ export const updateStudent = createAsyncThunk(
 export const updateImage = createAsyncThunk(
     'auth/updateImage',
     async (user, thunkAPI) => {
-        try{
+        try {
             const token = thunkAPI.getState().auth.student.token;
             return await authService.updateImage(user, token);
-        }catch(error){
+        } catch (error) {
             console.log(error.response.data.message)
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
@@ -79,9 +86,14 @@ export const authSlice = createSlice({
     reducers: {
         reset: (state) => {
             state.isLoading = false,
-            state.isError = false,
-            state.isSuccess = false,
-            state.message = ''
+                state.isError = false,
+                state.isSuccess = false,
+                state.message = '',
+                //
+                state.isLoadingUpdate = false,
+                state.isUpdateSuccess = false,
+                state.isUpdateError = false,
+                state.updateMessage = ''
         }
     },
     extraReducers: (builder) => {
@@ -91,12 +103,12 @@ export const authSlice = createSlice({
             })
             .addCase(register.fulfilled, (state, action) => {
                 state.isLoading = false,
-                state.isSuccess = true
+                    state.isSuccess = true
             })
             .addCase(register.rejected, (state, action) => {
                 state.isLoading = false,
-                state.isError = true,
-                state.message = action.payload
+                    state.isError = true,
+                    state.message = action.payload
                 state.student = null
             })
             .addCase(login.pending, (state) => {
@@ -104,8 +116,8 @@ export const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.isLoading = false,
-                state.isSuccess = true,
-                state.student = action.payload.data
+                    state.isSuccess = true,
+                    state.student = action.payload.data
                 localStorage.setItem('student', JSON.stringify(action.payload.data));
             })
             .addCase(login.rejected, (state, action) => {
@@ -115,20 +127,23 @@ export const authSlice = createSlice({
                 state.student = null
             })
             .addCase(updateStudent.pending, (state) => {
-                state.isLoading = true
+                state.isLoadingUpdate = true
             })
             .addCase(updateStudent.fulfilled, (state, action) => {
-                state.isLoading = false,
-                state.isSuccess = true,
+                state.isLoadingUpdate = false,
+                state.isUpdateSuccess = true,
+                state.updateMessage = action.payload.message
                 state.student = {
+                    ...state.student,
                     ...action.payload.data,
-                    token: state.student.token 
-                };
+                    token: state.student.token
+                }
+                localStorage.setItem('student', JSON.stringify(state.student));
             })
             .addCase(updateStudent.rejected, (state, action) => {
-                state.isLoading = false,
-                state.isError = true
-                state.message = action.payload
+                state.isLoadingUpdate = false,
+                state.isUpdateError = true
+                state.updateMessage = action.payload
                 state.student = null
             })
             .addCase(updateImage.pending, (state) => {
@@ -136,18 +151,18 @@ export const authSlice = createSlice({
             })
             .addCase(updateImage.fulfilled, (state, action) => {
                 state.isLoading = false,
-                state.isSuccess = true,
-                state.dp = action.payload.data
+                    state.isSuccess = true,
+                    state.dp = action.payload.data
             })
             .addCase(updateImage.rejected, (state, action) => {
                 state.isLoading = false,
-                state.isError = true
+                    state.isError = true
                 state.message = action.payload
             })
             .addCase(logout.fulfilled, (state) => {
                 state.isLoading = false,
-                state.isSuccess = true,
-                state.student = null
+                    state.isSuccess = true,
+                    state.student = null
             })
             .addCase(logout.pending, (state) => {
                 state.isLoading = true
@@ -155,5 +170,5 @@ export const authSlice = createSlice({
     }
 })
 
-export const {reset} = authSlice.actions;
+export const { reset } = authSlice.actions;
 export default authSlice.reducer;

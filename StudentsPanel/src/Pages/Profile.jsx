@@ -7,28 +7,48 @@ import {
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { updateStudent, updateImage } from '../Features/Auth/authSlice';
+import { updateStudent, updateImage, reset } from '../Features/Auth/authSlice';
 import Spinner from '../Components/Spinner';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import UtilFunctions from '../Utils/UtilFunctions';
 
 const Profile = () => {
-  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
-  const textColor = useColorModeValue('gray.800', 'white');
-  const { student, isLoading, dp } = useSelector(state => state.auth);
+
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();
-
   const [isMobile] = useMediaQuery('(max-width: 600px)')
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  const textColor = useColorModeValue('gray.800', 'white');
+
+  const [randomColor, setRandomColor] = useState('');
+  useEffect(() => {
+    setRandomColor(UtilFunctions.getRandomColor());
+  }, []);
+
+  const { student,
+    isLoading,
+    dp,
+    isError,
+    isSuccess,
+    message,
+    isLoadingUpdate,
+    isUpdateSuccess,
+    isUpdateError,
+    updateMessage
+  } = useSelector(state => state.auth);
 
   const [updateFormData, setUpdateFormData] = useState({
     emailId: student.emailId,
     studentName: student.studentName,
     studentRoll: student.studentRoll,
     number: student.number,
-    bankAccount: student.bankAccount ? student.bankAccount : '',
-    ifsc: student.ifsc ? student.ifsc : '',
+    bankAccount: student.bankAccount,
+    ifsc: student.ifsc,
+    // bankAccount: student.bankAccount ? student.bankAccount : '',
+    // ifsc: student.ifsc ? student.ifsc : '',
   });
+
 
   const [profileImage, setProfileImage] = useState(dp);
   const [profile, setProfile] = useState(null);
@@ -78,61 +98,58 @@ const Profile = () => {
     }
   }
 
-  const onUpdate = async (e) => {
+  const onUpdate = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('studentName', studentName);
-    formData.append('studentRoll', studentRoll);
-    formData.append('number', number);
-    formData.append('ifsc', ifsc);
-    formData.append('bankAccount', bankAccount);
-    formData.append('emailId', emailId);
+    dispatch(updateStudent(updateFormData));
+  };
 
-    try {
-      console.log(formData)
-      await dispatch(updateStudent(formData));
-      setDisable(true);
+  useEffect(() => {
+    if (isUpdateError && updateMessage) {
       toast({
-        title: 'Profile Updated Successfully',
-        status: 'success',
-        isClosable: true,
-        duration: 3000,
-      });
-      // navigate('/');
-    } catch (err) {
-      toast({
-        title: 'Update Failed',
-        description: err.message,
+        title: updateMessage,
         status: 'error',
         isClosable: true,
-        duration: 3000,
-      });
+        duration: 3000
+      })
     }
-  };
 
-  const getRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+    if (isUpdateSuccess && updateMessage) {
+      toast({
+        title: updateMessage,
+        status: 'success',
+        isClosable: true,
+        duration: 3000
+      })
+      navigate('/')
     }
-    if (color !== '#fff') return color;
-    return 'black';
-  };
 
-  const [randomColor, setRandomColor] = useState('');
-  useEffect(() => {
-    setRandomColor(getRandomColor());
-  }, []);
+    // if (isError && message) {
+    //   toast({
+    //     title: message,
+    //     status: 'error',
+    //     isClosable: true,
+    //     duration: 3000
+    //   })
+    // }
+
+    return () => {
+      dispatch(reset());
+    };
+
+  }, [updateMessage, message])
+
+  if (isLoadingUpdate) {
+    return <Spinner message={'Updating Your Profile....'} />;
+  }
 
   if (isLoading) {
-    return <Spinner message={'Updating Your Profile'} />;
+    return <Spinner message={'Getting Your Details....'} />;
   }
 
   return (
-    <Box 
-      className='flex gap-4 flex-col' 
-      bg={bgColor} 
+    <Box
+      className='flex gap-4 flex-col'
+      bg={bgColor}
       border={'2px solid  rgba(0, 0, 0, 0.05)'}
       p={4}
       borderRadius={'1rem'}
@@ -229,13 +246,13 @@ const Profile = () => {
             }
           </Box>
         </Box>
-        <ButtonGroup 
+        <ButtonGroup
           display={isMobile ? 'flex' : ''}
           // alignSelf={'center'} 
-          justifyContent={'space-between'} 
+          justifyContent={'space-between'}
           // background={'red'}
           flexDirection={isMobile ? 'column' : 'row'}
-          width={'100%'} 
+          width={'100%'}
           gap={'2rem'}
           paddingLeft={isMobile ? '0' : '25%'}
         >

@@ -127,7 +127,8 @@ const getAnnouncementsService = async () => {
 
 const getMenuService = async () => {
     try{
-        const response = await menuModel.find();
+        // const response = await menuModel.find();
+        const response = await menuModel.findOne();
         return response;
     }catch(err){
         throw {message: err.message}

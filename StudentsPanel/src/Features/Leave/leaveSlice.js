@@ -27,7 +27,6 @@ export const getLeaves = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const token = thunkAPI.getState().auth.student.token;
-            // console.log(token)
             return await leaveService.getLeaves(token);
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()

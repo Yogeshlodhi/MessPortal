@@ -3,12 +3,26 @@ import messService from './messService';
 
 const initialState = {
     announcements: [],
-    menu: [],
-    messInfo: '',
     isError: false,
     isSuccess: false,
     isLoading: false,
     message: '',
+    
+    // menu state
+    menu: [],
+    isErrorMenu: false,
+    isMenuSuccess: false,
+    isMenuLoading: false,
+    menuMessage: '',
+    // menu state
+    
+    // messInfo State
+    messInfo: {},
+    isLoadingMess: false,
+    isErrorMess: false,
+    messMessage: '',
+    isMessSuccess: false,
+    // messInfo State
 
     // complaints state
     complaints: [],
@@ -27,6 +41,19 @@ const initialState = {
     // feedback state
 }
 
+export const getMessInfo = createAsyncThunk(
+    'messInfo/getInfo',
+    async (_, thunkAPI) => {
+        try {
+            const state = thunkAPI.getState();
+            const token = state.auth.student.token;
+            return await messService.getMessInfoService(token);
+        } catch (error) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+)
 
 export const getAnnouncements = createAsyncThunk(
     'mess/announcements',
@@ -80,17 +107,6 @@ export const postComplaint = createAsyncThunk(
     }
 )
 
-export const getMessInfo =  createAsyncThunk(
-    'mess/messInfo',
-    async (_, thunkAPI) => {
-        try {
-            return await messService.getMessInfoService();
-        } catch (error) {
-            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-            return thunkAPI.rejectWithValue(message);
-        }
-    }
-)
 
 const messSlice = createSlice({
     name: 'mess',
@@ -143,34 +159,35 @@ const messSlice = createSlice({
                 state.isComplaintError = true,
                 state.isPostingComplaint = false,
                 state.isComplaintSuccess = false,
-                console.log(action.payload)
                 state.complaintMessage = action.payload
             })
             .addCase(getMenu.pending, (state) => {
-                state.isLoading = true
+                state.isMenuLoading = true
             })
             .addCase(getMenu.fulfilled, (state, action) => {
-                state.isLoading = false,
-                state.isSuccess = true,
-                state.menu = action.payload
+                state.isMenuLoading = false,
+                state.isMenuSuccess = true,
+                state.menu = action.payload.data,
+                state.menuMessage = action.payload.message
             })
             .addCase(getMenu.rejected, (state, action) => {
-                state.isError = true,
-                state.isLoading = false,
-                state.message = action.payload
+                state.isErrorMenu = true,
+                state.isMenuLoading = false,
+                state.menuMessage = action.payload
             })
             .addCase(getMessInfo.pending, (state) => {
-                state.isLoading = true
+                state.isLoadingMess = true
             })
             .addCase(getMessInfo.fulfilled, (state, action) => {
-                state.isLoading = false,
-                state.isSuccess = true,
-                state.messInfo = action.payload
+                state.messInfo = action.payload.data,
+                state.isLoadingMess = false,
+                state.isErrorMess = false,
+                state.messMessage = action.payload.message
             })
             .addCase(getMessInfo.rejected, (state, action) => {
-                state.isError = true,
-                state.isLoading = false,
-                state.message = action.payload
+                state.isLoadingMess = false;
+                state.isErrorMess = true;
+                state.messMessage = action.payload;
             })
     }
 })

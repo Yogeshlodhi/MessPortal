@@ -19,6 +19,7 @@ const getMenu = async (token) => {
         }
     }
     const response = await axios.get(`${API_URL}/getMenu`, config);
+    // console.log(response);
     return response.data;
 }
 
@@ -66,8 +67,15 @@ const postComplaint = async (token, complaintData) => {
     return response.data;
 }
 
-const getMessInfoService = async () => {
-    const response = await axios.get(`${API_URL}/messInfo`);
+const getMessInfoService = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+    }
+
+    const response = await axios.get(`${API_URL}/messInfo`, config);
     return response.data;
 }
 

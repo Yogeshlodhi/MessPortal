@@ -61,7 +61,7 @@ function Dashboard() {
   }
 
   const leavesData = leaves?.data || [];
-  const messAmount = messInfo?.data?.mealPrice || 0;
+  const messAmount = messInfo?.mealPrice || 0;
   
   const totalAmount = leavesData
     .filter((leave) => leave.status === 'Approved')

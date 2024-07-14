@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Login from './Authentication/Login';
 import Register from './Authentication/Register';
@@ -19,7 +19,8 @@ import MessInfo from './Pages/MessInfo';
 
 
 const App = () => {
-  const {student, isAuthenticated} = useSelector((state) => state.auth);
+  const {student} = useSelector((state) => state.auth);
+  // console.log(student)
   return (
     <Router>
       <Routes>
