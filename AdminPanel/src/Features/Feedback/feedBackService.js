@@ -11,7 +11,7 @@ const getAllFeedback = async ({token, adminType}) => {
         }
     };
     const response = await axios.get(`${API_URL}/feedback_list`, config);
-    return response.data.data;
+    return response.data;
 }
 
 const feedBackService = {

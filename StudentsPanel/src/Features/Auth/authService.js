@@ -8,10 +8,7 @@ const register = async (data) => {
 
 const login = async (data) => {
     const response = await axios.post(`${API_URL}/login`, data);
-    if(response.data && response.data.data){
-        localStorage.setItem('student', JSON.stringify(response.data.data));
-        return response.data.data;
-    }
+    return response.data;
 }
 
 const update = async (data, token) => {
@@ -20,6 +17,7 @@ const update = async (data, token) => {
             Authorization: `Bearer ${token}`
         }
     }
+    console.log(data)
     const response = await axios.put(`${API_URL}`, data, config);
     return response.data;
 }

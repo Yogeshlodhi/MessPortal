@@ -1,12 +1,13 @@
+import React, { useEffect, useState } from "react";
 import {
   Box, Flex, Text, Button, IconButton, Heading, Grid, Icon, ButtonGroup,
   useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton,
-  ModalBody
+  ModalBody, useMediaQuery,
+  useColorModeValue
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { getComplaintsList } from "../Features/Complaints/complaintSlice";
+import { getComplaintsList, deleteComplaint } from "../Features/Complaints/complaintSlice";
 import Spinner from "../Components/Spinner";
 
 const ComplaintsList = () => {
@@ -17,6 +18,8 @@ const ComplaintsList = () => {
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [isMobile] = useMediaQuery('(max-width : 600px)')
+
   useEffect(() => {
     dispatch(getComplaintsList());
   }, [dispatch]);
@@ -26,62 +29,89 @@ const ComplaintsList = () => {
     onOpen();
   };
 
+  const handleResolve = (complaint) => {
+    // console.log(complaint)
+    dispatch(deleteComplaint(complaint._id));
+    dispatch(getComplaintsList());
+  };
+
   if (isLoading) {
     return <Spinner message={'Loading Complaints....'} />;
   }
 
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  const textColor = useColorModeValue('gray.800', 'white');
+
   return (
-    <Box>
-      <Heading mb={4} size="lg">
+    <Box
+      border={'3px solid rgba(0, 0, 0, 0.05)'}
+      bg={bgColor}
+      boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
+      gap={'1rem'}
+      borderRadius={'1rem'}
+      padding={'1rem'}
+      // height={'100%'}
+    >
+      <Heading
+        mb={4}
+        fontSize={'2rem'}
+        textAlign={'center'}
+        textTransform={'uppercase'}
+      >
         Complaints
       </Heading>
-      <Grid templateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={4}>
-        {complaints.map((complaint, index) => (
-          <Box
-            key={index}
-            borderWidth="1px"
-            borderRadius="lg"
-            p={4}
-            boxShadow="md"
-            _hover={{ boxShadow: "lg" }}
-          >
-            <Flex justify="space-between" align="center" mb={2}>
-              <Text fontWeight="bold" fontSize="lg" className="overflow-hidden overflow-ellipsis whitespace-nowrap">{complaint.complaintAbout}</Text>
-              {admin.adminType === 'Warden' && (
-                <IconButton
-                  icon={<Icon as={MdClose} />}
-                  variant="ghost"
-                  colorScheme="red"
-                  aria-label="Close"
-                  onClick={() => handleResolve(complaint)}
-                />
-              )}
-            </Flex>
-            <Text className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-              {complaint.description}
-            </Text>
-            <ButtonGroup>
-              <Button mt={4} colorScheme="blue" onClick={() => handleView(complaint)}>
-                View
-              </Button>
-              <Button mt={4} colorScheme={
-                complaint.status === 'In Progress' ? 'orange' :
-                  complaint.status === 'Solved' ? 'green' :
-                    'red'
-              }
-              // onClick={handleResolve}
-              isDisabled
-              >
-                {complaint.status}
-              </Button>
-            </ButtonGroup>
-          </Box>
-        ))}
-      </Grid>
+      {complaints.length === 0 ? (
+        <Text color={'red'}>No Complaints Available....</Text>
+      ) : (
+        <Grid templateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={4}>
+          {complaints.map((complaint, index) => (
+            <Box
+              key={index}
+              borderWidth="1px"
+              borderRadius="lg"
+              p={4}
+              boxShadow="md"
+              _hover={{ boxShadow: "lg" }}
+            >
+              <Flex justify="space-between" align="center" mb={2}>
+                <Text fontWeight="bold" fontSize="lg" className="overflow-hidden overflow-ellipsis whitespace-nowrap">{complaint.complaintAbout}</Text>
+                {admin.adminType === 'Warden' && (
+                  <IconButton
+                    icon={<Icon as={MdClose} />}
+                    variant="ghost"
+                    colorScheme="red"
+                    aria-label="Close"
+                    onClick={() => handleResolve(complaint)}
+                  />
+                )}
+              </Flex>
+              <Text className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+                {complaint.description}
+              </Text>
+              <ButtonGroup>
+                <Button mt={4} colorScheme="blue" onClick={() => handleView(complaint)}>
+                  View
+                </Button>
+                <Button mt={4} colorScheme={
+                  complaint.status === 'In Progress' ? 'orange' :
+                    complaint.status === 'Solved' ? 'green' :
+                      'red'
+                }
+                  // onClick={handleResolve}
+                  isDisabled
+                >
+                  {complaint.status}
+                </Button>
+              </ButtonGroup>
+            </Box>
+          ))}
+        </Grid>
+      )}
       {selectedComplaint && (
-        <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <Modal size={isMobile ? 'sm' : 'lg'} isOpen={isOpen} onClose={onClose}>
           <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
-          <ModalContent>
+          <ModalContent bg={bgColor}
+            color={textColor}>
             <ModalHeader>Complaint Details</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
@@ -110,7 +140,7 @@ const ComplaintsList = () => {
                 ) : (
                   <Text color={'red'} fontWeight={'bold'}>No Image Was Attached With This Complaint</Text>
                 )
-              }
+                }
               </Box>
             </ModalBody>
           </ModalContent>

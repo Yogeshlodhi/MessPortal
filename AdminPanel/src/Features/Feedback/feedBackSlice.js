@@ -3,10 +3,10 @@ import feedBackService from './feedBackService';
 
 const initialState = {
     feedbacks : [],
-    isLoading: false,
+    isLoadingFeedbacks: false,
     isSuccess: false,
     isError: false,
-    message: ''
+    feedbackMessage: ''
 }
 
 export const getAllFeedbacks = createAsyncThunk(
@@ -33,17 +33,18 @@ const feedBackSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAllFeedbacks.pending, (state) => {
-                state.isLoading = true
+                state.isLoadingFeedbacks = true
             })
             .addCase(getAllFeedbacks.fulfilled, (state, action) => {
-                state.isLoading = false,
+                state.isLoadingFeedbacks = false,
                 state.isSuccess = true,
-                state.feedbacks = action.payload
+                state.feedbacks = action.payload.data
+                state.feedbackMessage = action.payload.message
             })
             .addCase(getAllFeedbacks.rejected, (state, action) => {
-                state.isLoading = false,
+                state.isLoadingFeedbacks = false,
                 state.isError = true,
-                state.message = action.payload
+                state.feedbackMessage = action.payload.message
             })
     }
 })

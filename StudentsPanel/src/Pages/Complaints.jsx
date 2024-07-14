@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Heading,
@@ -13,10 +13,12 @@ import {
   Text,
   Container,
   useToast,
+  useMediaQuery,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useDispatch, useSelector } from 'react-redux';
-import { postComplaint } from '../Features/Mess/messSlice';
+import { postComplaint, reset } from '../Features/Mess/messSlice';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../Components/Spinner'
 
@@ -26,13 +28,15 @@ const Complaint = () => {
   const toast = useToast()
   const navigate = useNavigate();
 
-  const {isLoading} = useSelector(state => state.mess)
+  const { isPostingComplaint, complaintMessage, isComplaintError, isComplaintSuccess } = useSelector(state => state.mess)
 
   const [complaint, setComplaint] = useState({
     complaintAbout: '',
     description: '',
     attachment: null
   });
+
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
 
   const { complaintAbout, description, attachment } = complaint;
 
@@ -55,35 +59,51 @@ const Complaint = () => {
     }
 
     dispatch(postComplaint(formData))
-      .then(() => {
-        toast({
-          title: 'Complaint Submitted',
-          duration: 3000,
-          status: 'success',
-          isClosable: true,
-        });
-        navigate('/');
-      })
-      .catch((err) => {
-        toast({
-          title: 'Submission Failed',
-          description: err.message,
-          duration: 3000,
-          status: 'error',
-          isClosable: true,
-        });
-      });
-    // console.log(complaint);
   };
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
 
-  if(isLoading){
-    return <Spinner message={'Submitting Your Complaint...'}/>
+  useEffect(() => {
+    if (isComplaintError) {
+      toast({
+        title: complaintMessage,
+        duration: 3000,
+        status: 'error',
+        isClosable: true
+      })
+    }
+    if (isComplaintSuccess) {
+      toast({
+        title: complaintMessage,
+        duration: 3000,
+        status: 'success',
+        isClosable: true
+      })
+      navigate('/')
+      dispatch(reset());
+    }
+  }, [isComplaintError, isComplaintSuccess])
+
+  if (isPostingComplaint) {
+    return <Spinner message={'Submitting Your Complaint...'} />
   }
 
   return (
-    <Box p={4}>
-      <Heading as="h1" size="lg" mb={4}>
-        Submit a Complaint
+    <Box
+      // p={6}
+      borderRadius={'1rem'}
+      padding={'1rem'}
+      bg={bgColor}
+      border={'3px solid rgba(0, 0, 0, 0.05)'}
+      boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
+    // height={'100%'}
+    >
+      <Heading
+        mb={6}
+        fontSize={'2rem'}
+        textAlign={'center'}
+        textTransform={'uppercase'}
+      >
+        Submit Complaint
       </Heading>
       <Box gap={'1rem'} display={'flex'} flexDirection={'column'}>
         <FormControl isRequired>
@@ -95,6 +115,7 @@ const Complaint = () => {
             onChange={handleChange}
             placeholder="Enter the issue you want to complain about"
             required
+            focusBorderColor='#B5B4B4'
           />
         </FormControl>
         <FormControl isRequired>
@@ -105,6 +126,7 @@ const Complaint = () => {
             onChange={handleChange}
             placeholder="Describe the issue in detail"
             required
+            focusBorderColor='#B5B4B4'
           />
         </FormControl>
         <Box
@@ -115,10 +137,10 @@ const Complaint = () => {
           // mt={6} 
           overflow={'hidden'}
           borderWidth={'0.1rem'}
-          width={'50%'}
+          width={isMobile ? '100%' : '50%'}
           alignSelf={'center'}
         >
-          <VStack spacing={4} alignItems="center">
+          <VStack spacing={4} alignItems="center" >
             <FormLabel fontSize={'2rem'} mt={6} htmlFor="imageUpload">Upload Image</FormLabel>
             <Flex alignItems="center" mt={6}>
               <Input
@@ -168,10 +190,13 @@ const Complaint = () => {
         </Box>
         <Button
           type="submit"
-          colorScheme="teal"
-          width={'50%'}
+          // colorScheme="teal"
+          width={isMobile ? '100%' : '50%'}
           alignSelf={'center'}
           onClick={handleSubmit}
+          color={'white'}
+          background={'#005252'}
+          _hover={{ backgroundColor: 'teal' }}
         >
           Submit Complaint
         </Button>

@@ -5,33 +5,45 @@ import {
   ModalHeader, ModalCloseButton, ModalBody, useDisclosure,
   Avatar,
   Text,
-  Heading
+  Heading,
+  useMediaQuery,
+  useColorModeValue,
+  useToast
 } from '@chakra-ui/react';
-import { getStudentsList } from '../Features/Students/studentSlice';
+import { getdata } from '../Features/Students/studentSlice';
 import Spinner from '../Components/Spinner';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { clearStudent, getSingleStudent } from '../Features/Students/studentProfileSlice';
-import profile from '../../../profile.jpg';
 import * as XLSX from 'xlsx';
 
 const Students = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [search, setSearch] = useState('');
   const [selectedStudent, setSelectedStudent] = useState(null);
 
-  const { studentsList, isLoading, isError, message } = useSelector((state) => state.students);
-
+  const { students, isLoading, isError, message } = useSelector((state) => state.students);
+  
   const { student, isLoadingStudent } = useSelector((state) => state.studentProfile);
 
+
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  const [isMobile] = useMediaQuery('(max-width: 600px)')
+
   useEffect(() => {
-    if (isError) {
-      console.log(message);
+    if (isError && message) {
+      toast({
+        title: message,
+        status: 'error',
+        isClosable: true,
+        duration: 3000
+      })
     }
-    dispatch(getStudentsList());
+    dispatch(getdata());
   }, [navigate, isError, dispatch, message]);
 
   useEffect(() => {
@@ -54,7 +66,7 @@ const Students = () => {
   };
 
   const handleExportToExcel = () => {
-    const data = studentsList.map((student, index) => ({
+    const data = data.map((student, index) => ({
       'Sr. No': index + 1,
       'Student Roll': student.studentRoll,
       'Student Name': student.studentName,
@@ -80,27 +92,33 @@ const Students = () => {
   }
 
   return (
-    <VStack width={'100%'} gap={'2rem'}>
-      <Box width={'90%'}>
+    <VStack
+      width={'100%'}
+      gap={'2rem'}
+      bg={bgColor}
+      // height={'100%'}
+      padding={'0.5rem'}
+    >
+      <Box width={'100%'}>
         <Input
           placeholder="Search Student With Name / RollNo / EmailId"
           onChange={(e) => setSearch(e.target.value)}
         />
       </Box>
-      <TableContainer width={'90%'}>
-        <Table variant="striped" colorScheme='teal'>
+      <TableContainer width={'100%'}>
+        <Table variant="striped" colorScheme='#1D1D1C'>
           <Thead>
-            <Tr background={'teal'}>
-              <Th color="#FFFFFF">Sr. No</Th>
-              <Th color="#FFFFFF">Student Roll</Th>
-              <Th color="#FFFFFF">Student Name</Th>
-              <Th color="#FFFFFF">Student Email</Th>
-              <Th color="#FFFFFF">Number</Th>
-              <Th color="#FFFFFF">Profile</Th>
+            <Tr>
+              <Th>Sr. No</Th>
+              <Th>Student Roll</Th>
+              <Th>Student Name</Th>
+              <Th>Student Email</Th>
+              <Th>Number</Th>
+              <Th>Profile</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {studentsList
+            {students
               .filter((student) => {
                 const searchLower = search.toLowerCase();
                 return searchLower === ''
@@ -130,14 +148,15 @@ const Students = () => {
       </TableContainer>
       <Button onClick={handleExportToExcel} colorScheme="teal">Export to Excel</Button>
       {selectedStudent && (
-        <Modal 
-          isOpen={isOpen} 
+        <Modal
+          isOpen={isOpen}
           // onClose={() => {
           //     onClose,
           //     setSelectedStudent(null)
           // }} 
           onClose={onClose}
-          size={'xl'}
+          size={isMobile ? 'sm' : 'xl'}
+        // size={'xl'}
         >
           <ModalOverlay
             bg='blackAlpha.300'
@@ -147,13 +166,24 @@ const Students = () => {
             <ModalHeader>
               {selectedStudent.studentName}'s Profile
             </ModalHeader>
-             <ModalCloseButton />
-            <ModalBody display={'flex'} gap={'1rem'}>
+            <ModalCloseButton />
+            <ModalBody
+              display={'flex'}
+              flexDirection={isMobile ? 'column' : 'row'}
+              gap={'1rem'}
+            >
               <Box>
                 <Avatar
-                  style={{ width: '10rem', height: '10rem' }}
+                  style={{
+                    // width: '10rem', 
+                    // height: '10rem',
+                    width: isMobile ? '100%' : '10rem',
+                    height: isMobile ? '100%' : '10rem',
+                    objectFit: 'cover'
+                  }}
                   name={selectedStudent.studentName}
-                  src={profile}
+                  // src={profile}
+                  src={selectedStudent.profileImage}
                   borderRadius="1rem"
                 />
               </Box>

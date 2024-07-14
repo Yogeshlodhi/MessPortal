@@ -4,8 +4,9 @@ import {
     complaintActionService,
     complaintListService,
     deleteAnnounceService,
+    deleteComplaintService,
     getAllLeavesList,
-    getAllStudentsList,
+    getAlldata,
     getAnnounceService,
     getFeedbackService,
     getMenuService,
@@ -70,6 +71,7 @@ const addMessInfo = (req, res) => {
     if (messData) {
         addMessInfoService(messData)
             .then((data) => {
+                // console.log(data)
                 return res
                     .status(statusCode.ok)
                     .send({ message: "Mess Information Added", data: data })
@@ -104,11 +106,11 @@ const getMessInfo = (req, res) => {
 }
 
 const getAllStudents = (req, res) => {
-    getAllStudentsList()
+    getAlldata()
         .then((data) => {
             return res
                 .status(statusCode.ok)
-                .send({ message: 'List Received', StudentsList: data })
+                .send({ message: 'List Received', data: data })
         })
         .catch((err) => {
             return res
@@ -119,10 +121,10 @@ const getAllStudents = (req, res) => {
 
 const getAllLeaves = (req, res) => {
     getAllLeavesList()
-        .then((data) => {
+    .then((data) => {
             return res
                 .status(statusCode.ok)
-                .send({ message: 'Leaves List Received', LeavesList: data })
+                .send({ message: 'Leaves List Received', data: data })
         })
         .catch((err) => {
             return res
@@ -137,6 +139,7 @@ const leaveAction = (req, res) => {
     const user = req.user.firstName;
     leaveActionService(id, actions, user)
         .then((data) => {
+            // console.log(data)
             return res
                 .status(statusCode.ok)
                 .send({ message: 'Action Updated Successfully', data: data });
@@ -289,6 +292,28 @@ const getComplaintsList = (req, res) => {
         })
 }
 
+const deleteComplaint = (req, res) => {
+    const id = req.params.id;
+    deleteComplaintService(id)
+        .then((data) => {
+            if (!data) {
+                return res
+                    .status(statusCode.badRequest)
+                    .send({ message: 'Error Occurred'})
+            }
+            return res
+                .status(statusCode.ok)
+                .send({ message: 'Complaint Deleted', data: data })
+        })
+        .catch((err) => {
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
+        })
+}
+
+
+
 const takeAction = (req, res) => {
     const id = req.params.id;
     const actions = req.body;
@@ -341,5 +366,6 @@ export {
     getSingleComplaint,
     leaveAction,
     addMessInfo,
-    getMessInfo
+    getMessInfo,
+    deleteComplaint
 }

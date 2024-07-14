@@ -11,7 +11,8 @@ const getMenu = async ({token, adminType}) => {
         }
     };
     const response = await axios.get(`${API_URL}/getMenu`, config);
-    return response.data.data[0];
+    // console.log(response.data)
+    return response.data;
 }
 
 const updateMenuService = async (month, updatedMenu, token, adminType) => {

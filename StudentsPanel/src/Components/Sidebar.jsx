@@ -1,5 +1,5 @@
-import { Box, Heading,Flex, Text, useColorModeValue } from '@chakra-ui/react'
-import React from 'react'
+import { Box, Heading, Flex, Text, useColorModeValue, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, useDisclosure, useMediaQuery, Tooltip, WrapItem } from '@chakra-ui/react';
+import React from 'react';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import RateReviewIcon from '@mui/icons-material/RateReview';
@@ -7,6 +7,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import PaymentIcon from '@mui/icons-material/Payment';
+import InfoIcon from '@mui/icons-material/Info';
 import { Link, NavLink } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
@@ -49,73 +50,75 @@ const SidebarOptions = [
   },
   {
     id: 7,
-    name: 'Payments',
-    path: '/payments',
-    icon: <PaymentIcon style={{ marginRight: '10px' }} />,
+    name: 'Mess Information',
+    path: '/messinfo',
+    icon: <InfoIcon style={{ marginRight: '10px' }} />,
   },
-]
-function Sidebar() {
-  // const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
-  // const textColor = useColorModeValue('lightMode.text', 'darkMode.text');
-  // const headingColor = useColorModeValue('lightMode.heading', 'darkMode.heading');
+  // {
+    //   id: 8,
+    //   name: 'Payments',
+    //   path: '/payments',
+    //   icon: <PaymentIcon style={{ marginRight: '10px' }} />,
+    // },
+];
 
+function Sidebar() {
+  const boxShadow = useColorModeValue('0px 0px 10px rgba(0,0,0,0.45)', '0px 0px 5px #636368');
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
+  // const bgColor = useColorModeValue('lightMode.bg', 'darkMode.');
   return (
     <Box
-      // backgroundColor='#2C3E50'
-      height={'100vh'}
-      boxShadow="0px 0px 10px rgba(0,0,0,0.45)"
-      // boxShadow="9px 3px 15px -6px rgba(0,0,0,0.45)"
-      // width={'20vw'}
-      position="relative"
+      // bg={bgColor}
+      // height={'100vh'}
+      height={isMobile ? '' : '100vh'}
+      // boxShadow={isMobile ? 'none' : "0px 0px 10px rgba(0,0,0,0.45)"}
+      boxShadow={isMobile ? 'none' : boxShadow}
+    // width={'20vw'}
+    // position="relative"
     >
-      <Box>
-        <Heading
-          // minHeight={'3.5rem'}
-          // padding={'1rem'}
-          // textAlign={'center'}
-          // color={headingColor}
-          minHeight={'3.5rem'}
-          padding={'1rem'}
-          textAlign={'center'}
-          textTransform={'uppercase'}
+      <Heading
+        minHeight="3.5rem"
+        padding="1rem"
+        textAlign="center"
+        textTransform="uppercase"
+      >
+        Mess Portal
+      </Heading>
+      {SidebarOptions.map((item) => (
+        <Flex
+          key={item.id}
+          display="flex"
+          alignItems="center"
+          marginBottom="15px"
+          paddingLeft="1rem"
+          paddingRight="1rem"
+          width="100%"
         >
-          Mess Portal
-        </Heading>
-        {
-          SidebarOptions.map((item) => {
-            return (
-              <Flex
-                display='flex'
-                alignItems='center'
-                marginBottom='15px'
-                paddingLeft={'1rem'}
-                paddingRight={'1rem'}
-                key={item.id}
-                width={'100%'}
-              >
-                <NavLink
-                  to={item.path}
-                  style={{
-                    textDecoration: 'none',
-                    fontSize: '1.5rem',
-                    width: '100%',
-                    padding: '0.5rem',
-                    borderRadius: '0.5rem'
-                  }}
-                  activeclassname="active"
-                >
-                  {item.icon}
-                  {item.name}
-                </NavLink>
-              </Flex>
-            )
-          }
-          )
-        }
-      </Box>
+          <NavLink
+            to={item.path}
+            style={{
+              textDecoration: 'none',
+              fontSize: '1.5rem',
+              width: '100%',
+              padding: '0.5rem',
+              borderRadius: '0.5rem',
+            }}
+            activeclassname="active"
+            className="link"
+          >
+            {item.icon}
+            {item.name}
+          </NavLink>
+        </Flex>
+      ))}
+      {/* <Tooltip label='Toggle Theme'> */}
+      <WrapItem cursor={'pointer'} visibility={isMobile ? 'visible' : 'hidden'} alignItems={'center'} gap={'1rem'} justifyContent={'center'}>
+        <Text fontSize={'1.5rem'}>Change Theme</Text>
+        <ThemeToggle />
+      </WrapItem>
+      {/* </Tooltip> */}
     </Box>
   );
 }
 
-export default Sidebar
-
+export default Sidebar;

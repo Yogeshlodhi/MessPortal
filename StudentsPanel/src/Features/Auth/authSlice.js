@@ -42,6 +42,7 @@ export const updateStudent = createAsyncThunk(
     async (user, thunkAPI) => {
         try{
             const token = thunkAPI.getState().auth.student.token;
+            console.log(user)
             return await authService.update(user, token);
         }catch(error){
             console.log(error.response.data.message)
@@ -104,7 +105,8 @@ export const authSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.isLoading = false,
                 state.isSuccess = true,
-                state.student = action.payload
+                state.student = action.payload.data
+                localStorage.setItem('student', JSON.stringify(action.payload.data));
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false,

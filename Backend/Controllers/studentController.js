@@ -57,7 +57,7 @@ const getMessInfo = (req, res) => {
                 .send({ message: "Mess Information Received", data: data })
         })
         .catch((err) => {
-            console.log(err);
+            // console.log(err);
             return res
                 .status(statusCode.badRequest)
                 .send({ message: err.message })
@@ -101,7 +101,7 @@ const submitFeedback = async (req, res) => {
         .catch((err) => {
             return res
                 .status(statusCode.badRequest)
-                .send({ message: 'Bad Request', error: err.message })
+                .send({ message: 'Bad Request, Try Again', error: err.message })
         })
 }
 
@@ -109,6 +109,7 @@ const addComplaint = async (req, res) => {
     const complaintData = req.body;
     const studentId = req.user.id;
     const localFilePath = req.file ? req.file.path : null;
+
     let imageUrl = null;
     if (localFilePath) {
         const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
@@ -125,7 +126,7 @@ const addComplaint = async (req, res) => {
         .catch((err) => {
             return res
                 .status(statusCode.badRequest)
-                .send({ message: err.message })
+                .send({ message: 'Bad Request, Try Again..', error: err.message })
         })
 }
 

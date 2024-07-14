@@ -58,12 +58,12 @@ const theme = extendTheme({
       variants: {
         striped: (props) => ({
           tbody: {
-            // tr: {
-            //   '&:nth-of-type(odd)': {
-            //     bg: '#005252',
-            //     color: 'white',
-            //   },
-            // },
+            tr: {
+              '&:nth-of-type(odd)': {
+                bg: '#005252',
+                color: 'white',
+              },
+            },
           },
         }),
       },

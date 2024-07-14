@@ -17,7 +17,8 @@ import {
     getSingleComplaint,
     leaveAction,
     addMessInfo,
-    getMessInfo
+    getMessInfo,
+    deleteComplaint
 } from "../Controllers/adminController.js";
 import authenticateAndCheckRole from "../Middleware/userPermission.js";
 
@@ -59,6 +60,7 @@ router.put('/complaint/takeAction/:id', takeAction);
 router.get('/complaints/:id', getSingleComplaint);
 
 
-router.delete('/announcement/:id',authenticateAndCheckRole(["Warden", "Mess Secretary"]), deleteAnnouncement);
+router.delete('/announcement/:id',authenticateAndCheckRole(["Mess Owner", "Mess Secretary"]), deleteAnnouncement);
+router.delete('/complaints/:id',authenticateAndCheckRole(["Warden"]), deleteComplaint);
 
 export default router;

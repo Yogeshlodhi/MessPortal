@@ -6,7 +6,16 @@
   "name": "messportal",
   "version": "1.0.0",
   "main": "Backend/index.js",
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.16.0",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@mui/x-data-grid": "^7.9.0",
     "abbrev": "^1.1.1",
     "ansi-regex": "^5.0.1",
     "ansi-styles": "^4.3.0",
@@ -56,6 +65,7 @@
     "spawn-command": "^0.0.2",
     "string-width": "^4.2.3",
     "strip-ansi": "^6.0.1",
+    "styled-components": "^6.1.11",
     "supports-color": "^8.1.1",
     "to-regex-range": "^5.0.1",
     "touch": "^3.1.0",

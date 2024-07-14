@@ -27,9 +27,9 @@ export const getLeaves = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const token = thunkAPI.getState().auth.student.token;
+            // console.log(token)
             return await leaveService.getLeaves(token);
         } catch (error) {
-            // console.log(error)
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message); 
         }
@@ -52,12 +52,13 @@ const leaveSlice = createSlice({
             .addCase(applyLeave.fulfilled, (state, action) => {
                 state.isLoading = false,
                 state.isSuccess = true,
-                state.leaves.push(action.payload)
+                state.leaves.push(action.payload.data)
+                state.message = action.payload.message
             })
             .addCase(applyLeave.rejected, (state, action) => {
-                state.message = action.payload,
                 state.isError = true,
                 state.isLoading = false
+                state.message = action.payload.message
             })
             .addCase(getLeaves.pending, (state) => {
                 state.isLoading = true

@@ -17,7 +17,7 @@ export const login = createAsyncThunk(
         try{
             return await authService.login(admin)
         }catch(error){
-            console.log(error.response.data.message);
+            // console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
         }
@@ -45,15 +45,18 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
-                state.admin = action.payload,
+                localStorage.setItem('admin', JSON.stringify(action.payload.data))
+                state.admin = action.payload.data,
                 state.isLoading = false,
                 state.isSuccess = true
+                state.message = action.payload.message
             })
             .addCase(login.rejected, (state, action) => {
+                console.log(action.payload)
                 state.admin = null,
                 state.isLoading = false,
                 state.isError = true,
-                state.message = action.payload
+                state.message = action.payload.message
             })
             .addCase(login.pending, (state, action) => {
                 state.isLoading = true

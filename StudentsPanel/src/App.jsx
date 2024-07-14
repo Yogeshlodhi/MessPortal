@@ -12,64 +12,76 @@ import Profile from './Pages/Profile';
 import Complaints from './Pages/Complaints';
 import Sidebar from './Components/Sidebar';
 import Header from './Components/Header';
-import Payments from './Pages/Payments'
-import { Box } from '@chakra-ui/react';
+import Payments from './Pages/Payments';
+import { Box, useMediaQuery, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, useColorModeValue } from '@chakra-ui/react';
+import MenuIcon from '@mui/icons-material/Menu';
+import MessInfo from './Pages/MessInfo';
+
 
 const App = () => {
-  const isAuthenticated = useSelector((state) => state.auth);
-
+  const {student, isAuthenticated} = useSelector((state) => state.auth);
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/*" element={isAuthenticated ? <AuthenticatedRoutes /> : <Navigate to="/login" replace />} />
+        <Route path="/*" element={student ? <AuthenticatedRoutes /> : <Navigate to="/login" replace />} />
+        {/* <Route path="/*" element={isAuthenticated ? <AuthenticatedRoutes /> : <Navigate to="/login" replace />} /> */}
       </Routes>
     </Router>
   );
 };
 
-const AuthenticatedRoutes = () => (
-  <Box
-    display="flex"
-    maxHeight={'90vh'}
-    height={'90vh'}
-  >
-    <Box flex={2}>
-      <Sidebar />
-    </Box>
+const AuthenticatedRoutes = () => {
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
+  
+  return (
     <Box
-      flex={7}
-      display={'flex'}
-      flexDirection={'column'}
-      height={'100vh'}
-      // background={'blue'}
-      width={'80vw'}
-      >
-      <Header />
+      display="flex"
+      maxHeight={'90vh'}
+      height={'90vh'}
+    >
+      {
+        !isMobile ? (
+          <Box flex={2}>
+            <Sidebar />
+          </Box>
+        ) : (
+          <></>
+        )
+      }
+
       <Box
-        overflow={'scroll'}
-        height={'90%'}
-        // height={'100vh'}
-        padding={'1rem'}
-        // overflowX={'hidden'}
-        paddingTop={'2rem'}
-        // background={'red'}
+        display={'flex'}
+        flexDirection={'column'}
+        height={'100vh'}
+        width={isMobile ? '100vw' : '80vw'}
       >
-        <Routes>
-          <Route index element={<Dashboard />} />
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/apply-leave" element={<LeaveApplication />} />
-          <Route path="/feedback" element={<Feedback />} />
-          <Route path="/menu" element={<Menu />} />
-          <Route path="/announcements" element={<Announcements />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/complaints" element={<Complaints />} />
-          <Route path="/payments" element={<Payments />} />
-        </Routes>
+        <Header />
+        <Box
+          overflow={'scroll'}
+          scrollBehavior={'smooth'}
+          height={'100%'}
+          // height={'90%'}
+          padding={isMobile ? '1rem' : '1rem'}
+          paddingTop={isMobile ? '1rem' : '2rem'}
+        >
+          <Routes>
+            <Route index element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/apply-leave" element={<LeaveApplication />} />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/announcements" element={<Announcements />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/complaints" element={<Complaints />} />
+            <Route path="/payments" element={<Payments />} />
+            <Route path="/messinfo" element={<MessInfo />} />
+          </Routes>
+        </Box>
       </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 export default App;
