@@ -15,6 +15,7 @@ import Header from './Components/Header';
 import Payments from './Pages/Payments';
 import { Box, useMediaQuery, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, useColorModeValue } from '@chakra-ui/react';
 import MenuIcon from '@mui/icons-material/Menu';
+import MessInfo from './Pages/MessInfo';
 
 
 const App = () => {
@@ -75,6 +76,7 @@ const AuthenticatedRoutes = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/complaints" element={<Complaints />} />
             <Route path="/payments" element={<Payments />} />
+            <Route path="/messinfo" element={<MessInfo />} />
           </Routes>
         </Box>
       </Box>

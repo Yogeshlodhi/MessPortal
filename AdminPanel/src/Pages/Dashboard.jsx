@@ -6,6 +6,7 @@ import { getdata } from '../Features/Students/studentSlice';
 import { getAllFeedbacks } from '../Features/Feedback/feedBackSlice';
 import { getLeavesList } from '../Features/Leaves/leaveSlice';
 import { getComplaintsList } from '../Features/Complaints/complaintSlice';
+import {getMessInfo} from '../Features/MessInfo/messInfoSlice'
 import UtilFunctions from '../Utils/UtilFunctions';
 
 
@@ -17,12 +18,12 @@ const Dashboard = () => {
   const { feedbacks, isLoadingFeedbacks, feedbackMessage } = useSelector((state) => state.feedbacks);
   const { complaints, isLoadingComplaints, complaintsMessage } = useSelector((state) => state.complaints);
 
-
   useEffect(() => {
     dispatch(getdata());
     dispatch(getLeavesList());
     dispatch(getAllFeedbacks());
     dispatch(getComplaintsList());
+    dispatch(getMessInfo())
   }, [dispatch]);
 
   if (isLoadingStudents || isLoadingLeaves || isLoadingFeedbacks || isLoadingComplaints) {
@@ -30,8 +31,8 @@ const Dashboard = () => {
   }
 
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
-  const filteredLeaves = UtilFunctions.filterLeavesByToday(leaves || []);
-  const filteredFeedbacks = UtilFunctions.filterFeedbacksByToday(feedbacks || []);
+  // const filteredLeaves = UtilFunctions.filterLeavesByToday(leaves || []);
+  // const filteredFeedbacks = UtilFunctions.filterFeedbacksByToday(feedbacks || []);
 
 
   return (
@@ -77,7 +78,7 @@ const Dashboard = () => {
       <Divider my={6} />
 
       <Flex flexWrap="wrap" gap="4">
-        <DashboardSection
+        {/* <DashboardSection
           title="Leaves (Today)"
           data={filteredLeaves}
           renderItem={(leave, index) => (
@@ -85,9 +86,9 @@ const Dashboard = () => {
               <Text>{leave.studentRoll} - {UtilFunctions.formatDate(new Date(leave.startDate))} to {UtilFunctions.formatDate(new Date(leave.endDate))} ({leave.status})</Text>
             </Box>
           )}
-        />
+        /> */}
 
-        <DashboardSection
+        {/* <DashboardSection
           title="Feedbacks (Today)"
           data={filteredFeedbacks}
           renderItem={(feedback, index) => (
@@ -95,7 +96,7 @@ const Dashboard = () => {
               <Text><strong>{feedback.studentRoll}</strong> ({feedback.mealOfDay}): {feedback.feedbackDescription}</Text>
             </Box>
           )}
-        />
+        /> */}
 
         <DashboardSection
           title="Complaints"

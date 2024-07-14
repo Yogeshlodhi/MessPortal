@@ -7,7 +7,8 @@ import {
   Text,
   Heading,
   useMediaQuery,
-  useColorModeValue
+  useColorModeValue,
+  useToast
 } from '@chakra-ui/react';
 import { getdata } from '../Features/Students/studentSlice';
 import Spinner from '../Components/Spinner';
@@ -20,6 +21,7 @@ import * as XLSX from 'xlsx';
 const Students = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [search, setSearch] = useState('');
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -33,8 +35,13 @@ const Students = () => {
   const [isMobile] = useMediaQuery('(max-width: 600px)')
 
   useEffect(() => {
-    if (isError) {
-      console.log(message);
+    if (isError && message) {
+      toast({
+        title: message,
+        status: 'error',
+        isClosable: true,
+        duration: 3000
+      })
     }
     dispatch(getdata());
   }, [navigate, isError, dispatch, message]);

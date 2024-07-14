@@ -15,6 +15,7 @@ import MessLeaves from './Pages/MessLeaves';
 import Students from './Pages/Students';
 import Profile from './Pages/Profile';
 import { useMediaQuery } from '@chakra-ui/react';
+import MessInfo from './Pages/MessInfo';
 
 
 function App() {
@@ -73,7 +74,7 @@ const AuthenticatedRoutes = () => {
             <Route path='/menu' element={<Menu />} />
             <Route path='/leaves' element={<MessLeaves />} />
             <Route path='/students' element={<Students />} />
-            {/* <Route path='/profile' element={<Profile/>}/> */}
+            <Route path='/messinfo' element={<MessInfo/>}/>
           </Routes>
         </Box>
       </Box>

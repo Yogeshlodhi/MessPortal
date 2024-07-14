@@ -14,7 +14,7 @@ const Menu = () => {
   const dispatch = useDispatch();
   const toast = useToast();
   const [isMobile] = useMediaQuery("(max-width: 600px)");
-  
+
   const { menu, isLoading } = useSelector(state => state.menu);
 
   useEffect(() => {
@@ -204,109 +204,113 @@ const Menu = () => {
           Update Menu for {updateFormData.monthOfMenu}
         </Heading>
       </Box>
-      <Container maxW="container.xl" py={8}>
-        <Box bg={bgColor} color={textColor} borderRadius="lg">
-          <VStack>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%">
-              <Heading size="lg" textTransform="uppercase" mb={2}>Additional Info</Heading>
-              <FormControl>
-                <FormLabel>Remarks</FormLabel>
-                <Input
-                  onChange={onRemarkOrTimingChange}
-                  value={updateFormData.remarks || ''}
-                  name='remarks'
-                  focusBorderColor='#B5B4B4'
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Timing (Breakfast)</FormLabel>
-                <Input
-                  onChange={onRemarkOrTimingChange}
-                  value={updateFormData.timing?.breakfast || ''}
-                  name='timing_breakfast'
-                  focusBorderColor='#B5B4B4'
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Timing (Lunch)</FormLabel>
-                <Input
-                  onChange={onRemarkOrTimingChange}
-                  value={updateFormData.timing?.lunch || ''}
-                  name='timing_lunch'
-                  focusBorderColor='#B5B4B4'
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Timing (Dinner)</FormLabel>
-                <Input
-                  onChange={onRemarkOrTimingChange}
-                  value={updateFormData.timing?.dinner || ''}
-                  name='timing_dinner'
-                  focusBorderColor='#B5B4B4'
-                />
-              </FormControl>
-            </Box>
-            {daysOfWeek.map(day => (
-              <Box key={day} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%">
-                <Heading size="lg" textTransform="uppercase" mb={2}>{day}</Heading>
-                <FormControl mb={4}>
-                  <FormLabel>Breakfast</FormLabel>
+      {menu && menu.length > 0 ? (
+        <Container maxW="container.xl" py={8}>
+          <Box bg={bgColor} color={textColor} borderRadius="lg">
+            <VStack>
+              <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%">
+                <Heading size="lg" textTransform="uppercase" mb={2}>Additional Info</Heading>
+                <FormControl>
+                  <FormLabel>Remarks</FormLabel>
                   <Input
-                    onChange={onChange}
-                    value={updateFormData[day]?.breakfast || ''}
-                    name={`${day}_breakfast`}
+                    onChange={onRemarkOrTimingChange}
+                    value={updateFormData.remarks || ''}
+                    name='remarks'
                     focusBorderColor='#B5B4B4'
                   />
                 </FormControl>
-                <FormControl mb={4}>
-                  <FormLabel>Lunch</FormLabel>
+                <FormControl>
+                  <FormLabel>Timing (Breakfast)</FormLabel>
                   <Input
-                    onChange={onChange}
-                    value={updateFormData[day]?.lunch || ''}
-                    name={`${day}_lunch`}
+                    onChange={onRemarkOrTimingChange}
+                    value={updateFormData.timing?.breakfast || ''}
+                    name='timing_breakfast'
                     focusBorderColor='#B5B4B4'
                   />
                 </FormControl>
-                <FormControl mb={4}>
-                  <FormLabel>Dinner</FormLabel>
+                <FormControl>
+                  <FormLabel>Timing (Lunch)</FormLabel>
                   <Input
-                    onChange={onChange}
-                    value={updateFormData[day]?.dinner || ''}
-                    name={`${day}_dinner`}
+                    onChange={onRemarkOrTimingChange}
+                    value={updateFormData.timing?.lunch || ''}
+                    name='timing_lunch'
+                    focusBorderColor='#B5B4B4'
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Timing (Dinner)</FormLabel>
+                  <Input
+                    onChange={onRemarkOrTimingChange}
+                    value={updateFormData.timing?.dinner || ''}
+                    name='timing_dinner'
                     focusBorderColor='#B5B4B4'
                   />
                 </FormControl>
               </Box>
-            ))}
-            <FormControl>
-              <FormLabel textTransform={'uppercase'}>Amount for one meal</FormLabel>
-              <Input
-                onChange={(e) => {
-                  setDisable(false);
-                  setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value });
-                }}
-                value={updateFormData.amountOfOneMeal || ''}
-                name='amountOfOneMeal'
-                focusBorderColor='#B5B4B4'
-              />
-            </FormControl>
-          </VStack>
-          <Button
-            onClick={onUpdate}
-            width={isMobile ? '100%' : '30%'}
-            display={'inline-block'}
-            alignSelf={'center'}
-            background={'teal'}
-            color={'white'}
-            fontSize={'1.5rem'}
-            _hover={{ background: 'teal.500' }}
-            isDisabled={disable}
-            mt={4}
-          >
-            Update Menu
-          </Button>
-        </Box>
-      </Container>
+              {daysOfWeek.map(day => (
+                <Box key={day} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%">
+                  <Heading size="lg" textTransform="uppercase" mb={2}>{day}</Heading>
+                  <FormControl mb={4}>
+                    <FormLabel>Breakfast</FormLabel>
+                    <Input
+                      onChange={onChange}
+                      value={updateFormData[day]?.breakfast || ''}
+                      name={`${day}_breakfast`}
+                      focusBorderColor='#B5B4B4'
+                    />
+                  </FormControl>
+                  <FormControl mb={4}>
+                    <FormLabel>Lunch</FormLabel>
+                    <Input
+                      onChange={onChange}
+                      value={updateFormData[day]?.lunch || ''}
+                      name={`${day}_lunch`}
+                      focusBorderColor='#B5B4B4'
+                    />
+                  </FormControl>
+                  <FormControl mb={4}>
+                    <FormLabel>Dinner</FormLabel>
+                    <Input
+                      onChange={onChange}
+                      value={updateFormData[day]?.dinner || ''}
+                      name={`${day}_dinner`}
+                      focusBorderColor='#B5B4B4'
+                    />
+                  </FormControl>
+                </Box>
+              ))}
+              <FormControl>
+                <FormLabel textTransform={'uppercase'}>Amount for one meal</FormLabel>
+                <Input
+                  onChange={(e) => {
+                    setDisable(false);
+                    setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value });
+                  }}
+                  value={updateFormData.amountOfOneMeal || ''}
+                  name='amountOfOneMeal'
+                  focusBorderColor='#B5B4B4'
+                />
+              </FormControl>
+            </VStack>
+            <Button
+              onClick={onUpdate}
+              width={isMobile ? '100%' : '30%'}
+              display={'inline-block'}
+              alignSelf={'center'}
+              background={'teal'}
+              color={'white'}
+              fontSize={'1.5rem'}
+              _hover={{ background: 'teal.500' }}
+              isDisabled={disable}
+              mt={4}
+            >
+              Update Menu
+            </Button>
+          </Box>
+        </Container>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 };

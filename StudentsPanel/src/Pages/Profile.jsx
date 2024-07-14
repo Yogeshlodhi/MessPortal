@@ -46,7 +46,6 @@ const Profile = () => {
 
   const onImageChange = (e) => {
     setDisable(false);
-    // Check if a file is selected
     if (e.target.files.length > 0) {
       setProfile(e.target.files[0]);
     }
@@ -90,6 +89,7 @@ const Profile = () => {
     formData.append('emailId', emailId);
 
     try {
+      console.log(formData)
       await dispatch(updateStudent(formData));
       setDisable(true);
       toast({
@@ -98,7 +98,7 @@ const Profile = () => {
         isClosable: true,
         duration: 3000,
       });
-      navigate('/');
+      // navigate('/');
     } catch (err) {
       toast({
         title: 'Update Failed',

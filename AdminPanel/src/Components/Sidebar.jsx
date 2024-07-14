@@ -8,7 +8,8 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import ThemeToggle from '../Components/ThemeToggle'
+import InfoIcon from '@mui/icons-material/Info';
+import ThemeToggle from '../Components/ThemeToggle';
 
 function Sidebar() {
     const [isMobile] = useMediaQuery('(max-width: 600px)');
@@ -55,6 +56,12 @@ function Sidebar() {
             name: 'Students',
             path: '/students',
             icon: <PeopleAltIcon style={{ marginRight: '10px' }} />,
+        },
+        {
+            id: 8,
+            name: 'Mess Information',
+            path: '/messinfo',
+            icon: <InfoIcon style={{ marginRight: '10px' }} />,
         },
     ]
 

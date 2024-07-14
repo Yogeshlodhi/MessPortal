@@ -7,6 +7,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import PaymentIcon from '@mui/icons-material/Payment';
+import InfoIcon from '@mui/icons-material/Info';
 import { Link, NavLink } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
@@ -47,12 +48,18 @@ const SidebarOptions = [
     path: '/complaints',
     icon: <ThumbDownOffAltIcon style={{ marginRight: '10px' }} />,
   },
+  {
+    id: 7,
+    name: 'Mess Information',
+    path: '/messinfo',
+    icon: <InfoIcon style={{ marginRight: '10px' }} />,
+  },
   // {
-  //   id: 7,
-  //   name: 'Payments',
-  //   path: '/payments',
-  //   icon: <PaymentIcon style={{ marginRight: '10px' }} />,
-  // },
+    //   id: 8,
+    //   name: 'Payments',
+    //   path: '/payments',
+    //   icon: <PaymentIcon style={{ marginRight: '10px' }} />,
+    // },
 ];
 
 function Sidebar() {
@@ -105,10 +112,10 @@ function Sidebar() {
         </Flex>
       ))}
       {/* <Tooltip label='Toggle Theme'> */}
-        <WrapItem cursor={'pointer'} visibility={isMobile ? 'visible' : 'hidden'} alignItems={'center'} gap={'1rem'} justifyContent={'center'}>
-          <Text fontSize={'1.5rem'}>Change Theme</Text>
-          <ThemeToggle />
-        </WrapItem>
+      <WrapItem cursor={'pointer'} visibility={isMobile ? 'visible' : 'hidden'} alignItems={'center'} gap={'1rem'} justifyContent={'center'}>
+        <Text fontSize={'1.5rem'}>Change Theme</Text>
+        <ThemeToggle />
+      </WrapItem>
       {/* </Tooltip> */}
     </Box>
   );

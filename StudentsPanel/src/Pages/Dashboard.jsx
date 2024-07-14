@@ -28,7 +28,7 @@ function Dashboard() {
   const dispatch = useDispatch();
   const [isMobile] = useMediaQuery('(max-width: 600px)');
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
-  
+
 
   const { student } = useSelector((state) => state.auth);
   const { leaves, isLoading, isError, message } = useSelector((state) => state.leave);
@@ -54,7 +54,7 @@ function Dashboard() {
     return () => {
       dispatch(reset());
     };
-  }, [student,dispatch]);
+  }, [student, dispatch]);
 
   if (isLoading) {
     return <Spinner message={'Fetching Leaves'} />;
@@ -62,26 +62,32 @@ function Dashboard() {
 
   const leavesData = leaves?.data || [];
   const messAmount = messInfo?.data?.mealPrice || 0;
-  // console.log(messInfo)
-  const totalAmount = leavesData.reduce(
-    (acc, leave) => acc + messAmount * UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate)),
-    0
-  );
+  
+  const totalAmount = leavesData
+    .filter((leave) => leave.status === 'Approved')
+    .reduce(
+      (acc, leave) =>
+        acc +
+        messAmount *
+        UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate)),
+      0
+    );
+
 
 
   return (
-    <Box 
+    <Box
       className='flex gap-8 flex-col'
       borderRadius={'1rem'}
       padding={'0.5rem'}
       bg={bgColor}
       border={'3px solid rgba(0, 0, 0, 0.05)'}
       boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
-      // height={'100%'}
+    // height={'100%'}
     >
       <Box className='flex gap-4' alignItems={'center'} justifyContent={isMobile ? 'center' : 'unset'}>
         <TextSnippetIcon style={{ fontSize: '2rem' }} />
-        <Heading 
+        <Heading
           fontSize={'2rem'}
           textAlign={'center'}
           textTransform={'uppercase'}
@@ -91,8 +97,8 @@ function Dashboard() {
       </Box>
       <Box>
         <TableContainer>
-          <Table 
-            variant='striped' 
+          <Table
+            variant='striped'
             // colorScheme='teal'
             colorScheme='#1D1D1C'
           >
@@ -108,7 +114,7 @@ function Dashboard() {
             </Thead>
             <Tbody>
               {leavesData.map((leave, index) => (
-                <Tr key={index}>
+                <Tr key={index} bg={leave.status === 'Approved' ? 'green' : leave.status === 'Pending' ? 'orange' : 'red'} color={'white'}>
                   <Td>{leave.reason}</Td>
                   <Td>{UtilFunctions.formatDate(new Date(leave.startDate))}</Td>
                   <Td>{UtilFunctions.formatDate(new Date(leave.endDate))}</Td>

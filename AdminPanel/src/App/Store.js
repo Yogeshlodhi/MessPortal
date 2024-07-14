@@ -7,12 +7,11 @@ import feedBackSlice from '../Features/Feedback/feedBackSlice';
 import announceSlice from '../Features/Announcements/announceSlice';
 import menuSlice from '../Features/Menu/menuSlice';
 import complaintSlice from '../Features/Complaints/complaintSlice';
-// import dashboardSlice from '../Features/Dashboad/dashboardSlice';
+import messInfoSlice from '../Features/MessInfo/messInfoSlice';
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
-        // dashboard: dashboardSlice,
         students: studentReducer,
         studentProfile: studentProfileReducer,
         leaves: leaveReducer,
@@ -20,16 +19,7 @@ export const store = configureStore({
         announcements: announceSlice,
         menu: menuSlice,
         complaints: complaintSlice,
+        messInfo: messInfoSlice
     },
     devTools: process.env.NODE_ENV !== 'production',
 })
-// export const store = configureStore({
-//     reducer: {
-//         auth: authReducer,
-//         students: studentReducer,
-//         studentProfile: studentProfileReducer,
-//         leaves: leaveReducer,
-//     },
-// })
-
-// console.log(store.getState())

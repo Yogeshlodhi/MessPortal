@@ -50,16 +50,16 @@ const menuSlice = createSlice({
         builder
             .addCase(getMenu.fulfilled, (state, action) => {
                 state.isLoading = false,
-                    state.isSuccess = true,
-                    state.menu = action.payload.data
+                state.isSuccess = true,
+                state.menu = action.payload.data
             })
             .addCase(getMenu.pending, (state, action) => {
                 state.isLoading = true
             })
             .addCase(getMenu.rejected, (state, action) => {
                 state.isLoading = false,
-                    state.isError = true,
-                    state.message = action.payload.message
+                state.isError = true,
+                state.message = action.payload.message
             })
             .addCase(updateMenu.pending, (state) => {
                 state.isLoading = true;

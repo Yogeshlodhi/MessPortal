@@ -24,11 +24,11 @@ const messInfoSchema = new Schema({
         required: true,
     },
     tenureStarts: {
-        type: Date,
+        type: String,
         required: true,
     },
     tenureEnds: {
-        type: Date,
+        type: String,
         required: true,
     },
 }, {

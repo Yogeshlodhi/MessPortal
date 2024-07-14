@@ -17,6 +17,7 @@ const update = async (data, token) => {
             Authorization: `Bearer ${token}`
         }
     }
+    console.log(data)
     const response = await axios.put(`${API_URL}`, data, config);
     return response.data;
 }
