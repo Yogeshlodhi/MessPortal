@@ -85,7 +85,8 @@ const Menu = () => {
           <Table 
             variant="striped" 
             whiteSpace="nowrap"
-            colorScheme='#1D1D1C'
+            // colorScheme='#1D1D1C'
+            colorScheme='teal'
           >
             <Thead>
               <Tr>
@@ -95,7 +96,9 @@ const Menu = () => {
                 <Th fontSize={{ base: 'md', md: 'lg' }} textAlign="center">Dinner</Th>
               </Tr>
             </Thead>
-            <Tbody bg={tableRowBgColor}>
+            <Tbody 
+              // bg={tableRowBgColor}
+            >
               {Object.keys(mealData.weeklyMenu).map((day) => (
                 <Tr key={day}>
                   <Td textAlign="center" fontSize={{ base: 'sm', md: 'md' }}>{day.charAt(0).toUpperCase() + day.slice(1)}</Td>
