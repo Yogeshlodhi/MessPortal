@@ -1,3 +1,6 @@
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 const formatDate = (date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -39,12 +42,26 @@ const filterFeedbacksByToday = (feedbacks) => {
     });
 };
 
+const generatePDF = () => {
+    const input = document.getElementById('table-content');
+    html2canvas(input).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('meal-schedule.pdf');
+    });
+};
+
 const UtilFunctions = {
     formatDate,
     calculateDays,
     areDatesEqual,
     filterLeavesByToday,
-    filterFeedbacksByToday
+    filterFeedbacksByToday,
+    generatePDF
 };
 
 export default UtilFunctions;

@@ -18,7 +18,9 @@ import {
     leaveAction,
     addMessInfo,
     getMessInfo,
-    deleteComplaint
+    deleteComplaint,
+    getTodaysLeaves,
+    getTodaysFeedbacks
 } from "../Controllers/adminController.js";
 import authenticateAndCheckRole from "../Middleware/userPermission.js";
 
@@ -46,13 +48,15 @@ router.route('/messInfo')
 
 router.get('/students_list', getAllStudents);
 router.get('/leaves_list', getAllLeaves);
+router.get('/filtered_leaves', getTodaysLeaves);
 router.put('/leaves/takeAction/:id', leaveAction);
 router.get('/student_profile', getStudentByEmail);
 
-router.post('/menu_upload', messSecretaryOrHigher, uploadMenu);
+router.post('/menu_upload', authenticateAndCheckRole(["Mess Owner", "Mess Secretary"]), uploadMenu);
 router.put('/menu/:month', updateMenu);
 
 router.get('/feedback_list', getFeedbacks);
+router.get('/filtered_feedbacks', getTodaysFeedbacks);
 router.get('/getMenu', getMenu);
 router.get('/getComplaints', getComplaintsList);
 

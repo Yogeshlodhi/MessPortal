@@ -13,6 +13,8 @@ import {
     getMessInfoService,
     getSingleComplaintService,
     getStudentByEmailService,
+    getTodaysFeedbackService,
+    getTodaysLeavesList,
     leaveActionService,
     loginAdminService,
     registerAdminService,
@@ -90,6 +92,7 @@ const addMessInfo = (req, res) => {
     }
 
 }
+
 const getMessInfo = (req, res) => {
     getMessInfoService()
         .then((data) => {
@@ -121,7 +124,7 @@ const getAllStudents = (req, res) => {
 
 const getAllLeaves = (req, res) => {
     getAllLeavesList()
-    .then((data) => {
+        .then((data) => {
             return res
                 .status(statusCode.ok)
                 .send({ message: 'Leaves List Received', data: data })
@@ -132,6 +135,21 @@ const getAllLeaves = (req, res) => {
                 .send({ message: err.message })
         })
 }
+
+const getTodaysLeaves = (req, res) => {
+    getTodaysLeavesList()
+        .then((data) => {
+            return res
+                .status(statusCode.ok)
+                .send({ message: "Today's Leaves List Received", data: data })
+        })
+        .catch((err) => {
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: err.message })
+        })
+}
+
 
 const leaveAction = (req, res) => {
     const id = req.params.id;
@@ -170,19 +188,34 @@ const updateMenu = (req, res) => {
 
     updateMenuService(updatedMenu, month)
         .then((data) => {
-            if (!data) {
-                return res.status(statusCode.badRequest).send({ message: 'Menu for the specified month not found' });
-            }
-            return res
-                .status(statusCode.ok)
-                .send({ message: `Menu for the month ${month} updated successfully`, data: data })
+            return res.status(statusCode.ok).send({ message: `Menu updated successfully`, data: data });
+            // return res.status(statusCode.ok).send({ message: `Menu for the month ${month} updated successfully`, data: data });
         })
         .catch((err) => {
             console.log(err);
-            return res.status(statusCode.badRequest).send({ message: err.message })
-        })
-
+            return res.status(statusCode.badRequest).send({ message: err.message });
+        });
 }
+
+// const updateMenu = (req, res) => {
+//     const month = req.params.month;
+//     const updatedMenu = req.body;
+
+//     updateMenuService(updatedMenu, month)
+//         .then((data) => {
+//             if (!data) {
+//                 return res.status(statusCode.badRequest).send({ message: 'Menu for the specified month not found' });
+//             }
+//             return res
+//                 .status(statusCode.ok)
+//                 .send({ message: `Menu for the month ${month} updated successfully`, data: data })
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//             return res.status(statusCode.badRequest).send({ message: err.message })
+//         })
+
+// }
 
 const addAnnouncement = (req, res) => {
     const announcementData = req.body;
@@ -248,6 +281,18 @@ const getFeedbacks = (req, res) => {
         })
 }
 
+const getTodaysFeedbacks = (req, res) => {
+    getTodaysFeedbackService()
+        .then((data) => {
+            return res
+                .status(statusCode.ok)
+                .send({ message: 'Today\'s Feedbacks Received', data: data });
+        })
+        .catch((err) => {
+            return res.status(statusCode.badRequest).send({ message: err.message })
+        })
+}
+
 const deleteAnnouncement = (req, res) => {
     const { id } = req.params;
     deleteAnnounceService(id)
@@ -267,6 +312,11 @@ const deleteAnnouncement = (req, res) => {
 const getMenu = (req, res) => {
     getMenuService()
         .then((data) => {
+            if (!data) {
+                return res
+                    .status(statusCode.ok)
+                    .send({ message: 'Menu Details Received', data: [] })
+            }
             return res
                 .status(statusCode.ok)
                 .send({ message: 'Menu Details Received', data: data })
@@ -299,7 +349,7 @@ const deleteComplaint = (req, res) => {
             if (!data) {
                 return res
                     .status(statusCode.badRequest)
-                    .send({ message: 'Error Occurred'})
+                    .send({ message: 'Error Occurred' })
             }
             return res
                 .status(statusCode.ok)
@@ -367,5 +417,7 @@ export {
     leaveAction,
     addMessInfo,
     getMessInfo,
-    deleteComplaint
+    deleteComplaint,
+    getTodaysLeaves,
+    getTodaysFeedbacks
 }

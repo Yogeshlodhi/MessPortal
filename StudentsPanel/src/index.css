@@ -8,6 +8,12 @@
     box-sizing: border-box;
 }
 
+.test{
+    /* background: #e9913f; */
+    background: #da4242;
+    /* background: #6dbc6d; */
+}
+
 .link {
     @apply transition-colors duration-300 ease-in-out;
 }

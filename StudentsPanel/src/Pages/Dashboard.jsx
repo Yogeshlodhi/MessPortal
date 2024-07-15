@@ -62,7 +62,7 @@ function Dashboard() {
 
   const leavesData = leaves?.data || [];
   const messAmount = messInfo?.mealPrice || 0;
-  
+
   const totalAmount = leavesData
     .filter((leave) => leave.status === 'Approved')
     .reduce(
@@ -114,7 +114,11 @@ function Dashboard() {
             </Thead>
             <Tbody>
               {leavesData.map((leave, index) => (
-                <Tr key={index} bg={leave.status === 'Approved' ? 'green' : leave.status === 'Pending' ? 'orange' : 'red'} color={'white'}>
+                <Tr
+                  key={index}
+                  bg={leave.status === 'Approved' ? '#6dbc6d' : leave.status === 'Pending' ? '#e9913f' : '#da4242'}
+                  color={'white'}
+                >
                   <Td>{leave.reason}</Td>
                   <Td>{UtilFunctions.formatDate(new Date(leave.startDate))}</Td>
                   <Td>{UtilFunctions.formatDate(new Date(leave.endDate))}</Td>
@@ -123,6 +127,8 @@ function Dashboard() {
                   <Td>{messAmount * UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))}</Td>
                 </Tr>
               ))}
+
+
             </Tbody>
             <Tfoot>
               <Tr>

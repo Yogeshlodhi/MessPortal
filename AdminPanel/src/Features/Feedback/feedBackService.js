@@ -14,8 +14,21 @@ const getAllFeedback = async ({token, adminType}) => {
     return response.data;
 }
 
+const getTodayFeedbacks = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            // 'adminRole': adminType
+        }
+    };
+    const response = await axios.get(`${API_URL}/filtered_feedbacks`, config);
+    return response.data;
+}
+
 const feedBackService = {
     getAllFeedback,
+    getTodayFeedbacks
 }
 
 export default feedBackService;

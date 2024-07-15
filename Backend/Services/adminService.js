@@ -45,7 +45,7 @@ const loginAdminService = async (loginData) => {
     }
 
     const isPasswordValid = await bcrypt.compare(loginData.password, admin.password);
-    
+
     if (admin && isPasswordValid) {
         const { password, ...adminData } = admin.toObject();
         adminData.token = createToken(admin._id);
@@ -54,6 +54,7 @@ const loginAdminService = async (loginData) => {
         throw { message: "Couldn't Log You In, Please Try Again" }
     }
 }
+
 
 const addMessInfoService = async (messInfo) => {
     try {
@@ -70,11 +71,6 @@ const addMessInfoService = async (messInfo) => {
 
 const getMessInfoService = async () => {
     try {
-        // let info = await messInfoModel.find();
-        // if (!info) {
-        //     throw { message: "Unexpected Error Occured" }
-        // }
-        // return info;
         const latestMessInfo = await messInfoModel.findOne().sort({ createdAt: -1 });
         if (latestMessInfo) {
             return latestMessInfo
@@ -86,6 +82,8 @@ const getMessInfoService = async () => {
         throw { message: 'Could Not Find the Informations', error: err }
     }
 }
+
+
 
 const getAlldata = async () => {
     try {
@@ -122,6 +120,39 @@ const getAllLeavesList = async () => {
     }
 }
 
+const getTodaysLeavesList = async () => {
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to midnight to compare only the date part
+
+        const leaves = await LeaveModel.find({ appliedDate: { $gte: today } })
+            .populate({
+                path: 'studentRoll',
+                model: studentModel,
+                select: 'studentRoll studentName',
+            })
+            .limit(5);
+
+        const updatedLeaves = leaves.map(leave => ({
+            _id: leave._id,
+            studentRoll: leave.studentRoll ? leave.studentRoll.studentRoll : 'Student Does Not Exist Anymore',
+            studentName: leave.studentRoll ? leave.studentRoll.studentName : 'Student Does Not Exist Anymore',
+            startDate: leave.startDate,
+            endDate: leave.endDate,
+            reason: leave.reason,
+            status: leave.status,
+            appliedDate: leave.appliedDate,
+            __v: leave.__v,
+            actionTakenBy: leave.actionTakenBy
+        }));
+
+        return updatedLeaves;
+    } catch (error) {
+        throw { message: error.message }
+    }
+}
+
+
 const leaveActionService = async (id, actionData, user) => {
     try {
         actionData.actionTakenBy = user;
@@ -157,6 +188,27 @@ const uploadMenuService = async (menuData) => {
         throw { message: 'Could Not Upload the Menu', error: err }
     }
 }
+
+// const updateMenuService = async (updatedMenuData, month) => {
+//     try {
+//         // Ensure the _id field is not included in the update data
+//         if (updatedMenuData._id) {
+//             delete updatedMenuData._id;
+//         }
+
+//         const menu = await menuModel.findOneAndUpdate(
+//             { monthOfMenu: month },
+//             { $set: updatedMenuData },
+//             { new: true, upsert: true, runValidators: true }
+//         );
+
+//         return menu;
+//     } catch (err) {
+//         console.log(err);
+//         throw { message: 'Could Not Update the Menu', error: err };
+//     }
+// };
+
 
 const updateMenuService = async (updatedMenuData, month) => {
     try {
@@ -227,9 +279,23 @@ const getFeedbackService = async () => {
     }
 }
 
+const getTodaysFeedbackService = async () => {
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to midnight to compare only the date part
+
+        const feedbacks = await feedbackModel.find({ submissionDate: { $gte: today } }).limit(5); // Limit the results to a maximum of 5 feedbacks
+
+        return feedbacks;
+    } catch (error) {
+        throw { message: error.message }
+    }
+}
+
 const getMenuService = async () => {
     try {
-        const response = await menuModel.find();
+        const response = await menuModel.findOne();
+        // console.log(response)
         return response;
     } catch (err) {
         throw { message: err.message }
@@ -300,5 +366,7 @@ export {
     leaveActionService,
     addMessInfoService,
     getMessInfoService,
-    deleteComplaintService
+    deleteComplaintService,
+    getTodaysLeavesList,
+    getTodaysFeedbackService
 }

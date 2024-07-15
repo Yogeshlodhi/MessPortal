@@ -6,7 +6,13 @@ const initialState = {
     isLoadingLeaves: false,
     isSuccess: false,
     isError: false,
-    leavesMessage: ''
+    leavesMessage: '',
+
+    filteredLeaves: [],
+    isLoadingFilter: false,
+    isErrorFilter: false,
+    isSuccessFilter: false,
+    filterMessage: '',
 }
 
 export const getLeavesList = createAsyncThunk(
@@ -23,7 +29,6 @@ export const getLeavesList = createAsyncThunk(
         }
     }
 );
-
 
 export const takeAction = createAsyncThunk(
     'leave/takeAction',
@@ -47,6 +52,20 @@ export const takeAction = createAsyncThunk(
     }
 );
 
+export const getFilteredLeaves = createAsyncThunk(
+    'leave/getFiltered',
+    async (_, thunkAPI) => {
+        try {
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+            const adminType = state.auth.admin.adminType;
+            return await leaveService.getTodayLeaves(token);
+        } catch (error) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+)
 
 const leaveSlice = createSlice({
     name: 'leave',
@@ -97,7 +116,21 @@ const leaveSlice = createSlice({
                 state.isLoadingLeaves = false;
                 state.isError = true;
                 state.leavesMessage = action.payload.message;
-            });
+            })
+            .addCase(getFilteredLeaves.pending, (state) => {
+                state.isLoadingFilter = true
+            })
+            .addCase(getFilteredLeaves.fulfilled, (state, action) => {
+                state.isLoadingFilter = false,
+                    state.isSuccessFilter = true,
+                    state.filteredLeaves = action.payload.data
+                state.filterMessage = action.payload.message
+            })
+            .addCase(getFilteredLeaves.rejected, (state, action) => {
+                state.isLoadingFeedbacks = false,
+                    state.isErrorFilter = true,
+                    state.filterMessage = action.payload
+            })
     }
 });
 

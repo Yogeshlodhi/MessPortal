@@ -74,7 +74,12 @@ const Announcements = () => {
               <Tbody>
                 {announcements && announcements?.map((row, id) => (
                   <React.Fragment key={id}>
-                    <Tr onClick={() => toggleRow(id)} cursor="pointer">
+                    <Tr 
+                      onClick={() => toggleRow(id)} 
+                      cursor="pointer" 
+                      background={'#006060'}
+                      color={'white'}
+                    >
                       <Td>{row.heading}</Td>
                       <Td>{UtilFunctions.formatDate(new Date(row.createdAt))}</Td>
                     </Tr>

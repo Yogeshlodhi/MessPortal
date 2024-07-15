@@ -147,6 +147,11 @@ const getAnnouncements = (req, res) => {
 const getMenu = (req, res) => {
     getMenuService()
         .then((data) => {
+            if (!data) {
+                return res
+                    .status(statusCode.ok)
+                    .send({ message: 'Menu Details Received', data: [] })
+            }
             return res
                 .status(statusCode.ok)
                 .send({ message: 'Menu Details Received', data: data })
