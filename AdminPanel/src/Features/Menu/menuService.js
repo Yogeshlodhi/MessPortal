@@ -26,7 +26,7 @@ const getMenu = async ({ token, adminType }) => {
     return response.data;
 }
 
-const updateMenuService = async (month, updatedMenu, token, adminType) => {
+const updateMenuService = async (id, updatedMenu, token, adminType) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -34,7 +34,8 @@ const updateMenuService = async (month, updatedMenu, token, adminType) => {
             // 'adminRole': adminType
         }
     };
-    const response = await axios.put(`${API_URL}/menu/${month}`, updatedMenu, config);
+    const response = await axios.put(`${API_URL}/menu/${id}`, updatedMenu, config);
+    // const response = await axios.put(`${API_URL}/menu/${month}`, updatedMenu, config);
     // console.log()
     return response.data;
 }

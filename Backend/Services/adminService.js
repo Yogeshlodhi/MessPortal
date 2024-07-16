@@ -83,6 +83,27 @@ const getMessInfoService = async () => {
     }
 }
 
+const addMessinfoContact = async (messId, newContact) => {
+    try {
+        const messInfo = await messInfoModel.findById(
+            // {_id: messId}
+            messId
+        );
+        console.log(messInfo)
+        if (!messInfo) {
+            throw {message: 'No Information Exists Associated with this'}
+        }
+
+        messInfo.contacts.push(newContact);
+        await messInfo.save();
+
+        return messInfo;
+    } catch (err) {
+        console.log(err);
+        throw { message: 'Server Error', error: err }
+    }
+}
+
 
 
 const getAlldata = async () => {
@@ -189,31 +210,11 @@ const uploadMenuService = async (menuData) => {
     }
 }
 
-// const updateMenuService = async (updatedMenuData, month) => {
-//     try {
-//         // Ensure the _id field is not included in the update data
-//         if (updatedMenuData._id) {
-//             delete updatedMenuData._id;
-//         }
 
-//         const menu = await menuModel.findOneAndUpdate(
-//             { monthOfMenu: month },
-//             { $set: updatedMenuData },
-//             { new: true, upsert: true, runValidators: true }
-//         );
-
-//         return menu;
-//     } catch (err) {
-//         console.log(err);
-//         throw { message: 'Could Not Update the Menu', error: err };
-//     }
-// };
-
-
-const updateMenuService = async (updatedMenuData, month) => {
+const updateMenuService = async (updatedMenuData, id) => {
     try {
         const menu = await menuModel.findOneAndUpdate(
-            { monthOfMenu: month },
+            id,
             updatedMenuData,
             { new: true, runValidators: true }
         );
@@ -366,6 +367,7 @@ export {
     leaveActionService,
     addMessInfoService,
     getMessInfoService,
+    addMessinfoContact,
     deleteComplaintService,
     getTodaysLeavesList,
     getTodaysFeedbackService

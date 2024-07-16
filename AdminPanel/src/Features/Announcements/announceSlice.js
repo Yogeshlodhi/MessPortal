@@ -68,7 +68,12 @@ const announceSlice = createSlice({
     name: 'announcement',
     initialState,
     reducers: {
-        reset: (state) => initialState,
+        reset: (state) => {
+            state.isError = false,
+            state.isLoading = false,
+            state.isSuccess = false,
+            state.message = ''
+        },
         setAnnounceList: (state, action) => {
             state.announcements = action.payload.data;
         },
@@ -103,12 +108,14 @@ const announceSlice = createSlice({
             .addCase(addAnnounce.rejected, (state, action) => {
                 state.isLoading = false,
                 state.isError = true,
-                state.message = action.payload
+                state.message = action.payload,
+                state.isSuccess = false
             })
             .addCase(addAnnounce.fulfilled, (state, action) => {
                 state.isLoading = false,
                 state.isSuccess = true,
                 state.isError = false,
+                state.message = action.payload.message
                 state.announcements.push(action.payload.data);
             })
             .addCase(deleteAnnounce.pending, (state) => {
@@ -117,10 +124,14 @@ const announceSlice = createSlice({
             .addCase(deleteAnnounce.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload.message;
+                state.message = action.payload;
+                state.isSuccess = false
             })
             .addCase(deleteAnnounce.fulfilled, (state, action) => {
                 state.isLoading = false;
+                state.isError = false,
+                state.isSuccess = true,
+                state.message = 'Deleted Successfully!'
                 // state.announcements = state.announcements.filter(announcement => announcement.id !== action.payload);
             });
     }

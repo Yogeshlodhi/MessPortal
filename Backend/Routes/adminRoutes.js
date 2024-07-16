@@ -20,7 +20,8 @@ import {
     getMessInfo,
     deleteComplaint,
     getTodaysLeaves,
-    getTodaysFeedbacks
+    getTodaysFeedbacks,
+    addContact
 } from "../Controllers/adminController.js";
 import authenticateAndCheckRole from "../Middleware/userPermission.js";
 
@@ -66,5 +67,7 @@ router.get('/complaints/:id', getSingleComplaint);
 
 router.delete('/announcement/:id',authenticateAndCheckRole(["Mess Owner", "Mess Secretary"]), deleteAnnouncement);
 router.delete('/complaints/:id',authenticateAndCheckRole(["Warden"]), deleteComplaint);
+
+router.post('/addContact/:id', authenticateAndCheckRole(["Warden"]), addContact);
 
 export default router;

@@ -1,5 +1,6 @@
 import {
     addMessInfoService,
+    addMessinfoContact,
     announcementService,
     complaintActionService,
     complaintListService,
@@ -77,6 +78,36 @@ const addMessInfo = (req, res) => {
                 return res
                     .status(statusCode.ok)
                     .send({ message: "Mess Information Added", data: data })
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(statusCode.badRequest)
+                    .send({ message: err.message })
+            })
+    }
+    else {
+        return res
+            .status(statusCode.incorrectCredential)
+            .send({ message: err.message })
+    }
+
+}
+
+const addContact = (req, res) => {
+    const newContact = req.body;
+    const id = req._id;
+
+    console.log(req.body)
+    
+    console.log(req._id)
+
+    if (newContact) {
+        addMessinfoContact(id, newContact)
+            .then((data) => {
+                return res
+                    .status(statusCode.ok)
+                    .send({ message: "Contact Added Successfully!", data: data })
             })
             .catch((err) => {
                 console.log(err);
@@ -183,10 +214,10 @@ const uploadMenu = (req, res) => {
 }
 
 const updateMenu = (req, res) => {
-    const month = req.params.month;
+    const id = req.params.id;
     const updatedMenu = req.body;
 
-    updateMenuService(updatedMenu, month)
+    updateMenuService(updatedMenu, id)
         .then((data) => {
             return res.status(statusCode.ok).send({ message: `Menu updated successfully`, data: data });
             // return res.status(statusCode.ok).send({ message: `Menu for the month ${month} updated successfully`, data: data });
@@ -228,7 +259,7 @@ const addAnnouncement = (req, res) => {
             }
             return res
                 .status(statusCode.created)
-                .send({ message: "Announcement Created", data: data })
+                .send({ message: "Announcement Added", data: data })
         })
         .catch((err) => {
             return res
@@ -415,8 +446,11 @@ export {
     takeAction,
     getSingleComplaint,
     leaveAction,
+
     addMessInfo,
     getMessInfo,
+    addContact,
+
     deleteComplaint,
     getTodaysLeaves,
     getTodaysFeedbacks

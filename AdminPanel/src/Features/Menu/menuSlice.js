@@ -40,12 +40,12 @@ export const getMenu = createAsyncThunk(
 
 export const updateMenu = createAsyncThunk(
     'menu/update',
-    async ({ month, updatedMenu }, thunkAPI) => {
+    async ({ id, updatedMenu }, thunkAPI) => {
         try {
             const state = thunkAPI.getState();
             const token = state.auth.admin.token;
             const adminType = state.auth.admin.adminType;
-            return await menuService.updateMenuService(month, updatedMenu, token, adminType);
+            return await menuService.updateMenuService(id, updatedMenu, token, adminType);
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);

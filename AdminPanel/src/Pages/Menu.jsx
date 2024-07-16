@@ -70,14 +70,15 @@ const Menu = () => {
 
   const onUpdate = (e) => {
     e.preventDefault();
-    dispatch(updateMenu({ month: updateFormData.monthOfMenu, updatedMenu: updateFormData }))
+    dispatch(updateMenu({ id: updateFormData._id, updatedMenu: updateFormData }))
+    // dispatch(updateMenu({ month: updateFormData.monthOfMenu, updatedMenu: updateFormData }))
   };
 
   // console.log(menu)
 
   useEffect(() => {
     if (isSuccess) {
-      if(menu.length == 0){
+      if (Array.isArray(menu) && menu.length == 0) {
         toast({
           title: 'No Menu Exists, Please Add A New One',
           isClosable: true,
@@ -85,7 +86,7 @@ const Menu = () => {
           duration: 3000,
         });
       }
-      else{
+      else {
         setDisable(true);
         toast({
           title: message,
@@ -108,12 +109,17 @@ const Menu = () => {
 
   const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-  
-  if (!isLoading && menu && menu.length === 0) {
-    return <AddMessMenu />;
+
+  // if (!isLoading && menu && menu.length === 0) {
+  //   return <AddMessMenu />;
+  // }
+  if (!isLoading && Array.isArray(menu)) {
+    if (menu.length === 0) {
+      return <AddMessMenu />;
+    }
   }
 
- else if (isLoading || !updateFormData || !updateFormData.weeklyMenu) {
+  else if (isLoading || !updateFormData || !updateFormData.weeklyMenu) {
     return <Spinner message={'Loading Menu....'} />;
   }
 
@@ -258,16 +264,6 @@ const Menu = () => {
                   />
                 </FormControl>
 
-                {/* <FormControl>
-                  <FormLabel>Menu Month</FormLabel>
-                  <Input
-                    onChange={onChange}
-                    value={updateFormData?.monthOfMenu || ''}
-                    name='monthOfMenu'
-                    focusBorderColor='#B5B4B4'
-                  />
-                </FormControl> */}
-
               </Box>
               {daysOfWeek.map(day => (
                 <Box key={day} borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} w="100%">
@@ -299,20 +295,18 @@ const Menu = () => {
                       focusBorderColor='#B5B4B4'
                     />
                   </FormControl>
+                  <FormControl mb={4}>
+                    <FormLabel>Extras</FormLabel>
+                    <Input
+                      onChange={onChange}
+                      value={updateFormData?.weeklyMenu[day]?.extras || ''}
+                      name={`${day}_extras`}
+                      focusBorderColor='#B5B4B4'
+                    />
+                  </FormControl>
                 </Box>
               ))}
-              {/* <FormControl>
-                <FormLabel textTransform={'uppercase'}>Amount for one meal</FormLabel>
-                <Input
-                  onChange={(e) => {
-                    setDisable(false);
-                    setUpdateFormData({ ...updateFormData, amountOfOneMeal: e.target.value });
-                  }}
-                  value={updateFormData?.amountOfOneMeal || ''}
-                  name='amountOfOneMeal'
-                  focusBorderColor='#B5B4B4'
-                />
-              </FormControl> */}
+
             </VStack>
             <Button
               onClick={onUpdate}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAnnounce, getAnnouncementList, deleteAnnounce, removeAnnouncement } from '../Features/Announcements/announceSlice';
+import { addAnnounce, getAnnouncementList, deleteAnnounce, removeAnnouncement, reset } from '../Features/Announcements/announceSlice';
 import {
   Table, Thead, Tbody,
   Tr, Td, Th, TableContainer,
@@ -23,7 +23,7 @@ import AddIcon from '@mui/icons-material/Add';
 const Announcements = () => {
   const dispatch = useDispatch();
   const toast = useToast();
-  const { announcements, isLoading, isError, message } = useSelector((state) => state.announcements);
+  const { announcements, isLoading, isError, message, isSuccess } = useSelector((state) => state.announcements);
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
   const textColor = useColorModeValue('gray.800', 'white');
 
@@ -32,6 +32,9 @@ const Announcements = () => {
 
   useEffect(() => {
     dispatch(getAnnouncementList());
+    return () => {
+      dispatch(reset());
+    }
   }, [dispatch]);
 
   const [openRowId, setOpenRowId] = useState(null);
@@ -99,6 +102,28 @@ const Announcements = () => {
     resetForm();
     onAddClose();
   };
+
+  useEffect(() => {
+    if(isSuccess && !isError){
+      toast({
+        title: message,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+      dispatch(reset())
+    }
+    
+    if(isError && !isSuccess){
+      toast({
+        title: message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
+      dispatch(reset())
+    }
+  }, [dispatch, message])
 
   if (isLoading) {
     return <Spinner message={'Please Wait .....'} />;
