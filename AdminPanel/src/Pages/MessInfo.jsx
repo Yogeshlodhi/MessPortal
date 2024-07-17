@@ -23,6 +23,7 @@ import {
 } from '@chakra-ui/react';
 import Spinner from '../Components/Spinner';
 import WorkIcon from '@mui/icons-material/Work';
+import AddMessInfo from '../Components/AddMessInfo';
 
 const MessInfo = () => {
     const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const MessInfo = () => {
         emailId: ''
     });
 
-    console.log(messInfo)
+    // console.log(messInfo)
 
     useEffect(() => {
         dispatch(getMessInfo());
@@ -52,7 +53,7 @@ const MessInfo = () => {
     }, [messInfo]);
 
     const handleAddContact = () => {
-        dispatch(addContact({ messId: messInfo._id, contact: newContact }))
+        dispatch(addContact({ ...newContact, id: messInfo._id }))
             .then(() => {
                 onAddClose();
                 setNewContact({ role: '', contactNo: '', emailId: '' });
@@ -81,6 +82,12 @@ const MessInfo = () => {
         return <Spinner message={'Loading Information...'} />;
     }
 
+    if (Object.keys(messInfo).length === 0) {
+        return (
+            <AddMessInfo/>
+        );
+    }
+
     return (
         <Box
             p={4}
@@ -92,7 +99,7 @@ const MessInfo = () => {
         >
             <Heading textTransform={'uppercase'} textAlign={'center'}>Mess Information</Heading>
             <Container mt={4} maxW='70rem' display={'flex'} justifyContent={'space-around'} flexDirection={isMobile ? 'column' : 'row'}>
-                <Avatar name='Mess Owner' width={'10rem'} height={'10rem'} alignSelf={'center'} />
+                <Avatar name={messOwner} width={'10rem'} height={'10rem'} alignSelf={'center'} />
                 <Box
                     display="flex"
                     alignSelf="center"

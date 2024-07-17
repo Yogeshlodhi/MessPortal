@@ -76,6 +76,7 @@ const getMessInfoService = async (token) => {
     }
 
     const response = await axios.get(`${API_URL}/messInfo`, config);
+    // if(response.data == null) return {};
     return response.data;
 }
 

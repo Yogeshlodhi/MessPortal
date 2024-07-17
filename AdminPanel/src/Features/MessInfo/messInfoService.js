@@ -14,13 +14,24 @@ const getMessInfoService = async ({ token, adminType }) => {
     return response.data;
 }
 
-const addContactService = async ({ messId, contact, token }) => {
+const addContactService = async ({contact, token }) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
-    const response = await axios.post(`${API_URL}/addContact/${messId}`, contact, config);
+    const response = await axios.post(`${API_URL}/addContact`, contact, config);
+    return response.data;
+};
+
+const addInfo = async ({info, token }) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    const response = await axios.post(`${API_URL}/messInfo`, info, config);
+    console.log(response)
     return response.data;
 };
 
@@ -49,7 +60,8 @@ const updateContactService = async ({ messId, contactId, updatedContact, token }
 const messInfoService = {
     getMessInfoService,
     addContactService,
-    updateContactService
+    updateContactService,
+    addInfo
 }
 
 export default messInfoService;

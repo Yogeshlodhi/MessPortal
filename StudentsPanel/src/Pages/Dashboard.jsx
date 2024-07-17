@@ -119,7 +119,7 @@ function Dashboard() {
                   bg={leave.status === 'Approved' ? '#6dbc6d' : leave.status === 'Pending' ? '#e9913f' : '#da4242'}
                   color={'white'}
                 >
-                  <Td>{leave.reason}</Td>
+                  <Td className="truncate max-w-xs">{leave.reason}</Td>
                   <Td>{UtilFunctions.formatDate(new Date(leave.startDate))}</Td>
                   <Td>{UtilFunctions.formatDate(new Date(leave.endDate))}</Td>
                   <Td>{UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))}</Td>

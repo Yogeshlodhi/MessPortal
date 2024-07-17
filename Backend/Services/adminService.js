@@ -75,7 +75,7 @@ const getMessInfoService = async () => {
         if (latestMessInfo) {
             return latestMessInfo
         } else {
-            return null;
+            return {};
         }
     } catch (err) {
         console.log(err);
@@ -83,13 +83,12 @@ const getMessInfoService = async () => {
     }
 }
 
-const addMessinfoContact = async (messId, newContact) => {
+const addMessinfoContact = async (newContact) => {
     try {
-        const messInfo = await messInfoModel.findById(
-            // {_id: messId}
-            messId
-        );
-        console.log(messInfo)
+        const id = newContact.id;
+        console.log("Mess Id : ",id)
+        const messInfo = await messInfoModel.findById({_id: id});
+        console.log("Mess Info : ",messInfo)
         if (!messInfo) {
             throw {message: 'No Information Exists Associated with this'}
         }
@@ -103,8 +102,6 @@ const addMessinfoContact = async (messId, newContact) => {
         throw { message: 'Server Error', error: err }
     }
 }
-
-
 
 const getAlldata = async () => {
     try {

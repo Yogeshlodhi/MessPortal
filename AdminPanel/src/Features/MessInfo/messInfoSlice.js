@@ -1,3 +1,4 @@
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import messInfoService from './messInfoService';
 
@@ -17,7 +18,7 @@ export const getMessInfo = createAsyncThunk(
             const adminType = state.auth.admin.adminType;
             return await messInfoService.getMessInfoService({ token, adminType });
         } catch (error) {
-            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);
         }
     }
@@ -25,31 +26,34 @@ export const getMessInfo = createAsyncThunk(
 
 export const addContact = createAsyncThunk(
     'messInfo/addContact',
-    async ({ messId, contact }, thunkAPI) => {
+    async (contact, thunkAPI) => {
         try {
             const state = thunkAPI.getState();
             const token = state.auth.admin.token;
-            return await messInfoService.addContactService({ messId, contact, token });
+            await messInfoService.addContactService({ contact, token });
+            const updatedContacts = await messInfoService.getMessInfoService({ token, adminType: state.auth.admin.adminType });
+            thunkAPI.dispatch(setContacts(updatedContacts));
+            return updatedContacts;
         } catch (error) {
-            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);
         }
     }
 )
 
-// export const addContact = createAsyncThunk(
-//     'messInfo/addContact',
-//     async ({ messId, contact }, thunkAPI) => {
-//         try {
-//             const state = thunkAPI.getState();
-//             const token = state.auth.admin.token;
-//             return await messInfoService.addContactService(token, messId, contact);
-//         } catch (error) {
-//             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-//             return thunkAPI.rejectWithValue(message);
-//         }
-//     }
-// )
+export const addMessInfo = createAsyncThunk(
+    'messInfo/addMess',
+    async (info, thunkAPI) => {
+        try {
+            const state = thunkAPI.getState();
+            const token = state.auth.admin.token;
+            return await messInfoService.addInfo({ info, token });
+        } catch (error) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            return thunkAPI.rejectWithValue(message);
+        }
+    }
+)
 
 export const updateContact = createAsyncThunk(
     'messInfo/updateContact',
@@ -59,7 +63,7 @@ export const updateContact = createAsyncThunk(
             const token = state.auth.admin.token;
             return await messInfoService.updateContactService({ messId, contactId, updatedContact, token });
         } catch (error) {
-            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);
         }
     }
@@ -69,18 +73,21 @@ const messInfoSlice = createSlice({
     name: 'messInfo',
     initialState,
     reducers: {
-        reset: (state) => initialState
+        reset: (state) => initialState,
+        setContacts: (state, action) => {
+            state.messInfo.contacts = action.payload.data.contacts;
+        }
     },
     extraReducers: (builder) => {
         builder
             .addCase(getMessInfo.pending, (state) => {
-                state.isLoadingMess = true
+                state.isLoadingMess = true;
             })
             .addCase(getMessInfo.fulfilled, (state, action) => {
-                state.messInfo = action.payload.data,
-                    state.isLoadingMess = false,
-                    state.isErrorMess = false,
-                    state.messMessage = action.payload.message
+                state.messInfo = action.payload.data;
+                state.isLoadingMess = false;
+                state.isErrorMess = false;
+                state.messMessage = action.payload.message;
             })
             .addCase(getMessInfo.rejected, (state, action) => {
                 state.isLoadingMess = false;
@@ -88,22 +95,35 @@ const messInfoSlice = createSlice({
                 state.messMessage = action.payload;
             })
             .addCase(addContact.pending, (state) => {
-                state.isLoadingMess = true
+                state.isLoadingMess = true;
             })
             .addCase(addContact.fulfilled, (state, action) => {
-                state.messInfo.contacts.push(action.payload.data);
+                state.messInfo.contacts = action.payload.data.contacts;
                 state.isLoadingMess = false;
                 state.isErrorMess = false;
-                state.messMessage = action.payload.message;
+                state.messMessage = 'Contact added successfully';
             })
             .addCase(addContact.rejected, (state, action) => {
                 state.isLoadingMess = false;
                 state.isErrorMess = true;
                 state.messMessage = action.payload;
             })
-
+            .addCase(addMessInfo.pending, (state) => {
+                state.isLoadingMess = true;
+            })
+            .addCase(addMessInfo.fulfilled, (state, action) => {
+                state.messInfo = action.payload.data
+                state.isLoadingMess = false;
+                state.isErrorMess = false;
+                state.messMessage = 'Information added successfully';
+            })
+            .addCase(addMessInfo.rejected, (state, action) => {
+                state.isLoadingMess = false;
+                state.isErrorMess = true;
+                state.messMessage = action.payload;
+            })
             .addCase(updateContact.pending, (state) => {
-                state.isLoadingMess = true
+                state.isLoadingMess = true;
             })
             .addCase(updateContact.fulfilled, (state, action) => {
                 const index = state.messInfo.contacts.findIndex(contact => contact._id === action.payload.data._id);
@@ -120,8 +140,7 @@ const messInfoSlice = createSlice({
                 state.messMessage = action.payload;
             })
     }
-
 })
 
-export const { reset } = messInfoSlice.actions;
+export const { reset, setContacts } = messInfoSlice.actions;
 export default messInfoSlice.reducer;

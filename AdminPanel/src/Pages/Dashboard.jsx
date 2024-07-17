@@ -26,7 +26,6 @@ const Dashboard = () => {
     dispatch(getFilteredLeaves());
   }, [dispatch]);
 
-  // console.log(filteredLeaves)
 
   if (isLoadingStudents || isLoadingLeaves || isLoadingFeedbacks || isLoadingComplaints) {
     return <Spinner message="Getting Data..." />;
@@ -64,11 +63,11 @@ const Dashboard = () => {
 
       <Flex flexWrap="wrap" gap={4}>
         <Section
-          title="Feedbacks (Posted Today)"
+          title="Feedbacks ( Posted Today )"
           data={filteredFeedbacks}
           renderItem={(item, index) => (
-            <Box key={index} mb={2} p={2} borderRadius="md" 
-              bg="teal" 
+            <Box key={index} mb={2} p={2} borderRadius="md"
+              bg="teal"
               color="white"
             >
               <Text>
@@ -82,10 +81,13 @@ const Dashboard = () => {
           title="Leaves ( Posted Today )"
           data={filteredLeaves}
           renderItem={(leave, index) => (
-            <Box key={index} mb={2} p={2} borderRadius="md" 
-            bg={leave.status === 'Approved' ? '#6dbc6d' : leave.status === 'Pending' ? '#e9913f' : '#da4242'}
-            color="white">
-              <Text><strong>{leave.studentName}</strong> ({leave.status}) : {leave.reason}</Text>
+            <Box key={index} mb={2} p={2} borderRadius="md"
+              bg={leave.status === 'Approved' ? '#6dbc6d' : leave.status === 'Pending' ? '#e9913f' : '#da4242'}
+              color="white">
+              <Text className="truncate whitespace-nowrap overflow-ellipsis">
+                <strong>{leave.studentName}</strong> ({leave.status}) : {leave.reason}
+              </Text>
+
             </Box>
           )}
           emptyMessage="No Leaves were posted today..."

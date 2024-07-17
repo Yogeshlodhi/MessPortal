@@ -96,14 +96,9 @@ const addMessInfo = (req, res) => {
 
 const addContact = (req, res) => {
     const newContact = req.body;
-    const id = req._id;
-
-    console.log(req.body)
-    
-    console.log(req._id)
-
+  
     if (newContact) {
-        addMessinfoContact(id, newContact)
+        addMessinfoContact(newContact)
             .then((data) => {
                 return res
                     .status(statusCode.ok)

@@ -68,6 +68,6 @@ router.get('/complaints/:id', getSingleComplaint);
 router.delete('/announcement/:id',authenticateAndCheckRole(["Mess Owner", "Mess Secretary"]), deleteAnnouncement);
 router.delete('/complaints/:id',authenticateAndCheckRole(["Warden"]), deleteComplaint);
 
-router.post('/addContact/:id', authenticateAndCheckRole(["Warden"]), addContact);
+router.post('/addContact', authenticateAndCheckRole(["Warden"]), addContact);
 
 export default router;
