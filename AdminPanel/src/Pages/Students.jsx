@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import {
   Box, Button, IconButton, Input, Table, TableContainer,
@@ -29,7 +30,6 @@ const Students = () => {
   const { students, isLoading, isError, message } = useSelector((state) => state.students);
   
   const { student, isLoadingStudent } = useSelector((state) => state.studentProfile);
-
 
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
   const [isMobile] = useMediaQuery('(max-width: 600px)')
@@ -66,7 +66,7 @@ const Students = () => {
   };
 
   const handleExportToExcel = () => {
-    const data = data.map((student, index) => ({
+    const exportData = students.map((student, index) => ({
       'Sr. No': index + 1,
       'Student Roll': student.studentRoll,
       'Student Name': student.studentName,
@@ -76,7 +76,7 @@ const Students = () => {
       'IFSC Code': student.ifsc,
     }));
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Students');
 
@@ -150,13 +150,8 @@ const Students = () => {
       {selectedStudent && (
         <Modal
           isOpen={isOpen}
-          // onClose={() => {
-          //     onClose,
-          //     setSelectedStudent(null)
-          // }} 
           onClose={onClose}
           size={isMobile ? 'sm' : 'xl'}
-        // size={'xl'}
         >
           <ModalOverlay
             bg='blackAlpha.300'
@@ -175,14 +170,11 @@ const Students = () => {
               <Box>
                 <Avatar
                   style={{
-                    // width: '10rem', 
-                    // height: '10rem',
                     width: isMobile ? '100%' : '10rem',
                     height: isMobile ? '100%' : '10rem',
                     objectFit: 'cover'
                   }}
                   name={selectedStudent.studentName}
-                  // src={profile}
                   src={selectedStudent.profileImage}
                   borderRadius="1rem"
                 />
