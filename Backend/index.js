@@ -8,8 +8,15 @@ import cors from 'cors';
 import leaveRoutes from './Routes/leaveRoutes.js';
 
 const app = express();
-dotenv.config();
+// dotenv.config();
+dotenv.config({ path: '/home/yogesh/Desktop/MessPortal/.env' });
+
+
 connectDB();
+
+// console.log('DB_URL:', process.env.DB_URL);
+// console.log('PORT:', process.env.PORT);
+
 
 const PORT = process.env.PORT || 6000;
 
