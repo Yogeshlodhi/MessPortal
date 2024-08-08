@@ -8,29 +8,30 @@ import cors from 'cors';
 import leaveRoutes from './Routes/leaveRoutes.js';
 
 const app = express();
-// dotenv.config();
-dotenv.config({ path: '/home/yogesh/Desktop/MessPortal/.env' });
-
-
+dotenv.config();
 connectDB();
-
-// console.log('DB_URL:', process.env.DB_URL);
-// console.log('PORT:', process.env.PORT);
-
 
 const PORT = process.env.PORT || 6000;
 
-app.use(cors({origin: "*"}))
+// app.use(cors({ origin: "*" }))
+const corsOptions = {
+    origin: ["http://localhost:5173", "http://localhost:5174"], 
+    // origin: ["http://localhost:3000", "deployed backend url"], 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    allowedHeaders: 'Content-Type,Authorization'
+}
+app.use(cors(corsOptions));
 
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 
-app.use('/api/student',userRoutes);
-app.use('/api/student/leaveApplication',leaveRoutes);
-app.use('/api/admin',adminRoutes);
+app.use('/api/student', userRoutes);
+app.use('/api/student/leaveApplication', leaveRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use(errorHandler);
 
-app.listen(PORT,() => {
+app.listen(PORT, () => {
     console.log(`App is running fine @ ${PORT}`)
 })
