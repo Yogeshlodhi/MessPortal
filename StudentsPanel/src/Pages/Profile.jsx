@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { updateStudent, updateImage, reset } from '../Features/Auth/authSlice';
+import { updateStudent, reset } from '../Features/Auth/authSlice';
 import Spinner from '../Components/Spinner';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import UtilFunctions from '../Utils/UtilFunctions';
@@ -19,18 +19,15 @@ const Profile = () => {
   const navigate = useNavigate();
   const [isMobile] = useMediaQuery('(max-width: 600px)')
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
-  const textColor = useColorModeValue('gray.800', 'white');
 
   const [randomColor, setRandomColor] = useState('');
+  const [preview, setPreview] = useState(null); // State to hold the image preview URL
   useEffect(() => {
     setRandomColor(UtilFunctions.getRandomColor());
   }, []);
 
   const { student,
     isLoading,
-    dp,
-    isError,
-    isSuccess,
     message,
     isLoadingUpdate,
     isUpdateSuccess,
@@ -45,62 +42,47 @@ const Profile = () => {
     number: student.number,
     bankAccount: student.bankAccount,
     ifsc: student.ifsc,
-    // bankAccount: student.bankAccount ? student.bankAccount : '',
-    // ifsc: student.ifsc ? student.ifsc : '',
+    avatar: student.avatar?.url,
   });
 
-
-  const [profileImage, setProfileImage] = useState(dp);
-  const [profile, setProfile] = useState(null);
   const [disable, setDisable] = useState(true);
 
-  const { emailId, studentName, studentRoll, number, bankAccount, ifsc } = updateFormData;
+  const { emailId, studentName, studentRoll, number, bankAccount, ifsc, avatar } = updateFormData;
 
   const onChange = (e) => {
     setDisable(false);
-    setUpdateFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+    const { name, value, files } = e.target;
 
-  const onImageChange = (e) => {
-    setDisable(false);
-    if (e.target.files.length > 0) {
-      setProfile(e.target.files[0]);
+    // Handle file input change to generate a preview
+    if (name === 'avatar' && files.length > 0) {
+      const file = files[0];
+      const imageUrl = URL.createObjectURL(file);
+      setPreview(imageUrl); // Set the preview URL
+      setUpdateFormData(prev => ({
+        ...prev,
+        avatar: file,
+      }));
+    } else {
+      setUpdateFormData(prev => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
-
-  const editImage = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    if (profile) {
-      formData.append('image', profile);
-    }
-    try {
-      await dispatch(updateImage(formData));
-      // setDisable(true);
-      toast({
-        title: 'Profile Image Updated',
-        status: 'success',
-        isClosable: true,
-        duration: 3000,
-      });
-      navigate('/');
-    } catch (err) {
-      toast({
-        title: 'Update Failed',
-        description: err.message,
-        status: 'error',
-        isClosable: true,
-        duration: 3000,
-      });
-    }
-  }
 
   const onUpdate = (e) => {
     e.preventDefault();
-    dispatch(updateStudent(updateFormData));
+    const formData = new FormData();
+    formData.append('emailId', emailId);
+    formData.append('studentName', studentName);
+    formData.append('studentRoll', studentRoll);
+    formData.append('number', number);
+    formData.append('bankAccount', bankAccount);
+    formData.append('ifsc', ifsc);
+    if (avatar) {
+      formData.append('avatar', avatar);
+    }
+    dispatch(updateStudent(formData));
   };
 
   useEffect(() => {
@@ -113,6 +95,13 @@ const Profile = () => {
       })
     }
 
+    return () => {
+      dispatch(reset());
+    };
+
+  }, [isUpdateError, toast, dispatch]);
+  useEffect(() => {
+
     if (isUpdateSuccess && updateMessage) {
       toast({
         title: updateMessage,
@@ -123,20 +112,10 @@ const Profile = () => {
       navigate('/')
     }
 
-    // if (isError && message) {
-    //   toast({
-    //     title: message,
-    //     status: 'error',
-    //     isClosable: true,
-    //     duration: 3000
-    //   })
-    // }
-
     return () => {
       dispatch(reset());
     };
-
-  }, [updateMessage, message])
+  }, [isUpdateSuccess, dispatch, toast])
 
   if (isLoadingUpdate) {
     return <Spinner message={'Updating Your Profile....'} />;
@@ -160,27 +139,48 @@ const Profile = () => {
         <Box padding='4' w={'100%'} className={isMobile ? '' : 'grid grid-cols-2 gap-6'}>
           <FormControl mt={4}>
             <FormLabel>Student Name</FormLabel>
-            <Input onChange={onChange} value={studentName} name='studentName' />
+            <Input 
+              onChange={onChange} 
+                focusBorderColor='#B5B4B4'
+              value={studentName} name='studentName' />
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>Student Roll No.</FormLabel>
-            <Input onChange={onChange} value={studentRoll} name='studentRoll' />
+            <Input onChange={onChange} value={studentRoll} 
+                focusBorderColor='#B5B4B4'
+                name='studentRoll' />
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>Webmail Id</FormLabel>
-            <Input onChange={onChange} value={emailId} name='emailId' />
+            <Input 
+                focusBorderColor='#B5B4B4'
+                onChange={onChange} value={emailId} name='emailId' />
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>Phone Number</FormLabel>
-            <Input onChange={onChange} value={number} name='number' />
+            <Input 
+                focusBorderColor='#B5B4B4'
+                onChange={onChange} value={number} name='number' />
           </FormControl>
-          <FormControl mt={4}>
+          <FormControl mt={4} isRequired>
             <FormLabel>Bank Account Number</FormLabel>
-            <Input onChange={onChange} value={bankAccount} name='bankAccount' />
+            <Input 
+                focusBorderColor='#B5B4B4'
+              onChange={onChange} 
+              value={bankAccount} 
+              name='bankAccount' 
+              placeholder={bankAccount ? bankAccount : 'Account Number should contain 10-20 characters'}
+            />
           </FormControl>
-          <FormControl mt={4}>
+          <FormControl mt={4} isRequired>
             <FormLabel>IFSC Code</FormLabel>
-            <Input onChange={onChange} value={ifsc} name='ifsc' />
+            <Input 
+              onChange={onChange} 
+              value={ifsc} 
+              name='ifsc' 
+              focusBorderColor='#B5B4B4'
+              placeholder={bankAccount ? bankAccount : 'Account Number should contain minimum 10 characters'}
+            />
           </FormControl>
           <Box
             border="1px dotted black"
@@ -192,13 +192,13 @@ const Profile = () => {
             mt={4}
           >
             <VStack spacing={4} alignItems="center">
-              <FormLabel fontSize={'2rem'} htmlFor="imageUpload">Update Profile Image</FormLabel>
+              <FormLabel fontSize={'2rem'} htmlFor="imageUpload">Select Image</FormLabel>
               <Flex alignItems="center" mt={6}>
                 <Input
                   type="file"
                   id="imageUpload"
-                  name='profile'
-                  onChange={onImageChange}
+                  name='avatar'
+                  onChange={onChange}
                   style={{ display: 'none' }}
                 />
                 <Box as="label" htmlFor="imageUpload" cursor="pointer">
@@ -211,9 +211,17 @@ const Profile = () => {
                     justifyContent="center"
                     _hover={{ borderColor: '#4A5568' }}
                   >
-                    {profile ? (
+                    {preview ? (
                       <Image
-                        src={URL.createObjectURL(profile)}
+                        src={preview}
+                        width={150}
+                        height={150}
+                        alt={'Profile Preview'}
+                        style={{ maxWidth: '100%', maxHeight: '100%' }}
+                      />
+                    ) : avatar ? (
+                      <Image
+                        src={avatar}
                         width={150}
                         height={150}
                         alt={'Profile Image'}
@@ -230,57 +238,28 @@ const Profile = () => {
               </Flex>
             </VStack>
           </Box>
-          <Box alignSelf={'center'} justifySelf={'center'}>
-            {profileImage ? (
-              <Image
-                src={profileImage}
-                width={150}
-                height={150}
-                alt={'Profile Image'}
-                style={{ objectFit: 'contain', borderRadius: '0.5rem', marginTop: '2rem' }}
-              />
-            ) : (
-              <>
-              </>
-            )
-            }
-          </Box>
         </Box>
+        <Button
+          onClick={onUpdate}
+          width={isMobile ? '100%' : '30%'}
+          display={'inline-block'}
+          alignSelf={'center'}
+          background={'teal'}
+          color={'white'}
+          fontSize={'1.5rem'}
+          _hover={{ background: 'teal.500' }}
+          isDisabled={disable}
+        >
+          Update Profile
+        </Button>
         <ButtonGroup
           display={isMobile ? 'flex' : ''}
-          // alignSelf={'center'} 
           justifyContent={'space-between'}
-          // background={'red'}
           flexDirection={isMobile ? 'column' : 'row'}
           width={'100%'}
           gap={'2rem'}
           paddingLeft={isMobile ? '0' : '25%'}
         >
-          <Button
-            onClick={onUpdate}
-            width={isMobile ? '100%' : '30%'}
-            display={'inline-block'}
-            alignSelf={'center'}
-            background={'teal'}
-            color={'white'}
-            fontSize={'1.5rem'}
-            _hover={{ background: 'teal.500' }}
-            isDisabled={disable}
-          >
-            Update Profile
-          </Button>
-          <Button
-            onClick={editImage}
-            width={isMobile ? '100%' : '30%'}
-            display={'inline-block'}
-            alignSelf={'center'}
-            background={'teal'}
-            color={'white'}
-            fontSize={'1.5rem'}
-            _hover={{ background: 'teal.500' }}
-          >
-            Update Image
-          </Button>
         </ButtonGroup>
       </Container>
     </Box>
@@ -288,7 +267,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-
-
-

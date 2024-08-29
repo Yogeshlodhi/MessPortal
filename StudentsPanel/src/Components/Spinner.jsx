@@ -24,10 +24,10 @@ function Spinner({message}) {
             >
                 <InfinitySpin
                     visible={true}
-                    color="#2C3E50"
+                    color='teal'
                     ariaLabel="infinity-spin-loading"
                 />
-                <Heading textAlign="center" color="#2C3E50" marginTop={4}>
+                <Heading textAlign="center" color="teal" marginTop={4}>
                     {message}
                 </Heading>
             </Box>

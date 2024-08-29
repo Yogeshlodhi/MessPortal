@@ -24,7 +24,13 @@ function Register() {
     const dispatch = useDispatch();
 
     const {studentName, emailId, studentRoll, number, password} = formData;
-    const {student, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
+    const {
+        // student, 
+        isLoading, 
+        isError, 
+        isSuccess, 
+        message
+    } = useSelector((state) => state.auth)
     const toast = useToast();
 
     useEffect(() => {
@@ -36,12 +42,16 @@ function Register() {
             })
         }
         
-        if(isSuccess || student){
+        if(isSuccess
+            //  || student
+        ){
             navigate('/')
         }
 
         dispatch(reset());
-    },[student, isError, isSuccess, message, navigate, dispatch])
+    },[
+        // student, 
+        isError, isSuccess, message, navigate, dispatch])
 
     const onChange = (e) => {
         setFormData((prev) => ({

@@ -13,8 +13,7 @@ export const applyLeave = createAsyncThunk(
     'leave/apply',
     async(leaveData, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.student.token
-            return await leaveService.apply(leaveData, token);
+            return await leaveService.apply(leaveData);
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
@@ -26,16 +25,13 @@ export const getLeaves = createAsyncThunk(
     'leave/getAll',
     async (_, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.student.token;
-            return await leaveService.getLeaves(token);
+            return await leaveService.getLeaves();
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message); 
         }
     }
 )
-
-
 
 const leaveSlice = createSlice({
     name: 'leave',
@@ -57,7 +53,7 @@ const leaveSlice = createSlice({
             .addCase(applyLeave.rejected, (state, action) => {
                 state.isError = true,
                 state.isLoading = false
-                state.message = action.payload.message
+                state.message = action.payload
             })
             .addCase(getLeaves.pending, (state) => {
                 state.isLoading = true

@@ -6,15 +6,15 @@ const { Schema } = mongoose;
 const contactSchema = new Schema({
     role: {
         type: String,
-        required: true,
+        required: [true, "Role of the Contact Required!"],
     },
     contactNo: {
         type: String,
-        required: true,
+        required: [true, "Please provide the contact number of the person"],
     },
     emailId: {
         type: String,
-        required: true,
+        required: [true, "Please provide the Email Id of the person"],
     },
 }, { _id : false });
 

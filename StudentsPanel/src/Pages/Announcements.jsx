@@ -59,7 +59,7 @@ const Announcements = () => {
       <TableContainer bg={bgColor} borderRadius="md">
         {
           announcements && announcements.length === 0 ? (
-            <Text mt={4} color={'red'}>No Announcements Made Till Now....</Text>
+            <Text textAlign={'center'} mt={4} color={'red'}>No active announcements to show</Text>
           ) : (
             <Table
               variant="striped"

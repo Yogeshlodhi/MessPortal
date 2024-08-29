@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Button, ButtonGroup, Heading, Text } from '@chakra-ui/react';
 import { Box } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import UtilFunctions from '../../../StudentsPanel/src/Utils/UtilFunctions';
+import UtilFunctions from '../Utils/UtilFunctions'
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import { takeAction } from '../Features/Leaves/leaveSlice';

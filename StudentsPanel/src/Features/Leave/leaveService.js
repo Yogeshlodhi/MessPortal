@@ -1,29 +1,16 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:4000/api/student'
+const API_URL = import.meta.env.VITE_API_URL;
 
-const apply = async (data, token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-    const response = await axios.post(`${API_URL}/leaveApplication`, data, config);
+const apply = async (data) => {
+    const response = await axios.post(`${API_URL}/leaveApplication`, data, {withCredentials: true});
     return response.data;
 }
 
-const getLeaves = async (token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-    const response = await axios.get(`${API_URL}/leaves`, config);
+const getLeaves = async () => {
+    const response = await axios.get(`${API_URL}/leaves`, { withCredentials: true });
     return response.data;
 }
 
-const logout = () => {
-    localStorage.removeItem('student');
-}
 
 const leaveService = {
     apply,

@@ -1,23 +1,25 @@
-import { Avatar, 
-    Box, 
-    Popover, 
-    PopoverArrow, 
-    PopoverBody, 
-    PopoverContent, 
-    PopoverFooter, 
-    PopoverHeader, 
-    PopoverTrigger, 
-    Tooltip, 
-    WrapItem, 
-    useColorModeValue, 
-    useMediaQuery, 
-    Drawer, 
-    DrawerBody, 
-    DrawerHeader, 
-    DrawerOverlay, 
-    DrawerContent, 
-    DrawerCloseButton, 
-    Button } from '@chakra-ui/react';
+import {
+    Avatar,
+    Box,
+    Popover,
+    PopoverArrow,
+    PopoverBody,
+    PopoverContent,
+    PopoverFooter,
+    PopoverHeader,
+    PopoverTrigger,
+    Tooltip,
+    WrapItem,
+    useColorModeValue,
+    useMediaQuery,
+    Drawer,
+    DrawerBody,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerCloseButton,
+    Button
+} from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -36,9 +38,9 @@ function Header() {
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
 
     const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
+    const closeDrawer = () => setDrawerOpen(false);
 
-    const { student, dp } = useSelector((state) => state.auth);
-    // console.log(dp)
+    const { student } = useSelector((state) => state.auth);
 
     const logoutStudent = () => {
         dispatch(logout());
@@ -51,8 +53,10 @@ function Header() {
             navigate('/login');
         }
     }, [navigate, student]);
+
     const boxShadow = useColorModeValue('4px 2px 5px 0px rgba(0,0,0,0.35)', '4px 0px 5px 0px #636368');
     const bgColor = useColorModeValue('lightMode.bg', 'darkMode.primaryBg');
+    
     return (
         <Box
             display={'flex'}
@@ -68,19 +72,19 @@ function Header() {
             {
                 isMobile ? (
                     <>
-                        <Button 
-                            onClick={toggleDrawer} 
+                        <Button
+                            onClick={toggleDrawer}
                             ml={4}
                             zIndex="1000"
                         >
-                            <MenuOpenIcon fontSize='large'/>
+                            <MenuIcon fontSize='large' />
                         </Button>
-                        <Drawer isOpen={isDrawerOpen} placement="left" onClose={toggleDrawer}>
+                        <Drawer isOpen={isDrawerOpen} placement="top" onClose={toggleDrawer}>
                             <DrawerOverlay />
                             <DrawerContent>
-                                <DrawerCloseButton marginTop={4} size={'lg'}/>
+                                <DrawerCloseButton marginTop={4} size={'lg'} />
                                 <DrawerBody bg={bgColor}>
-                                    <Sidebar />
+                                    <Sidebar onClose={closeDrawer} />
                                 </DrawerBody>
                             </DrawerContent>
                         </Drawer>
@@ -101,11 +105,12 @@ function Header() {
                         <WrapItem cursor={'pointer'}>
                             <Avatar
                                 name={student.studentName}
-                                src={dp ? dp : student.studentName}
+                                // src={student.avatar?.url}
+                                src={student.avatar}
                             />
                         </WrapItem>
                     </PopoverTrigger>
-                    <PopoverContent width={'12rem'}>
+                    <PopoverContent width={'12rem'} bg={bgColor}>
                         <Link to={'/profile'}>
                             <PopoverHeader display={'flex'} justifyContent={'space-between'}>
                                 {student.studentName}

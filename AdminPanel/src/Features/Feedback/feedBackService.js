@@ -1,16 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4000/api/admin';
+// const API_URL = 'http://localhost:4000/api/admin';
+const API_URL = import.meta.env.VITE_ADMIN_API;
 
-const getAllFeedback = async ({token, adminType}) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            // 'adminRole': adminType
-        }
-    };
-    const response = await axios.get(`${API_URL}/feedback_list`, config);
+const getAllFeedback = async () => {
+    const response = await axios.get(`${API_URL}/feedback_list`, {withCredentials: true});
     return response.data;
 }
 

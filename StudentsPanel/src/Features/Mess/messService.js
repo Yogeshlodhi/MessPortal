@@ -1,69 +1,23 @@
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
-const API_URL = 'http://localhost:4000/api/student'
-
-const getAnnouncements = async (token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-    const response = await axios.get(`${API_URL}/announcements`, config);
+const getAnnouncements = async () => {
+    const response = await axios.get(`${API_URL}/announcements`,{withCredentials: true});
     return response.data;
 }
 
-const getMenu = async (token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-    const response = await axios.get(`${API_URL}/getMenu`, config);
-    // console.log(response);
+const getMenu = async () => {
+    const response = await axios.get(`${API_URL}/getMenu`, {withCredentials: true});
     return response.data;
 }
 
-const postFeedback = async (token, feedbackData) => {
-    const formData = new FormData();
-
-    // Construct FormData manually
-    for (let key in feedbackData) {
-        if (key === 'image') {
-            formData.append(key, feedbackData[key]);
-        } else {
-            formData.set(key, feedbackData[key]);
-        }
-    }
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-    const response = await axios.post(`${API_URL}/submitFeedback`, feedbackData, config);
-
+const postFeedback = async (feedbackData) => {
+    const response = await axios.post(`${API_URL}/submitFeedback`, feedbackData, {withCredentials: true});
     return response.data;
 }
 
-const postComplaint = async (token, complaintData) => {
-    const formData = new FormData();
-
-    // Construct FormData manually
-    for (let key in complaintData) {
-        if (key === 'image') {
-            formData.append(key, complaintData[key]);
-        } else {
-            formData.set(key, complaintData[key]);
-        }
-    }
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-    const response = await axios.post(`${API_URL}/raise_complaint`, complaintData, config);
-
+const postComplaint = async (complaintData) => {
+    const response = await axios.post(`${API_URL}/raise_complaint`, complaintData, {withCredentials: true});
     return response.data;
 }
 
@@ -76,7 +30,6 @@ const getMessInfoService = async (token) => {
     }
 
     const response = await axios.get(`${API_URL}/messInfo`, config);
-    // if(response.data == null) return {};
     return response.data;
 }
 

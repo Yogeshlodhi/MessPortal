@@ -1,17 +1,10 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:4000/api/admin'
+// const API_URL = 'http://localhost:4000/api/admin'
+const API_URL = import.meta.env.VITE_ADMIN_API
 
-const getAllLeaves = async ({ token, adminType }) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            // 'adminRole': adminType
-        }
-    };
-    const response = await axios.get(`${API_URL}/leaves_list`, config);
-    // console.log(response.data)
+const getAllLeaves = async () => {
+    const response = await axios.get(`${API_URL}/leaves_list`, {withCredentials: true});
     return response.data;
 }
 
@@ -28,15 +21,8 @@ const getTodayLeaves = async (token) => {
 }
 
 
-const leaveAction = async (token, id, actionData) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        }
-    }
-    // console.log(actionData)
-    const response = await axios.put(`${API_URL}/leaves/takeAction/${id}`, { status: actionData }, config);
+const leaveAction = async (id, actionData) => {
+    const response = await axios.put(`${API_URL}/leaves/takeAction/${id}`, { status: actionData }, {withCredentials: true});
     return response.data;
 }
 

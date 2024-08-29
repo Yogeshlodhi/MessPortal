@@ -1,4 +1,4 @@
-import mongoose,{Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const complaintSchema = new Schema({
     complaintAbout: {
@@ -20,17 +20,20 @@ const complaintSchema = new Schema({
         enum: ["Solved", "In Progress", "Pending", "Rejected"],
         default: "Pending"
     },
-    // actionBy: {
+    actionBy: {
+        type: String,
+    },
+    // attachment: {
     //     type: String,
-    //     default: "Not Verified Yet"
     // },
     attachment: {
-        type: String
+        public_id: { type: String },
+        url: { type: String },
     },
 },
-{
-    timestamps: true
-}
+    {
+        timestamps: true
+    }
 )
 
 const complaintModel = new mongoose.model('ComplaintModel', complaintSchema, 'Complaints');

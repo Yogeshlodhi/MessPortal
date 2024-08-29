@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:4000/api/student'
+const API_URL = import.meta.env.VITE_API_URL;
 
 const register = async (data) => {
     const response = await axios.post(API_URL, data);
@@ -7,34 +7,19 @@ const register = async (data) => {
 }
 
 const login = async (data) => {
-    const response = await axios.post(`${API_URL}/login`, data);
+    const response = await axios.post(`${API_URL}/login`, data,{ withCredentials: true});
     return response.data;
 }
 
-const update = async (data, token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-    // console.log(data)
-    const response = await axios.put(`${API_URL}`, data, config);
-    // console.log(response)
+const update = async (data) => {
+    const response = await axios.put(`${API_URL}`, data, {withCredentials: true});
     return response.data;
 }
 
-const updateImage = async (data, token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-    const response = await axios.put(`${API_URL}/updateImage`, data, config);
-    return response.data;
-}
-
-const logout = () => {
+const logout = async () => {
+    const response = await axios.get(`${API_URL}/logout`, {withCredentials: true});
     localStorage.removeItem('student');
+    return response.data;
 }
 
 const authService = {
@@ -42,7 +27,6 @@ const authService = {
     login,
     logout,
     update,
-    updateImage
 }
 
 export default authService

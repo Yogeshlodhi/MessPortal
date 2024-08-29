@@ -39,8 +39,9 @@ function Header() {
     const [isDrawerOpen, setDrawerOpen] = useState(false);
 
     const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
+    const closeDrawer = () => setDrawerOpen(false);
 
-    let { admin } = useSelector((state) => state.auth)
+    const { admin } = useSelector((state) => state.auth)
 
 
     const logoutUser = () => {
@@ -79,14 +80,14 @@ function Header() {
                             ml={4}
                             zIndex="1000"
                         >
-                            <MenuOpenIcon fontSize='large'/>
+                            <MenuIcon fontSize='large'/>
                         </Button>
-                        <Drawer isOpen={isDrawerOpen} placement="left" onClose={toggleDrawer}>
+                        <Drawer isOpen={isDrawerOpen} placement="top" onClose={toggleDrawer}>
                             <DrawerOverlay />
                             <DrawerContent>
                                 <DrawerCloseButton marginTop={4} size={'lg'} />
                                 <DrawerBody bg={bgColor}>
-                                    <Sidebar />
+                                    <Sidebar onClose={closeDrawer}/>
                                 </DrawerBody>
                             </DrawerContent>
                         </Drawer>
@@ -109,7 +110,7 @@ function Header() {
                             <Avatar name={admin.firstName} src='https://bit.ly/tioluwani-kolawole' />
                         </WrapItem>
                     </PopoverTrigger>
-                    <PopoverContent width={'12rem'}>
+                    <PopoverContent width={'12rem'}  bg={bgColor}>
                         {/* <Link to={'/profile'}> */}
                         <PopoverHeader display={'flex'} justifyContent={'space-between'}>
                             {admin.firstName}  {' '}

@@ -96,7 +96,8 @@ const Students = () => {
       width={'100%'}
       gap={'2rem'}
       bg={bgColor}
-      // height={'100%'}
+      border={'3px solid rgba(0, 0, 0, 0.05)'}
+      borderRadius={'1rem'}
       padding={'0.5rem'}
     >
       <Box width={'100%'}>
@@ -157,7 +158,7 @@ const Students = () => {
             bg='blackAlpha.300'
             backdropFilter='blur(10px)'
           />
-          <ModalContent width={'auto'}>
+          <ModalContent width={'auto'} bg={bgColor} alignSelf={'center'} marginLeft={'0.5rem'} marginRight={'0.5rem'}>
             <ModalHeader>
               {selectedStudent.studentName}'s Profile
             </ModalHeader>
@@ -171,11 +172,11 @@ const Students = () => {
                 <Avatar
                   style={{
                     width: isMobile ? '100%' : '10rem',
-                    height: isMobile ? '100%' : '10rem',
+                    height: isMobile ? '5rem' : '10rem',
                     objectFit: 'cover'
                   }}
                   name={selectedStudent.studentName}
-                  src={selectedStudent.profileImage}
+                  src={selectedStudent.avatar?.url}
                   borderRadius="1rem"
                 />
               </Box>

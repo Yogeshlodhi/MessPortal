@@ -59,8 +59,8 @@ export const getAnnouncements = createAsyncThunk(
     'mess/announcements',
     async (_, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.student.token;
-            return await messService.getAnnouncements(token);
+            // const token = thunkAPI.getState().auth.student.token;
+            return await messService.getAnnouncements();
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
@@ -72,8 +72,7 @@ export const getMenu = createAsyncThunk(
     'mess/menu',
     async (_, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.student.token;
-            return await messService.getMenu(token);
+            return await messService.getMenu();
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
@@ -85,8 +84,7 @@ export const postFeedback = createAsyncThunk(
     'mess/feedback',
     async (data, thunkAPI) => {
         try{
-            const token = thunkAPI.getState().auth.student.token;
-            return await messService.postFeedback(token, data);
+            return await messService.postFeedback(data);
         }catch(error){
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
@@ -98,8 +96,8 @@ export const postComplaint = createAsyncThunk(
     'mess/complaint',
     async (data, thunkAPI) => {
         try{
-            const token = thunkAPI.getState().auth.student.token;
-            return await messService.postComplaint(token, data);
+            // const token = thunkAPI.getState().auth.student.token;
+            return await messService.postComplaint(data);
         }catch(error){
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);

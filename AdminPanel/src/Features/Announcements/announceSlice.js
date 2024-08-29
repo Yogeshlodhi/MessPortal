@@ -14,12 +14,8 @@ export const getAnnouncementList = createAsyncThunk(
     'announcement/getAll',
     async (_, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
-            const token = state.auth.admin.token;
-            const adminType = state.auth.admin.adminType;
-            return await announceService.getAnnouncement({ token, adminType });
+            return await announceService.getAnnouncement();
         } catch (error) {
-            // console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
         }
@@ -30,10 +26,7 @@ export const addAnnounce = createAsyncThunk(
     'announcement/addOne',
     async (data, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
-            const token = state.auth.admin.token;
-            const adminType = state.auth.admin.adminType;
-            return await announceService.addAnnouncement(data, token, adminType);
+            return await announceService.addAnnouncement(data);
         } catch (error) {
             if (error.response && error.response.status === 403) {
                 return thunkAPI.rejectWithValue('You do not have permission to add announcements.');
@@ -48,11 +41,8 @@ export const deleteAnnounce = createAsyncThunk(
     'announcement/deleteOne',
     async (id, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
-            const token = state.auth.admin.token;
-            const adminType = state.auth.admin.adminType;
-            await announceService.deleteAnnouncement(id, token, adminType);
-            const updatedAnnouncements = await announceService.getAnnouncement({ token, adminType });
+            await announceService.deleteAnnouncement(id);
+            const updatedAnnouncements = await announceService.getAnnouncement();
             thunkAPI.dispatch(setAnnounceList(updatedAnnouncements));
             
             return id;

@@ -19,10 +19,7 @@ export const getLeavesList = createAsyncThunk(
     'leave/getAll',
     async (_, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
-            const token = state.auth.admin.token;
-            const adminType = state.auth.admin.adminType;
-            return await leaveService.getAllLeaves({ token, adminType });
+            return await leaveService.getAllLeaves();
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);
@@ -34,14 +31,11 @@ export const takeAction = createAsyncThunk(
     'leave/takeAction',
     async (data, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
             const { leaveId, status } = data;
-            const token = state.auth.admin.token;
-
-            const updatedLeave = await leaveService.leaveAction(token, leaveId, status);
+            const updatedLeave = await leaveService.leaveAction(leaveId, status);
             let updatedLeavesList;
             if (updatedLeave) {
-                updatedLeavesList = await leaveService.getAllLeaves({ token, adminType: state.auth.admin.adminType });
+                updatedLeavesList = await leaveService.getAllLeaves();
                 thunkAPI.dispatch(setLeavesList(updatedLeavesList));
             }
             return updatedLeave;

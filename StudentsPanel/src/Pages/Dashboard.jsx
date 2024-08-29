@@ -54,7 +54,7 @@ function Dashboard() {
     return () => {
       dispatch(reset());
     };
-  }, [student, dispatch]);
+  }, [student, dispatch, navigate]);
 
   if (isLoading) {
     return <Spinner message={'Fetching Leaves'} />;
@@ -78,7 +78,7 @@ function Dashboard() {
   return (
     <Box
       className='flex gap-8 flex-col'
-      borderRadius={'1rem'}
+      borderRadius={'0.5rem'}
       padding={'0.5rem'}
       bg={bgColor}
       border={'3px solid rgba(0, 0, 0, 0.05)'}
@@ -86,22 +86,12 @@ function Dashboard() {
     // height={'100%'}
     >
       <Box className='flex gap-4' alignItems={'center'} justifyContent={isMobile ? 'center' : 'unset'}>
-        <TextSnippetIcon style={{ fontSize: '2rem' }} />
-        <Heading
-          fontSize={'2rem'}
-          textAlign={'center'}
-          textTransform={'uppercase'}
-        >
-          Leave History
-        </Heading>
+        {/* <TextSnippetIcon style={{ fontSize: '2rem' }} /> */}
+        <Heading fontSize={'2rem'} textAlign={'center'} textTransform={'uppercase'}>Leave History</Heading>
       </Box>
       <Box>
         <TableContainer>
-          <Table
-            variant='striped'
-            // colorScheme='teal'
-            colorScheme='#1D1D1C'
-          >
+          <Table variant='striped' colorScheme='#1D1D1C'>
             <Thead>
               <Tr>
                 <Th>Reason</Th>
@@ -109,6 +99,7 @@ function Dashboard() {
                 <Th>To</Th>
                 <Th>Duration (in days)</Th>
                 <Th>Status</Th>
+                <Th>Action Taken By</Th>
                 <Th>Amount ( ₹ )</Th>
               </Tr>
             </Thead>
@@ -116,7 +107,7 @@ function Dashboard() {
               {leavesData.map((leave, index) => (
                 <Tr
                   key={index}
-                  bg={leave.status === 'Approved' ? '#6dbc6d' : leave.status === 'Pending' ? '#e9913f' : '#da4242'}
+                  bg={leave.status === 'Approved' ? '#5dc85d' : leave.status === 'Pending' ? '#e9913f' : '#da4242'}
                   color={'white'}
                 >
                   <Td className="truncate max-w-xs">{leave.reason}</Td>
@@ -124,16 +115,15 @@ function Dashboard() {
                   <Td>{UtilFunctions.formatDate(new Date(leave.endDate))}</Td>
                   <Td>{UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))}</Td>
                   <Td>{leave.status}</Td>
+                  <Td>{leave.actionTakenBy ? leave.actionTakenBy : 'Unnoticed'}</Td>
                   <Td>{messAmount * UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))}</Td>
                 </Tr>
               ))}
-
-
             </Tbody>
             <Tfoot>
               <Tr>
-                <Td colSpan={5} textAlign="center">
-                  Total
+                <Td colSpan={6} textAlign="center">
+                  Total Approved
                 </Td>
                 <Td>{totalAmount}</Td>
               </Tr>

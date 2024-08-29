@@ -55,7 +55,7 @@ const Complaint = () => {
     formData.append('complaintAbout', complaintAbout);
     formData.append('description', description);
     if (attachment) {
-      formData.append('image', attachment);
+      formData.append('attachment', attachment);
     }
 
     dispatch(postComplaint(formData))
@@ -63,7 +63,7 @@ const Complaint = () => {
   const [isMobile] = useMediaQuery('(max-width: 600px)');
 
   useEffect(() => {
-    if (isComplaintError) {
+    if (isComplaintError && complaintMessage) {
       toast({
         title: complaintMessage,
         duration: 3000,
@@ -71,7 +71,13 @@ const Complaint = () => {
         isClosable: true
       })
     }
-    if (isComplaintSuccess) {
+    return () => {
+      dispatch(reset());
+    }
+  }, [isComplaintError, toast, dispatch])
+
+  useEffect(() => {
+    if (isComplaintSuccess && complaintMessage) {
       toast({
         title: complaintMessage,
         duration: 3000,
@@ -79,9 +85,11 @@ const Complaint = () => {
         isClosable: true
       })
       navigate('/')
+    }
+    return () => {
       dispatch(reset());
     }
-  }, [isComplaintError, isComplaintSuccess])
+  }, [isComplaintSuccess, toast, dispatch])
 
   if (isPostingComplaint) {
     return <Spinner message={'Submitting Your Complaint...'} />

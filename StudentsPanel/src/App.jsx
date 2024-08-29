@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Login from './Authentication/Login';
 import Register from './Authentication/Register';
 import Dashboard from './Pages/Dashboard';
@@ -13,21 +13,56 @@ import Complaints from './Pages/Complaints';
 import Sidebar from './Components/Sidebar';
 import Header from './Components/Header';
 import Payments from './Pages/Payments';
-import { Box, useMediaQuery, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, useColorModeValue } from '@chakra-ui/react';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Box, useMediaQuery, Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, useColorModeValue, useToast } from '@chakra-ui/react';
 import MessInfo from './Pages/MessInfo';
+import Spinner from './Components/Spinner';
+import { reset } from './Features/Auth/authSlice';
 
 
 const App = () => {
-  const {student} = useSelector((state) => state.auth);
-  // console.log(student)
+  const { student, isLogout, isLogoutError, logoutMessage, isLogoutSucess } = useSelector((state) => state.auth);
+  const toast = useToast();
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   if (isLogoutSucess) {
+  //     toast({
+  //       title: logoutMessage,
+  //       status: 'success',
+  //       isClosable: true,
+  //       duration: 3000
+  //     })
+  //   }
+  //   return () => {
+  //     dispatch(reset());
+  //   }
+  // }, [isLogoutSucess, dispatch, toast])
+
+  // useEffect(() => {
+  //   if (isLogoutError) {
+  //     toast({
+  //       title: logoutMessage,
+  //       status: 'error',
+  //       isClosable: true,
+  //       duration: 3000
+  //     })
+  //   }
+  //   return () => {
+  //     dispatch(reset());
+  //   }
+  // }, [isLogoutError, dispatch, toast])
+
+  // if(isLogout){
+  //   return <Spinner message={'Please Wait..'}/>
+  // }
+
+
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/*" element={student ? <AuthenticatedRoutes /> : <Navigate to="/login" replace />} />
-        {/* <Route path="/*" element={isAuthenticated ? <AuthenticatedRoutes /> : <Navigate to="/login" replace />} /> */}
       </Routes>
     </Router>
   );
@@ -35,7 +70,7 @@ const App = () => {
 
 const AuthenticatedRoutes = () => {
   const [isMobile] = useMediaQuery('(max-width: 600px)');
-  
+
   return (
     <Box
       display="flex"

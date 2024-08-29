@@ -3,16 +3,16 @@ import LeaveModel from "../Models/leaveApplicationModel.js"
 const applyLeaveService = async (leaveData, roll) => {
     try {
         const leaveApplication = await LeaveModel.create({...leaveData, studentRoll: roll})
-        return leaveApplication ? leaveApplication : null;
+        if(!leaveApplication) throw {message: 'Could Not apply your leave, Please Try Again Later!'}
+        return leaveApplication;
     } catch (error) {
         throw { message: error.message };
     }
 }
 
-const getAllLeavesService = async (studentData) => {
+const getAllLeavesService = async (studentRoll) => {
     try {
-        // console.log(studentData)
-        const list = await LeaveModel.find({ studentRoll: studentData._id })
+        const list = await LeaveModel.find({ studentRoll })
         return list;
     } catch (error) {
         throw {message : error.message};

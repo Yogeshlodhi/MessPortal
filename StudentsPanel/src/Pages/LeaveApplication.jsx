@@ -21,6 +21,7 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { applyLeave, reset } from '../Features/Leave/leaveSlice';
+import Spinner from '../Components/Spinner';
 
 function LeaveApplication() {
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
@@ -34,17 +35,36 @@ function LeaveApplication() {
 
   const { student } = useSelector((state) => state.auth);
 
-  const {isLoading, message, isError} = useSelector((state) => state.leave);
+  const { isLoading, message, isError, isSuccess } = useSelector((state) => state.leave);
 
   useEffect(() => {
-    if(isError){
+    if (isError && message) {
       toast({
         title: message,
         duration: 3000,
         status: 'error'
       })
     }
-  })
+    return () => {
+      dispatch(reset())
+    }
+  }, [isError, dispatch, toast])
+
+  useEffect(() => {
+    if (isSuccess && message) {
+      toast({
+        title: message,
+        duration: 3000,
+        status: 'success',
+        isClosable: true,
+      });
+      navigate('/');
+    }
+    return () => {
+      dispatch(reset())
+    }
+  }, [isSuccess, toast, dispatch])
+
 
   const [leaveForm, setLeaveForm] = useState({
     studentRoll: student && student.studentRoll,
@@ -88,17 +108,10 @@ function LeaveApplication() {
       reason,
     };
     dispatch(applyLeave(leaveData));
-    toast({
-      title: 'Leave Applied',
-      duration: 3000,
-      status: 'success',
-      isClosable: true,
-    });
-    navigate('/');
   };
 
-  if(isLoading){
-    return <Spinner message={'Please wait....'}/>
+  if (isLoading) {
+    return <Spinner message={'Please wait....'} />
   }
 
   return (
@@ -111,7 +124,7 @@ function LeaveApplication() {
       border={'3px solid rgba(0, 0, 0, 0.05)'}
       boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.05)'}
     >
-      <Heading 
+      <Heading
         fontSize={'2rem'}
         textAlign={'center'}
         textTransform={'uppercase'}
@@ -120,16 +133,12 @@ function LeaveApplication() {
       </Heading>
       <List spacing={1}>
         <ListItem display={'flex'} alignItems={'center'}>
-        <ListIcon as={ArrowRightAltIcon}/>
+          <ListIcon as={ArrowRightAltIcon} />
           The Leave must be of a minimum of 3 days
         </ListItem>
         <ListItem display={'flex'} alignItems={'center'}>
-        <ListIcon as={ArrowRightAltIcon}/>
+          <ListIcon as={ArrowRightAltIcon} />
           Your leave start date should be minimum a day before applying
-        </ListItem>
-        <ListItem display={'flex'} alignItems={'center'}>
-          <ListIcon as={ArrowRightAltIcon}/>
-          Kindly upload the screenshot of the leave after the application
         </ListItem>
       </List>
       <Container
@@ -144,9 +153,9 @@ function LeaveApplication() {
       >
         <VStack spacing={5} w={'100%'}>
           <Box w={'100%'} display={{ base: 'block', md: 'flex' }} gap={5}>
-            <FormControl 
-              flex={1} 
-              mb={{ base: 4, md: 0 }} 
+            <FormControl
+              flex={1}
+              mb={{ base: 4, md: 0 }}
               isRequired
             >
               <FormLabel color={textColor}>From</FormLabel>
@@ -190,7 +199,7 @@ function LeaveApplication() {
             marginTop={'1rem'}
             onClick={onApply}
             background={'#005252'}
-            _hover={{backgroundColor: 'teal'}}
+            _hover={{ backgroundColor: 'teal' }}
             color={'white'}
           >
             Apply

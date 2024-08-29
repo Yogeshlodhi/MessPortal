@@ -3,9 +3,10 @@ import complaintService from './complaintService';
 
 const initialState = {
     complaints: [],
-    isLoadingComplaints: false,
     isSuccess: false,
     isError: false,
+    isComplaintSuccess: false,
+    isLoadingComplaints: false,
     complaintsMessage: ''
 }
 
@@ -14,12 +15,8 @@ export const getComplaintsList = createAsyncThunk(
     'complaints/getAll',
     async (_, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
-            const token = state.auth.admin.token;
-            const adminType = state.auth.admin.adminType;
-            return await complaintService.getComplaints(token, adminType);
+            return await complaintService.getComplaints();
         } catch (error) {
-            // console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
         }
@@ -30,14 +27,11 @@ export const deleteComplaint = createAsyncThunk(
     'complaints/delete',
     async (complaintId, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
-            const token = state.auth.admin.token;
-            await complaintService.deleteComplaint(token, complaintId);
-            const updatedComplaints = await complaintService.getComplaints(token, state.auth.admin.adminType);
-            thunkAPI.dispatch(setComplaintsList(updatedComplaints)); 
+            await complaintService.deleteComplaint(complaintId);
+            const updatedComplaints = await complaintService.getComplaints();
+            thunkAPI.dispatch(setComplaintsList(updatedComplaints));
             return complaintId;
         } catch (error) {
-            // console.log(error.response.data.message);
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);
         }
@@ -63,8 +57,8 @@ const complaintSlice = createSlice({
         builder
             .addCase(getComplaintsList.fulfilled, (state, action) => {
                 state.complaints = action.payload.data,
-                state.isLoadingComplaints = false,
-                state.isSuccess = true
+                    state.isLoadingComplaints = false,
+                    state.isSuccess = true
                 state.complaintsMessage = action.payload.message
             })
             .addCase(getComplaintsList.pending, (state, action) => {
@@ -72,20 +66,23 @@ const complaintSlice = createSlice({
             })
             .addCase(getComplaintsList.rejected, (state, action) => {
                 state.complaints = [],
-                state.isLoadingComplaints = false,
-                state.isError = true,
-                state.complaintsMessage = action.payload.message
-                // state.complaintsMessage = action.payload.message
+                    state.isLoadingComplaints = false,
+                    state.isError = true
+            })
+            .addCase(deleteComplaint.pending, (state, action) => {
+                state.isLoadingComplaints = true
             })
             .addCase(deleteComplaint.fulfilled, (state, action) => {
                 state.complaints = state.complaints.filter(
                     (complaint) => complaint.id !== action.payload
                 );
+                state.complaintsMessage = 'Complaint deleted'
+                state.isComplaintSuccess = true
             })
+
             .addCase(deleteComplaint.rejected, (state, action) => {
                 state.isError = true;
-                state.complaintsMessage = action.payload.message;
-                // state.complaintsMessage = action.payload.message;
+                state.complaintsMessage = 'An Error Occurred, Please Try Again Later';
             });
     }
 })

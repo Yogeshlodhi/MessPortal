@@ -1,11 +1,13 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 const feedBackSuggestion = new Schema(
     {
         feedback: {
             type: Number,
+            required: true,
         },
         feedbackDescription: {
             type: String,
+            required: true,
         },
         suggestion: {
             type: String,
@@ -25,8 +27,12 @@ const feedBackSuggestion = new Schema(
             required: true,
             enum: ["Breakfast", "Lunch", "Dinner"],
         },
-        feedbackImage : {
-            type: String,
+        // feedbackImage : {
+        //     type: String,
+        // }
+        feedbackImage: {
+            public_id: { type: String },
+            url: { type: String },
         }
     },
     {

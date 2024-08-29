@@ -10,4 +10,5 @@ export const statusCode = {
     incorrectCredential: 901,
     defaultPageLimit: 10,
     found: 302,
+    internalServerError: 500,
 }

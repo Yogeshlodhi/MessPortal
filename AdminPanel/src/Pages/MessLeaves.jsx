@@ -9,7 +9,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Button, ButtonGroup, Text } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import UtilFunctions from '../../../StudentsPanel/src/Utils/UtilFunctions';
+import UtilFunctions from '../Utils/UtilFunctions';
 import { getLeavesList } from '../Features/Leaves/leaveSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
@@ -68,9 +68,9 @@ const MessLeaves = () => {
       bg={bgColor}
       boxShadow={'0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'}
       gap={'1rem'}
-      borderRadius={'0.5rem'}
+      // borderRadius={'0.5rem'}
       padding={'1rem'}
-      // height={'100%'}
+    // height={'100%'}
     >
       <Heading
         fontSize={'2rem'}
@@ -85,13 +85,13 @@ const MessLeaves = () => {
             leaves.filter((leave) => {
               return leave.studentName !== "Student Does Not Exist Anymore";
             }).map((leave) => (
-              <Accordion key={leave._id} style={{ marginBottom: '1rem', color: 'white', borderRadius: '0.5rem' }}>
+              <Accordion key={leave._id} style={{ marginBottom: '1rem', color: 'white' }}>
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon style={{ color: 'white ' }} />}
+                  expandIcon={<ExpandMoreIcon style={{ color: 'white'}} />}
                   aria-controls="panel3-content"
                   id="panel3-header"
                 >
-                  {`${leave.studentName} (No. Of Days: ${UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))})`}
+                  {`${leave.studentRoll} (No. Of Days: ${UtilFunctions.calculateDays(new Date(leave.startDate), new Date(leave.endDate))})`}
                 </AccordionSummary>
                 <AccordionDetails style={{ color: 'black' }}>
                   {leave.reason}

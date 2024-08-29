@@ -3,7 +3,9 @@ import {
   Box, Flex, Text, Button, IconButton, Heading, Grid, Icon, ButtonGroup,
   useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton,
   ModalBody, useMediaQuery,
-  useColorModeValue
+  useColorModeValue,
+  Image,
+  useToast
 } from "@chakra-ui/react";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +14,8 @@ import Spinner from "../Components/Spinner";
 
 const ComplaintsList = () => {
   const dispatch = useDispatch();
-  const { complaints, isLoading } = useSelector(state => state.complaints);
+  const toast = useToast();
+  const { complaints, isLoading, isLoadingComplaints, complaintsMessage, isError, isComplaintSuccess } = useSelector(state => state.complaints);
   const { admin } = useSelector(state => state.auth);
 
   const [selectedComplaint, setSelectedComplaint] = useState(null);
@@ -23,6 +26,17 @@ const ComplaintsList = () => {
   useEffect(() => {
     dispatch(getComplaintsList());
   }, [dispatch]);
+
+  useEffect(() => {
+    if(isComplaintSuccess){
+      toast({
+        title: complaintsMessage,
+        isClosable: true,
+        status: 'success',
+        duration: 3000
+      })
+    }
+  }, [complaintsMessage])
 
   const handleView = (complaint) => {
     setSelectedComplaint(complaint);
@@ -35,9 +49,7 @@ const ComplaintsList = () => {
     dispatch(getComplaintsList());
   };
 
-  if (isLoading) {
-    return <Spinner message={'Loading Complaints....'} />;
-  }
+  if (isLoading) return <Spinner message={'Loading Complaints....'} />;
 
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
   const textColor = useColorModeValue('gray.800', 'white');
@@ -50,7 +62,7 @@ const ComplaintsList = () => {
       gap={'1rem'}
       borderRadius={'1rem'}
       padding={'1rem'}
-      // height={'100%'}
+    // height={'100%'}
     >
       <Heading
         mb={4}
@@ -111,7 +123,11 @@ const ComplaintsList = () => {
         <Modal size={isMobile ? 'sm' : 'lg'} isOpen={isOpen} onClose={onClose}>
           <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
           <ModalContent bg={bgColor}
-            color={textColor}>
+            color={textColor}
+            marginLeft={'0.5rem'}
+            marginRight={'0.5rem'}
+            alignSelf={'center'}
+          >
             <ModalHeader>Complaint Details</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
@@ -130,8 +146,8 @@ const ComplaintsList = () => {
               {/* Add more fields as needed */}
               <Box mb={4}>
                 {selectedComplaint.attachment ? (
-                  <img
-                    src={selectedComplaint.attachment}
+                  <Image
+                    src={selectedComplaint.attachment?.url}
                     width={'100%'}
                     height={'100%'}
                     style={{ objectFit: 'contain', borderRadius: '0.5rem' }}

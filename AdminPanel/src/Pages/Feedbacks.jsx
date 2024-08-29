@@ -72,7 +72,7 @@ const Feedbacks = () => {
         textTransform={'uppercase'}
         mb={6}
       >
-        Feedback & Suggestions</Heading>
+        Feedbacks & Suggestions</Heading>
       <HStack
         spacing={isMobile ? 2 : 4}
         mb={4}
@@ -153,7 +153,7 @@ const Feedbacks = () => {
                     {
                       feedback.feedbackImage ? (
                         <img
-                          src={feedback.feedbackImage}
+                          src={feedback.feedbackImage?.url}
                           width={'100%'}
                           height={'100%'}
                           style={{ objectFit: 'contain' }}

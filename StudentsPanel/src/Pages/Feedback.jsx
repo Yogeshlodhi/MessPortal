@@ -53,7 +53,8 @@ const Feedback = () => {
     formData.append('suggestion', suggestion);
     formData.append('mealOfDay', mealOfDay);
     if (feedbackImage) {
-      formData.append('image', feedbackImage);
+      // formData.append(feedbackImage);
+      formData.append('feedbackImage', feedbackImage);
     }
     dispatch(postFeedback(formData))
   };
@@ -125,7 +126,8 @@ const Feedback = () => {
                   key={value}
                   onClick={() => handleRatingClick(value)}
                   colorScheme={feedback === value ? 'teal' : 'gray'}
-                  m={1}
+                  // m={1}
+                  margin={'0.1rem'}
                 >
                   {value}
                 </Button>
@@ -133,7 +135,7 @@ const Feedback = () => {
             </Flex>
             <FormControl w={'95%'} maxW='40rem' p='4' color={textColor}>
               <Textarea
-                placeholder='Write Something About Your Feedback.......'
+                placeholder='Please provide your feedback description, This field is required'
                 minHeight={'10rem'}
                 maxHeight={'10rem'}
                 resize={'none'}
@@ -146,7 +148,7 @@ const Feedback = () => {
             </FormControl>
             <FormControl w={'95%'} maxW='40rem' p='4' color={textColor}>
               <Textarea
-                placeholder='Please Write Suggestions if any.....'
+                placeholder='Please write suggestions if any'
                 minHeight={'10rem'}
                 maxHeight={'10rem'}
                 resize={'none'}
@@ -178,6 +180,7 @@ const Feedback = () => {
               <Flex alignItems="center" mt={6}>
                 <Input
                   type="file"
+                  accept="image/*"
                   id="imageUpload"
                   name='feedbackImage'
                   onChange={(e) => {

@@ -26,13 +26,13 @@ const Spinner = ({message}) => {
                     height={100}
                     width={100}
                     radius={5}
-                    color="#2C3E50"
+                    color="teal"
                     ariaLabel="ball-triangle-loading"
                     wrapperStyle={{}}
                     wrapperClass=""
                     visible={true}
                 />
-                <Heading textAlign="center" color="#2C3E50" marginTop={4}>
+                <Heading textAlign="center" color="teal" marginTop={4}>
                     {message}
                 </Heading>
             </Box>

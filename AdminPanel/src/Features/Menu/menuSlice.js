@@ -13,9 +13,7 @@ export const addNewMenu = createAsyncThunk(
     'menu/addnew',
     async (menuData, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
-            const token = state.auth.admin.token;
-            return await menuService.addMenu(token, menuData);
+            return await menuService.addMenu(menuData);
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);
@@ -27,10 +25,7 @@ export const getMenu = createAsyncThunk(
     'mess/menu',
     async (_, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
-            const token = state.auth.admin.token;
-            const adminType = state.auth.admin.adminType;
-            return await menuService.getMenu({ token, adminType });
+            return await menuService.getMenu();
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
             return thunkAPI.rejectWithValue(message);
@@ -42,10 +37,7 @@ export const updateMenu = createAsyncThunk(
     'menu/update',
     async ({ id, updatedMenu }, thunkAPI) => {
         try {
-            const state = thunkAPI.getState();
-            const token = state.auth.admin.token;
-            const adminType = state.auth.admin.adminType;
-            return await menuService.updateMenuService(id, updatedMenu, token, adminType);
+            return await menuService.updateMenuService(id, updatedMenu);
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             return thunkAPI.rejectWithValue(message);

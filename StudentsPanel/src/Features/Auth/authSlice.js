@@ -5,12 +5,18 @@ const student = JSON.parse(localStorage.getItem('student'));
 
 const initialState = {
     student: student ? student : null,
-    dp: student ? student.profileImage : null,
     isError: false,
     isSuccess: false,
     isLoading: false,
     message: '',
-    
+
+    //logout
+    isLogout: false,
+    isLogoutSuccess: false,
+    isLogoutError: false,
+    logoutMessage: '',
+    //logout
+
     // update profile states
     isLoadingUpdate: false,
     isUpdateSuccess: false,
@@ -48,23 +54,7 @@ export const updateStudent = createAsyncThunk(
     'auth/update',
     async (user, thunkAPI) => {
         try {
-            const token = thunkAPI.getState().auth.student.token;
-            // console.log(user)
-            return await authService.update(user, token);
-        } catch (error) {
-            console.log(error.response.data.message)
-            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-            return thunkAPI.rejectWithValue(message);
-        }
-    }
-)
-
-export const updateImage = createAsyncThunk(
-    'auth/updateImage',
-    async (user, thunkAPI) => {
-        try {
-            const token = thunkAPI.getState().auth.student.token;
-            return await authService.updateImage(user, token);
+            return await authService.update(user);
         } catch (error) {
             console.log(error.response.data.message)
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -75,8 +65,14 @@ export const updateImage = createAsyncThunk(
 
 export const logout = createAsyncThunk(
     'auth/logout',
-    async () => {
-        await authService.logout()
+    async (_, thunkAPI) => {
+        try{
+            return await authService.logout();
+        }catch(error){
+            console.log(error.response.data.message)
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message);
+        }
     }
 )
 
@@ -116,9 +112,14 @@ export const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.isLoading = false,
-                    state.isSuccess = true,
-                    state.student = action.payload.data
-                localStorage.setItem('student', JSON.stringify(action.payload.data));
+                state.isSuccess = true,
+                // state.student = action.payload.data
+                state.student = {
+                    ...action.payload.data,
+                    // console.log(action.payload)
+                    avatar: action.payload.data.avatar?.url
+                }
+                localStorage.setItem('student', JSON.stringify(state.student));
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false,
@@ -134,9 +135,8 @@ export const authSlice = createSlice({
                 state.isUpdateSuccess = true,
                 state.updateMessage = action.payload.message
                 state.student = {
-                    ...state.student,
                     ...action.payload.data,
-                    token: state.student.token
+                    avatar: action.payload.data.avatar.url
                 }
                 localStorage.setItem('student', JSON.stringify(state.student));
             })
@@ -144,28 +144,21 @@ export const authSlice = createSlice({
                 state.isLoadingUpdate = false,
                 state.isUpdateError = true
                 state.updateMessage = action.payload
-                state.student = null
-            })
-            .addCase(updateImage.pending, (state) => {
-                state.isLoading = true
-            })
-            .addCase(updateImage.fulfilled, (state, action) => {
-                state.isLoading = false,
-                    state.isSuccess = true,
-                    state.dp = action.payload.data
-            })
-            .addCase(updateImage.rejected, (state, action) => {
-                state.isLoading = false,
-                    state.isError = true
-                state.message = action.payload
             })
             .addCase(logout.fulfilled, (state) => {
-                state.isLoading = false,
-                    state.isSuccess = true,
-                    state.student = null
+                state.isLogout = false,
+                state.isLogoutSuccess = true,
+                state.logoutMessage = 'Logout Successful'
+                state.student = null
             })
             .addCase(logout.pending, (state) => {
-                state.isLoading = true
+                state.isLogout = true
+            })
+            .addCase(logout.rejected, (state, action) => {
+                state.isLogout = false,
+                state.isLogoutError = true,
+                state.logoutMessage = action.payload,
+                state.isLogoutSuccess = false
             })
     }
 })

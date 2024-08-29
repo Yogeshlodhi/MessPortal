@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAnnounce, getAnnouncementList, deleteAnnounce, removeAnnouncement, reset } from '../Features/Announcements/announceSlice';
+import { addAnnounce, getAnnouncementList, deleteAnnounce, reset } from '../Features/Announcements/announceSlice';
 import {
   Table, Thead, Tbody,
   Tr, Td, Th, TableContainer,
@@ -13,15 +13,18 @@ import {
   Textarea,
   useColorModeValue,
   useToast,
-  Text
+  Text,
+  useMediaQuery
 } from '@chakra-ui/react';
-import UtilFunctions from '../../../StudentsPanel/src/Utils/UtilFunctions';
+import UtilFunctions from '../Utils/UtilFunctions'
 import Spinner from '../Components/Spinner';
 import AddIcon from '@mui/icons-material/Add';
 
 
 const Announcements = () => {
   const dispatch = useDispatch();
+  const [isMobile] = useMediaQuery('(max-width: 600px)');
+
   const toast = useToast();
   const { announcements, isLoading, isError, message, isSuccess } = useSelector((state) => state.announcements);
   const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
@@ -84,7 +87,7 @@ const Announcements = () => {
   };
 
   useEffect(() => {
-    if(isError){
+    if (isError) {
       toast({
         title: message,
         status: 'error',
@@ -104,7 +107,7 @@ const Announcements = () => {
   };
 
   useEffect(() => {
-    if(isSuccess && !isError){
+    if (isSuccess && !isError) {
       toast({
         title: message,
         status: 'success',
@@ -113,8 +116,8 @@ const Announcements = () => {
       })
       dispatch(reset())
     }
-    
-    if(isError && !isSuccess){
+
+    if (isError && !isSuccess) {
       toast({
         title: message,
         status: 'error',
@@ -137,7 +140,7 @@ const Announcements = () => {
       gap={'1rem'}
       borderRadius={'1rem'}
       padding={'1rem'}
-      // height={'100%'}
+    // height={'100%'}
     >
       <Heading
         mb={4}
@@ -183,7 +186,9 @@ const Announcements = () => {
                             whiteSpace={'normal'}
                             display={'flex'}
                             justifyContent={'space-between'}
-                            alignItems={'center'}
+                            flexDirection={isMobile ? 'column' : 'row'}
+                            alignItems={isMobile ? 'flex-start' : 'center'}
+                            gap={'1rem'}
                           >
                             {row.description}
                             <Button
@@ -209,7 +214,13 @@ const Announcements = () => {
       {/* Add Announcement Modal */}
       <Modal isOpen={isAddOpen} onClose={handleModalClose}>
         <ModalOverlay />
-        <ModalContent bg={bgColor} color={textColor}>
+        <ModalContent
+          bg={bgColor}
+          color={textColor}
+          marginLeft={'0.5rem'}
+          marginRight={'0.5rem'}
+          alignSelf={'center'}
+        >
           <ModalHeader>Add New Announcement</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -249,9 +260,11 @@ const Announcements = () => {
       {/* Delete Confirmation Modal */}
       <Modal isOpen={isDeleteOpen} onClose={onDeleteClose}>
         <ModalOverlay />
-        <ModalContent bg={bgColor} color={textColor}>
+        <ModalContent bg={bgColor} color={textColor} marginLeft={'0.5rem'}
+          marginRight={'0.5rem'}
+          alignSelf={'center'}>
           <ModalHeader>Delete Announcement</ModalHeader>
-          <ModalCloseButton />
+          {/* <ModalCloseButton /> */}
           <ModalBody>
             Are you sure you want to delete this announcement?
           </ModalBody>

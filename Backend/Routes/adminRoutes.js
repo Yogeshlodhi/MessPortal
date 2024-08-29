@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { 
-    getAllLeaves, 
-    getAllStudents, 
-    loginAdmin, 
+import {
+    getAllLeaves,
+    getAllStudents,
+    loginAdmin,
     registerAdmin,
     uploadMenu,
     addAnnouncement,
@@ -21,53 +21,49 @@ import {
     deleteComplaint,
     getTodaysLeaves,
     getTodaysFeedbacks,
-    addContact
+    addContact,
+    logout,
+    addAdmin,
+    updateMessInfo
 } from "../Controllers/adminController.js";
-import authenticateAndCheckRole from "../Middleware/userPermission.js";
+import { authenticateUser, authorizeRoles } from '../Middleware/userPermission.js'
 
 const router = Router();
 
-// Public routes
 router.post('', registerAdmin);
+router.post('/addAdmin', authenticateUser, authorizeRoles(["Warden"]), addAdmin);
 router.post('/login', loginAdmin);
-
-// Middleware groups
-const wardenOrHigher = authenticateAndCheckRole(["Warden", "Mess Secretary", "Mess Owner"]);
-const messSecretaryOrHigher = authenticateAndCheckRole(["Mess Secretary", "Mess Owner"]);
-
-router.route('/announcement')
-        .post(messSecretaryOrHigher, addAnnouncement)
-        .get(getAnnouncements);
-
-        
-// Routes
-router.use(wardenOrHigher);
+router.route('/logout').get(logout)
 
 router.route('/messInfo')
-        .post(addMessInfo)
-        .get(getMessInfo)
+    .post(authenticateUser, authorizeRoles(["Warden", "Mess Secretary", "Mess Owner"]), addMessInfo)
+    .get(getMessInfo)
+router.put('/messInfo/:id', authenticateUser, authorizeRoles(["Warden"]), updateMessInfo);
+
+    
+router.post('/messInfo/addContact/:id', authenticateUser, authorizeRoles(["Mess Secretary", "Mess Owner"]), addContact)
 
 router.get('/students_list', getAllStudents);
+
+
+router.route('/announcement')
+    .post(authenticateUser, authorizeRoles(["Mess Secretary"]),addAnnouncement)
+    .get(getAnnouncements);
+    
 router.get('/leaves_list', getAllLeaves);
 router.get('/filtered_leaves', getTodaysLeaves);
-router.put('/leaves/takeAction/:id', leaveAction);
+router.put('/leaves/takeAction/:id',authenticateUser, authorizeRoles(["Warden","Mess Owner"]), leaveAction);
+router.post('/menu_upload', authenticateUser, authorizeRoles(["Mess Secretary","Mess Owner"]), uploadMenu);
+router.put('/menu/:id',authenticateUser, authorizeRoles(["Mess Secretary","Mess Owner"]), updateMenu);
 router.get('/student_profile', getStudentByEmail);
-
-router.post('/menu_upload', authenticateAndCheckRole(["Mess Owner", "Mess Secretary"]), uploadMenu);
-router.put('/menu/:month', updateMenu);
-
 router.get('/feedback_list', getFeedbacks);
-router.get('/filtered_feedbacks', getTodaysFeedbacks);
 router.get('/getMenu', getMenu);
+router.get('/filtered_feedbacks', getTodaysFeedbacks);
+router.delete('/announcement/:id', authenticateUser, authorizeRoles(["Mess Secretary","Mess Owner", "Warden"]), deleteAnnouncement);
 router.get('/getComplaints', getComplaintsList);
-
-router.put('/complaint/takeAction/:id', takeAction);
+router.delete('/complaints/:id', authenticateUser, authorizeRoles(["Warden"]), deleteComplaint);
+router.put('/complaint/takeAction/:id',authenticateUser, authorizeRoles(["Warden"]), takeAction);
 router.get('/complaints/:id', getSingleComplaint);
 
-
-router.delete('/announcement/:id',authenticateAndCheckRole(["Mess Owner", "Mess Secretary"]), deleteAnnouncement);
-router.delete('/complaints/:id',authenticateAndCheckRole(["Warden"]), deleteComplaint);
-
-router.post('/addContact', authenticateAndCheckRole(["Warden"]), addContact);
 
 export default router;

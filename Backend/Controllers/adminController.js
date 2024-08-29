@@ -1,4 +1,5 @@
 import {
+    addAdminService,
     addMessInfoService,
     addMessinfoContact,
     announcementService,
@@ -20,26 +21,43 @@ import {
     loginAdminService,
     registerAdminService,
     updateMenuService,
+    updateMessInfoService,
     uploadMenuService
 } from '../Services/adminService.js';
 import { statusCode } from '../Utils/http.js';
 
 const registerAdmin = (req, res) => {
     let registerData = req.body;
-    if (!registerData.emailId || !registerData.firstName || !registerData.password) {
-        res
-            .status(statusCode.badRequest)
-            .send({ message: 'Please Fill in All the required Fields' });
-    }
-
     registerAdminService(registerData)
         .then((data) => {
+            const token = data.getJwtToken();
+            const options = {
+                expires: new Date(
+                    Date.now() + process.env.COOKIE_EXPIRES_TIME * 24 * 60 * 60 * 1000
+                ),
+                httpOnly: true,
+            }
             return res
                 .status(statusCode.created)
+                .cookie('token', token, options)
                 .send({ message: "Admin Registered", data: data })
         })
         .catch((error) => {
-            console.log(error)
+            return res
+                .status(statusCode.badRequest)
+                .send({ message: 'Bad Request', error: error.message })
+        })
+}
+
+const addAdmin = (req, res) => {
+    let adminData = req.body;
+    addAdminService(adminData)
+        .then((data) => {
+            return res
+                .status(statusCode.created)
+                .send({ message: "Admin Created", data: data })
+        })
+        .catch((error) => {
             return res
                 .status(statusCode.badRequest)
                 .send({ message: 'Bad Request', error: error.message })
@@ -51,8 +69,18 @@ const loginAdmin = (req, res) => {
     if (loginData) {
         loginAdminService(loginData)
             .then((data) => {
+                const token = data.getJwtToken();
+                const options = {
+                    expires: new Date(
+                        Date.now() + process.env.COOKIE_EXPIRES_TIME * 24 * 60 * 60 * 1000
+                    ),
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
+                    sameSite: 'None',
+                }
                 return res
                     .status(statusCode.ok)
+                    .cookie('token', token, options)
                     .send({ message: "Admin Logged In", data: data })
             })
             .catch((err) => {
@@ -69,55 +97,28 @@ const loginAdmin = (req, res) => {
     }
 }
 
-const addMessInfo = (req, res) => {
+const logout = (req, res) => {
+    res.cookie('token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    });
+    res.status(statusCode.ok).send({ message: 'Logged Out', success: true })
+}
+
+const addMessInfo = async (req, res) => {
     const messData = req.body;
-    if (messData) {
-        addMessInfoService(messData)
-            .then((data) => {
-                // console.log(data)
-                return res
-                    .status(statusCode.ok)
-                    .send({ message: "Mess Information Added", data: data })
-            })
-            .catch((err) => {
-                console.log(err);
-                return res
-                    .status(statusCode.badRequest)
-                    .send({ message: err.message })
-            })
-    }
-    else {
-        return res
-            .status(statusCode.incorrectCredential)
-            .send({ message: err.message })
+    if (!messData) {
+        return res.status(statusCode.badRequest).send({ message: "No Mess Information Provided" });
     }
 
-}
-
-const addContact = (req, res) => {
-    const newContact = req.body;
-  
-    if (newContact) {
-        addMessinfoContact(newContact)
-            .then((data) => {
-                return res
-                    .status(statusCode.ok)
-                    .send({ message: "Contact Added Successfully!", data: data })
-            })
-            .catch((err) => {
-                console.log(err);
-                return res
-                    .status(statusCode.badRequest)
-                    .send({ message: err.message })
-            })
+    try {
+        const data = await addMessInfoService(messData);
+        return res.status(statusCode.ok).send({ message: "Mess Information Added", data: data });
+    } catch (err) {
+        console.error("Error in addMessInfo:", err);
+        return res.status(statusCode.badRequest).send({ message: err.message });
     }
-    else {
-        return res
-            .status(statusCode.incorrectCredential)
-            .send({ message: err.message })
-    }
-
-}
+};
 
 const getMessInfo = (req, res) => {
     getMessInfoService()
@@ -132,6 +133,43 @@ const getMessInfo = (req, res) => {
                 .status(statusCode.badRequest)
                 .send({ message: err.message })
         })
+}
+
+const updateMessInfo = (req, res) => {
+    const id = req.params.id;
+    const updatedInfo = req.body;
+    updateMessInfoService(updatedInfo, id)
+        .then((data) => {
+            return res.status(statusCode.ok).send({ message: `Data Updated Successfully`, data: data });
+        })
+        .catch((err) => {
+            console.log(err);
+            return res.status(statusCode.badRequest).send({ message: err.message });
+        });
+}
+
+const addContact = (req, res) => {
+    const newContact = req.body;
+    const id = req.params.id;
+    if (newContact) {
+        addMessinfoContact(newContact, id)
+            .then((data) => {
+                return res
+                    .status(statusCode.ok)
+                    .send({ message: "Contact Added Successfully!", data: data })
+            })
+            .catch((err) => {
+                return res
+                    .status(statusCode.badRequest)
+                    .send({ message: err.message })
+            })
+    }
+    else {
+        return res
+            .status(statusCode.incorrectCredential)
+            .send({ message: 'Invalid Credentials' })
+    }
+
 }
 
 const getAllStudents = (req, res) => {
@@ -176,14 +214,12 @@ const getTodaysLeaves = (req, res) => {
         })
 }
 
-
 const leaveAction = (req, res) => {
     const id = req.params.id;
     const actions = req.body;
     const user = req.user.firstName;
     leaveActionService(id, actions, user)
         .then((data) => {
-            // console.log(data)
             return res
                 .status(statusCode.ok)
                 .send({ message: 'Action Updated Successfully', data: data });
@@ -200,7 +236,7 @@ const uploadMenu = (req, res) => {
     uploadMenuService(menuData)
         .then((data) => {
             return res
-                .status(statusCode.ok)
+                .status(statusCode.created)
                 .send({ message: "Menu Uploaded", data: data })
         })
         .catch((err) => {
@@ -211,37 +247,15 @@ const uploadMenu = (req, res) => {
 const updateMenu = (req, res) => {
     const id = req.params.id;
     const updatedMenu = req.body;
-
     updateMenuService(updatedMenu, id)
         .then((data) => {
             return res.status(statusCode.ok).send({ message: `Menu updated successfully`, data: data });
-            // return res.status(statusCode.ok).send({ message: `Menu for the month ${month} updated successfully`, data: data });
         })
         .catch((err) => {
             console.log(err);
             return res.status(statusCode.badRequest).send({ message: err.message });
         });
 }
-
-// const updateMenu = (req, res) => {
-//     const month = req.params.month;
-//     const updatedMenu = req.body;
-
-//     updateMenuService(updatedMenu, month)
-//         .then((data) => {
-//             if (!data) {
-//                 return res.status(statusCode.badRequest).send({ message: 'Menu for the specified month not found' });
-//             }
-//             return res
-//                 .status(statusCode.ok)
-//                 .send({ message: `Menu for the month ${month} updated successfully`, data: data })
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//             return res.status(statusCode.badRequest).send({ message: err.message })
-//         })
-
-// }
 
 const addAnnouncement = (req, res) => {
     const announcementData = req.body;
@@ -319,22 +333,6 @@ const getTodaysFeedbacks = (req, res) => {
         })
 }
 
-const deleteAnnouncement = (req, res) => {
-    const { id } = req.params;
-    deleteAnnounceService(id)
-        .then((data) => {
-            return res
-                .status(statusCode.ok)
-                .json({ message: 'Announcement Deleted', data: data });
-        })
-        .catch((err) => {
-            console.error(err);
-            return res
-                .status(statusCode.badRequest)
-                .json({ message: err.message });
-        });
-};
-
 const getMenu = (req, res) => {
     getMenuService()
         .then((data) => {
@@ -354,6 +352,22 @@ const getMenu = (req, res) => {
         })
 }
 
+const deleteAnnouncement = (req, res) => {
+    const { id } = req.params;
+    deleteAnnounceService(id)
+        .then((data) => {
+            return res
+                .status(statusCode.ok)
+                .json({ message: 'Announcement Deleted', data: data });
+        })
+        .catch((err) => {
+            console.error(err);
+            return res
+                .status(statusCode.badRequest)
+                .json({ message: err.message });
+        });
+};
+
 const getComplaintsList = (req, res) => {
     complaintListService()
         .then((data) => {
@@ -369,7 +383,7 @@ const getComplaintsList = (req, res) => {
 }
 
 const deleteComplaint = (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     deleteComplaintService(id)
         .then((data) => {
             if (!data) {
@@ -388,13 +402,11 @@ const deleteComplaint = (req, res) => {
         })
 }
 
-
-
 const takeAction = (req, res) => {
+    // console.log(req.user);
     const id = req.params.id;
     const actions = req.body;
     const user = req.user.firstName;
-    // console.log(req.user);
     complaintActionService(id, actions, user)
         .then((data) => {
             return res
@@ -427,6 +439,9 @@ const getSingleComplaint = (req, res) => {
 export {
     registerAdmin,
     loginAdmin,
+    addAdmin,
+    logout,
+
     getAllStudents,
     getAllLeaves,
     uploadMenu,
@@ -445,6 +460,7 @@ export {
     addMessInfo,
     getMessInfo,
     addContact,
+    updateMessInfo,
 
     deleteComplaint,
     getTodaysLeaves,

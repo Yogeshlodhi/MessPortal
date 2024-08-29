@@ -17,7 +17,7 @@ const Menu = () => {
   }, [dispatch]);
 
   if (!isMenuLoading && menu && menu.length === 0) {
-    return <Heading textAlign={'center'}>No Menu Approved So Far...</Heading>;
+    return <Heading textAlign={'center'}>No menu has been approved till now, Please contact the Admin </Heading>;
   }
   else if (isMenuLoading || !menu) {
     return <Spinner message={'Fetching Mess Menu'} />;

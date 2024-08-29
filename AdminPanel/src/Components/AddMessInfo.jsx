@@ -29,7 +29,6 @@ const AddMessInfo = () => {
     const { isLoadingMess, isErrorMess, messMessage } = useSelector((state) => state.messInfo);
 
     const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
-    const textColor = useColorModeValue('gray.800', 'white');
     const [isMobile] = useMediaQuery('(max-width: 600px)');
     const navigate = useNavigate();
 

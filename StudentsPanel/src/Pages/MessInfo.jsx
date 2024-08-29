@@ -83,7 +83,7 @@ const MessInfo = () => {
                     <Heading fontSize={'1.5rem'} textTransform={'uppercase'} color={'teal'}>{messInfo.messOwner}</Heading>
                 </Box>
             </Container>
-            <Heading mt={6} paddingLeft={'3rem'} textTransform={'uppercase'} fontSize={'1.5rem'}>Contacts : </Heading>
+            <Heading mt={6} textAlign={'center'} textTransform={'uppercase'} fontSize={'1.5rem'}>Contacts : </Heading>
             <Container maxW='70rem' className={isMobile ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-2 gap-4'} padding={'1rem'}>
                 {
                     messInfo?.contacts?.length !== 0 ? (
@@ -123,16 +123,16 @@ const MessInfo = () => {
 
                     <Box display={'flex'}>
                         <FormLabel>Tenure Starts : </FormLabel>
-                        <Text>{tenureStarts || ''}</Text>
+                        <Text>{tenureStarts}</Text>
                     </Box>
 
                     <Box display={'flex'}>
                         <FormLabel>Tenure Ends : </FormLabel>
-                        <Text>{tenureEnds || ''}</Text>
+                        <Text>{tenureEnds}</Text>
                     </Box>
                     <Box display={'flex'}>
-                        <FormLabel>Meal Price : </FormLabel>
-                        <Text>{mealPrice || ''}</Text>
+                        <FormLabel>Price per day : </FormLabel>
+                        <Text>{mealPrice}</Text>
                     </Box>
                 </Box>
             </Container>

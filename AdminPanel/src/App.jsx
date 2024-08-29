@@ -16,6 +16,7 @@ import Students from './Pages/Students';
 import Profile from './Pages/Profile';
 import { useMediaQuery } from '@chakra-ui/react';
 import MessInfo from './Pages/MessInfo';
+import AddAdmin from './Components/AddAdmin';
 
 
 function App() {
@@ -40,9 +41,6 @@ const AuthenticatedRoutes = () => {
       maxHeight={'90vh'}
       height={'90vh'}
     >
-      {/* <Box flex={2}>
-        <Sidebar />
-      </Box> */}
       {
         !isMobile ? (
           <Box flex={2}>
@@ -61,7 +59,8 @@ const AuthenticatedRoutes = () => {
         <Header />
         <Box
           overflow={'scroll'}
-          height={'90%'}
+          scrollBehavior={'smooth'}
+          height={'100%'}
           padding={isMobile ? '1rem' : '1rem'}
           paddingTop={isMobile ? '1rem' : '2rem'}
         >
@@ -75,6 +74,7 @@ const AuthenticatedRoutes = () => {
             <Route path='/leaves' element={<MessLeaves />} />
             <Route path='/students' element={<Students />} />
             <Route path='/messinfo' element={<MessInfo/>}/>
+            <Route path='/admincreate' element={<AddAdmin />} />
           </Routes>
         </Box>
       </Box>

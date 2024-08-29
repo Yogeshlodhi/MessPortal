@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { applyLeave } from "../Controllers/leaveController.js";
-import verifyToken from "../Middleware/verifyToken.js";
+import  {isAuthenticatedUser} from "../Utils/auth.js";
 
 const router = Router();
 
-router.post('',verifyToken, applyLeave);
+router.post('',isAuthenticatedUser, applyLeave);
 
 export default router;

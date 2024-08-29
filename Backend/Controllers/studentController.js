@@ -1,5 +1,4 @@
-import { complaintService, feedbackAndSuggestion, getAnnouncementsService, getMenuService, getMessInfoService, getProfileService, studentLogin, studentRegister, updateProfileImageService, updateProfileService } from '../Services/studentService.js';
-import uploadOnCloudinary from '../Utils/cloudinary.js';
+import { complaintService, feedbackAndSuggestion, getAnnouncementsService, getMenuService, getMessInfoService, getProfileService, studentLogin, studentRegister, updateProfileService } from '../Services/studentService.js';
 import { statusCode } from '../Utils/http.js';
 
 const registerStudent = (req, res) => {
@@ -15,15 +14,23 @@ const registerStudent = (req, res) => {
     let studentData = req.body;
     studentRegister(studentData)
         .then((data) => {
+            const token = data.getJwtToken();
+            const options = {
+                expires: new Date(
+                    Date.now() + process.env.COOKIE_EXPIRES_TIME * 24 * 60 * 60 * 1000
+                ),
+                httpOnly: true,
+            };
+
             return res
-                .status(statusCode.ok)
+                .status(statusCode.created)
+                .cookie('token', token, options)
                 .send({ message: 'Student Registered', data: data })
         })
         .catch((error) => {
-            // console.log(error)
             return res
                 .status(statusCode.badRequest)
-                .send({ message: 'Bad Request', error: error.message })
+                .send({ message: error.message });
         })
 }
 
@@ -32,8 +39,20 @@ const loginStudent = (req, res) => {
     if (loginData) {
         studentLogin(loginData)
             .then((data) => {
+                const token = data.getJwtToken();
+                const options = {
+                    expires: new Date(
+                        Date.now() + process.env.COOKIE_EXPIRES_TIME * 24 * 60 * 60 * 1000
+                    ),
+                    httpOnly: true, // Set to true for security, to prevent client-side access
+                    secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
+                    sameSite: 'None',
+                    // httpOnly: false,
+                };
+
                 return res
                     .status(statusCode.ok)
+                    .cookie('token', token, options)
                     .send({ message: "Student Logged In", data: data })
             })
             .catch((err) => {
@@ -49,19 +68,12 @@ const loginStudent = (req, res) => {
     }
 }
 
-const getMessInfo = (req, res) => {
-    getMessInfoService()
-        .then((data) => {
-            return res
-                .status(statusCode.ok)
-                .send({ message: "Mess Information Received", data: data })
-        })
-        .catch((err) => {
-            // console.log(err);
-            return res
-                .status(statusCode.badRequest)
-                .send({ message: err.message })
-        })
+const logout = (req, res) => {
+    res.cookie('token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    });
+    res.status(statusCode.ok).send({ message: 'Logged Out', success: true })
 }
 
 const getProfile = (req, res) => {
@@ -79,55 +91,62 @@ const getProfile = (req, res) => {
         })
 }
 
-const submitFeedback = async (req, res) => {
-    let feedbackData = req.body;
-    const studentId = req.user.id;
-    const localFilePath = req.file ? req.file.path : null;
+const updateProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const profileData = req.body;
+        const avatarFile = req.files?.avatar; // Safely access avatar file
 
-    let imageUrl = null;
-    if (localFilePath) {
-        const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
-        imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
+        const updatedUser = await updateProfileService(userId, profileData, avatarFile);
+        res.status(statusCode.ok).json({ message: 'Profile Updated Successfully', data: updatedUser });
+    } catch (err) {
+        res.status(statusCode.badRequest).json({ message: err.message });
     }
+};
 
-    feedbackData.feedbackImage = imageUrl;
-    // console.log(feedbackData)
-    feedbackAndSuggestion(feedbackData, studentId)
+const getMessInfo = (req, res) => {
+    getMessInfoService()
         .then((data) => {
             return res
                 .status(statusCode.ok)
-                .send({ message: 'FeedBack Submitted', data: data })
+                .send({ message: "Mess Information Received", data: data })
         })
         .catch((err) => {
             return res
                 .status(statusCode.badRequest)
-                .send({ message: 'Bad Request, Try Again', error: err.message })
+                .send({ message: err.message })
         })
 }
 
-const addComplaint = async (req, res) => {
-    const complaintData = req.body;
-    const studentId = req.user.id;
-    const localFilePath = req.file ? req.file.path : null;
+const submitFeedback = async (req, res) => {
+    try {
+        const studentId = req.user.id;
+        const feedbackData = req.body;
+        const feedbackImage = req.files?.feedbackImage
+        const feedback = await feedbackAndSuggestion(feedbackData, studentId, feedbackImage);
+        res.status(statusCode.ok).json({ message: 'Feedback Submitted Successfully', data: feedback });
+    } catch (err) {
+        res
+            .status(statusCode.badRequest)
+            .send({ message: 'Bad Request, Try Again', error: err.message })
 
-    let imageUrl = null;
-    if (localFilePath) {
-        const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
-        imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
     }
+}
 
-    complaintData.attachment = imageUrl;
-    complaintService(complaintData, studentId)
-        .then((data) => {
-            return res
-                .status(statusCode.created)
-                .send({ message: "Complaint Raised", data: data })
-        })
-        .catch((err) => {
-            return res
-                .status(statusCode.badRequest)
-                .send({ message: 'Bad Request, Try Again..', error: err.message })
-        })
+const addComplaint = async (req, res) => {
+    try {
+        const studentId = req.user.id;
+        const complaintData = req.body;
+        const complaintImage = req.files?.attachment
+        const complaint = await complaintService(complaintData, studentId, complaintImage);
+        res
+            .status(statusCode.created)
+            .send({ message: 'Complaint Submitted', data: complaint });
+    } catch (err) {
+        res
+            .status(statusCode.badRequest)
+            .send({ message: 'Bad Request, Try Again..', error: err.message })
+    }
 }
 
 const getAnnouncements = (req, res) => {
@@ -163,56 +182,6 @@ const getMenu = (req, res) => {
         })
 }
 
-const updateProfile = async (req, res) => {
-    const userId = req.user.id
-    const profileData = req.body
-    // const localFilePath = req.file ? req.file.path : null;
-
-
-    // let imageUrl = null;
-    // if (localFilePath) {
-    //     const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
-    //     imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
-    // }
-
-    // profileData.profileImage = imageUrl;
-
-    updateProfileService(userId, profileData)
-        .then((data) => {
-            return res
-                .status(statusCode.ok)
-                .send({ message: 'Profile Updated Successfully', data: data })
-        })
-        .catch((err) => {
-            return res
-                .status(statusCode.badRequest)
-                .send({ message: err.message })
-        })
-}
-
-const updateProfileImage = async (req, res) => {
-    const userId = req.user.id
-    const localFilePath = req.file ? req.file.path : null;
-
-    let imageUrl = null;
-    if (localFilePath) {
-        const cloudinaryResponse = await uploadOnCloudinary(localFilePath);
-        imageUrl = cloudinaryResponse ? cloudinaryResponse.url : null;
-    }
-
-    updateProfileImageService(userId, imageUrl)
-        .then((data) => {
-            return res
-                .status(statusCode.ok)
-                .send({ message: 'Image Updated Successfully', data: data })
-        })
-        .catch((err) => {
-            return res
-                .status(statusCode.badRequest)
-                .send({ message: err.message })
-        })
-}
-
 export {
     registerStudent,
     loginStudent,
@@ -223,5 +192,5 @@ export {
     getMenu,
     updateProfile,
     getMessInfo,
-    updateProfileImage
+    logout
 }

@@ -33,8 +33,7 @@ function Login() {
             navigate('/')
         }
         dispatch(reset());
-    }, [dispatch, navigate, isSuccess])
-    // }, [admin, navigate, isError, message, isSuccess, dispatch])
+    }, [admin, dispatch, navigate, isSuccess, isError, message, toast])
 
     const onChange = (e) => {
         setFormData((prev) => ({
@@ -53,7 +52,7 @@ function Login() {
     }
 
     if (isLoading) {
-        return <Spinner message={'Please Wait While We Log You In...'} />
+        return <Spinner message={'Please Wait, Logging You In...'} />
     }
 
     return (
@@ -114,9 +113,9 @@ function Login() {
                                 </InputRightElement>
                             </InputGroup>
                         </FormControl>
-                        <Box textAlign={'left'} mt={2}>
+                        {/* <Box textAlign={'left'} mt={2}>
                             <Link to={'#'}>Forgot Password</Link>
-                        </Box>
+                        </Box> */}
                     </Box>
                     <Button
                         display={'inline-block'}
