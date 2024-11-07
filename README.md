@@ -33,7 +33,7 @@ Follow these steps to set up the project locally:
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/Yogeshlodhi/MessPortal.git
+    git clone [https://github.com/Yogeshlodhi/MessPortal.git](https://github.com/Yogeshlodhi/MessPortal.git)
     cd MessPortal
     ```
 
@@ -41,38 +41,73 @@ Follow these steps to set up the project locally:
     - Navigate to the server directory and install dependencies:
 
     ```bash
-    cd server
+    cd Backend
     npm install
     ```
 
     - Configure environment variables by creating a `.env` file in the `server` folder with the following keys:
 
     ```bash
-    MONGO_URI=<your_mongo_db_connection_string>
-    JWT_SECRET=<your_jwt_secret>
-    PORT=<your_preferred_port>
+
+    CLOUDINARY_API_KEY=<your_cloudinary_api_key>
+    CLOUDINARY_API_SECRET=<your_cloudinary_api_secret_key>
+    CLOUDINARY_CLOUD_NAME=<your_cloudinary_cloud_name>
+    COOKIE_EXPIRES_TIME=<choose_yours>
+    DB_AUTH_PASSWORD=<your_db_authentication_password>
+    DB_AUTH_USER=<your_db_user_name>
+    DB_NAME=<your_db_name>
+    DB_URL=<your_db_cluster_name>
+    JWT_EXPIRES_TIME=<choose_yours>
+    JWT_SECRET=<choose_yours>
+    NODE_ENV=<production/development>
+    NODE_PORT=<8000>
     ```
 
     - Start the server:
 
     ```bash
-    npm start
+    npm run dev
     ```
 
-3. **Set up the client (Frontend):**
+3. **Set up the Students Panel:**
     - Navigate to the client directory and install dependencies:
 
     ```bash
-    cd client
+    cd StudentsPanel
+    npm install
+    ```
+    - Configure environment variables by creating a `.env` file in the `server` folder with the following keys:
+
+    ```bash
+    VITE_API_URL=http://localhost:4000/api/student
+    ```
+
+    - Start the server:
+
+    ```bash
+    npm run dev
+    ```
+4. **Set up the Admin Panel:**
+    - Navigate to the client directory and install dependencies:
+
+    ```bash
+    cd AdminPanel
     npm install
     ```
 
-    - Start the client:
+    - Configure environment variables by creating a `.env` file in the `server` folder with the following keys:
 
     ```bash
-    npm start
+    VITE_ADMIN_API=<http://localhost:8000/api/admin/>
     ```
 
+    ```
+
+    - Start the server:
+
+    ```bash
+    npm run dev
+    ```
 ## Usage
 
 After setting up the project, you can access the application:
