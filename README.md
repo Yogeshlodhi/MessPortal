@@ -26,6 +26,10 @@ This project is a **Mess Portal** built using the **MERN stack** (MongoDB, Expre
 - **Mess Menu Management**: Admin can add, modify, or delete items in the mess menu.
 - **Student Management**: Admin can manage student profiles and their respective data.
 
+### Live URLs
+[Admin Panel](https://adminpanel-zvp2.onrender.com/login)
+[Students Portal](https://studentspanel.onrender.com/login)
+
 ## Installation
 
 Follow these steps to set up the project locally:
