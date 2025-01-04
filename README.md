@@ -27,14 +27,7 @@ This project is a **Mess Portal** built using the **MERN stack** (MongoDB, Expre
 - **Student Management**: Admin can manage student profiles and their respective data.
 
 ### Live URLs
-For admin, Use the below credentials for testing: 
-username : yogeshlodhi1208@gmail.com
-password : yogesh123
 - [Admin Panel](https://adminpanel-zvp2.onrender.com/login) 
-
-For Students, Use the below credentials for testing: 
-username : yogesh_2101cb61@iitp.ac.in
-password : Yogesh@1208
 - [Students Portal](https://studentspanel.onrender.com/login)
 
 ## Installation
