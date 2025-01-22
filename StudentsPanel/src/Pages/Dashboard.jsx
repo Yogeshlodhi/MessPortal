@@ -107,7 +107,7 @@ function Dashboard() {
               {leavesData.map((leave, index) => (
                 <Tr
                   key={index}
-                  bg={leave.status === 'Approved' ? '#5dc85d' : leave.status === 'Pending' ? '#e9913f' : '#da4242'}
+                  bg={leave.status === 'Approved' ? '#22c55e' : leave.status === 'Pending' ? '#f97316' : '#dc2626'}
                   color={'white'}
                 >
                   <Td className="truncate max-w-xs">{leave.reason}</Td>

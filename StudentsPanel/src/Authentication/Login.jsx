@@ -1,6 +1,6 @@
 import {
   Box, Button, Container, FormControl, FormLabel, Heading, Input,
-  InputGroup, InputRightElement, Text, useToast
+  InputGroup, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, useToast
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,11 @@ function Login() {
   const toast = useToast();
 
   const [show, setShow] = useState(false);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+  const textColor = useColorModeValue('gray.800', 'white');
+
   const handleClick = () => setShow(!show);
 
   const [formData, setFormData] = useState({
@@ -47,6 +52,14 @@ function Login() {
   };
 
   const SubmitHandler = async (e) => {
+    if (!emailId || !password) {
+      toast({
+        title: 'All fields are required',
+        duration: 3000,
+        status: 'error'
+      });
+      return;
+    }
     e.preventDefault();
     const loginData = {
       emailId,
@@ -130,14 +143,7 @@ function Login() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            {/* <Box
-              textAlign="left"
-              mt={2}
-              _hover={{ color: 'red' }}
-              transition="0.3s ease-in"
-            >
-              <Link to="#">Forgot Password</Link>
-            </Box> */}
+            
           </Box>
           <Button
             type="submit"
@@ -151,7 +157,41 @@ function Login() {
           >
             {isLoading ? <Spinner size="sm" color="white" /> : "Continue"}
           </Button>
+
+        <Box className='flex justify-center items-center gap-4 mt-4'>
+          <Text>Guest User?</Text>
+          <Button 
+            onClick={onOpen}
+          >
+            Get Credentials
+          </Button>
+        </Box>
         </Container>
+        <Modal
+          isOpen={isOpen} onClose={onClose}
+        >
+          <ModalOverlay />
+          <ModalContent
+            marginLeft={'0.5rem'}
+            marginRight={'0.5rem'}
+            alignSelf={'center'}
+            bg={bgColor}
+            color={textColor}
+          >
+            <ModalHeader>Guest User Credentials</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody padding={4}>
+              <Box className='flex items-center gap-10'>
+                <Heading fontSize={'large'}>Email ID : </Heading>
+                <Text>guest_2101cb61@iitp.ac.in</Text>
+              </Box>
+              <Box className='flex items-center gap-10'>
+                <Heading fontSize={'large'}>Password : </Heading>
+                <Text>guest123</Text>
+              </Box>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
       </Box>
     </Box>
   );

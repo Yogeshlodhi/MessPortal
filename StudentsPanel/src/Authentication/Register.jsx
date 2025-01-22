@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, List, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { register, reset } from '../Features/Auth/authSlice';
 import { InfinitySpin } from 'react-loader-spinner';
 
 function Register() {
-    
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+    const textColor = useColorModeValue('gray.800', 'white');
+
     const [formData, setFormData] = useState({
         studentName: '',
         emailId: '',
@@ -19,37 +23,37 @@ function Register() {
 
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
-    
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const {studentName, emailId, studentRoll, number, password} = formData;
+    const { studentName, emailId, studentRoll, number, password } = formData;
     const {
         // student, 
-        isLoading, 
-        isError, 
-        isSuccess, 
+        isLoading,
+        isError,
+        isSuccess,
         message
     } = useSelector((state) => state.auth)
     const toast = useToast();
 
     useEffect(() => {
-        if(isError){
+        if (isError) {
             toast({
                 duration: '3000',
                 status: 'error',
                 title: message
             })
         }
-        
-        if(isSuccess
+
+        if (isSuccess
             //  || student
-        ){
+        ) {
             navigate('/')
         }
 
         dispatch(reset());
-    },[
+    }, [
         // student, 
         isError, isSuccess, message, navigate, dispatch])
 
@@ -59,8 +63,8 @@ function Register() {
             [e.target.name]: e.target.value,
         }))
     }
-    
-    if(isLoading){
+
+    if (isLoading) {
         return (
             <Box marginTop={'20%'} display={'flex'} alignItems={'center'} justifyContent={'center'} flexDir={'column'}>
                 <InfinitySpin
@@ -74,6 +78,14 @@ function Register() {
     }
 
     const onSubmit = (e) => {
+        if (!emailId || !studentName || !password) {
+            toast({
+                title: 'Required fields not filled',
+                duration: '3000',
+                status: 'error'
+            })
+            return;
+        }
         e.preventDefault();
         const studentData = {
             studentName,
@@ -139,11 +151,11 @@ function Register() {
                         </FormControl>
                         <FormControl mt={3} isRequired>
                             <FormLabel>Student Name</FormLabel>
-                            <Input 
-                                type='text' 
-                                color={'#474745'} 
-                                borderRadius={'2rem'} 
-                                placeholder='Yogesh Kumar' 
+                            <Input
+                                type='text'
+                                color={'#474745'}
+                                borderRadius={'2rem'}
+                                placeholder='Yogesh Kumar'
                                 id='name'
                                 name='studentName'
                                 value={studentName}
@@ -152,11 +164,11 @@ function Register() {
                         </FormControl>
                         <FormControl mt={3}>
                             <FormLabel>Roll Number</FormLabel>
-                            <Input 
-                                type='text' 
-                                borderRadius={'2rem'} 
-                                color={'#474745'} 
-                                placeholder='2101CB61' 
+                            <Input
+                                type='text'
+                                borderRadius={'2rem'}
+                                color={'#474745'}
+                                placeholder='2101CB61'
                                 id='roll'
                                 name='studentRoll'
                                 value={studentRoll}
@@ -165,11 +177,11 @@ function Register() {
                         </FormControl>
                         <FormControl mt={3}>
                             <FormLabel>Contact Number</FormLabel>
-                            <Input 
-                                type='text' 
-                                borderRadius={'2rem'} 
-                                color={'#474745'} 
-                                placeholder='9999999999' 
+                            <Input
+                                type='text'
+                                borderRadius={'2rem'}
+                                color={'#474745'}
+                                placeholder='9999999999'
                                 id='phone'
                                 name='number'
                                 value={number}
@@ -211,7 +223,41 @@ function Register() {
                     >
                         Register
                     </Button>
+                    <Button mt={4} onClick={onOpen}>Guidelines</Button>
                 </Container>
+                <Modal
+                    isOpen={isOpen} onClose={onClose}
+                >
+                    <ModalOverlay />
+                    <ModalContent
+                        marginLeft={'0.5rem'}
+                        marginRight={'0.5rem'}
+                        alignSelf={'center'}
+                        bg={bgColor}
+                        color={textColor}
+                    >
+                        <ModalHeader>Have a Look!</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody padding={4}>
+                            <List spacing={3} styleType="disc" paddingLeft="20px">
+                                <ListItem>
+                                    <Text>You should be from IIT Patna</Text>
+                                </ListItem>
+                                <ListItem>
+                                    <Text>Roll number should be of the format: <strong>BATCH_BRANCHCODE_ROLL</strong>, e.g., <strong>2101CB61</strong></Text>
+                                </ListItem>
+                                <ListItem>
+                                    <Text>Branches can be: <strong>CB, CS, EE, MC, MM, ME, AI, CE, PH</strong></Text>
+                                </ListItem>
+                                <ListItem>
+                                    <Text>
+                                        Email should be of the format: <strong>NAME_ROLLNO@iitp.ac.in</strong>, e.g., <strong>yogesh_2101cb61@iitp.ac.in</strong>
+                                    </Text>
+                                </ListItem>
+                            </List>
+                        </ModalBody>
+                    </ModalContent>
+                </Modal>
             </Box>
         </Box>
     )

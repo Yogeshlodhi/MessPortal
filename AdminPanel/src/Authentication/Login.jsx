@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, reset } from '../Features/Auth/authSlice';
@@ -9,6 +9,10 @@ function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const toast = useToast();
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const bgColor = useColorModeValue('lightMode.bg', 'darkMode.bg');
+    const textColor = useColorModeValue('gray.800', 'white');
 
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
@@ -129,7 +133,40 @@ function Login() {
                     >
                         Continue
                     </Button>
+                    <Box className='flex justify-center items-center gap-4 mt-4'>
+                        <Text>Guest Admin?</Text>
+                        <Button
+                            onClick={onOpen}
+                        >
+                            Get Credentials
+                        </Button>
+                    </Box>
                 </Container>
+                <Modal
+                    isOpen={isOpen} onClose={onClose}
+                >
+                    <ModalOverlay />
+                    <ModalContent
+                        marginLeft={'0.5rem'}
+                        marginRight={'0.5rem'}
+                        alignSelf={'center'}
+                        bg={bgColor}
+                        color={textColor}
+                    >
+                        <ModalHeader>Guest User Credentials</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody padding={4}>
+                            <Box className='flex items-center gap-10'>
+                                <Heading fontSize={'large'}>Email ID : </Heading>
+                                <Text>secretary@gmail.com</Text>
+                            </Box>
+                            <Box className='flex items-center gap-10'>
+                                <Heading fontSize={'large'}>Password : </Heading>
+                                <Text>secretary123</Text>
+                            </Box>
+                        </ModalBody>
+                    </ModalContent>
+                </Modal>
             </Box>
         </Box>
     )
