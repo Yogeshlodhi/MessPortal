@@ -10,6 +10,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cloudinary from 'cloudinary';
 import fileUpload from 'express-fileupload';
+import path from 'path';
 
 dotenv.config();
 
@@ -41,6 +42,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(fileUpload());
 app.use(express.urlencoded({ extended: true }));
+
+// to be used for aws 
+const _dirname = path.dirname("")
+const buildPathForStudents = path.join(_dirname, "../StudentsPanel/build")
+const buildPathForAdmin = path.join(_dirname, "../AdminPanel/build")
+app.use(express.static(buildPathForStudents));
+app.use(express.static(buildPathForAdmin));
+// to be used for aws 
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
