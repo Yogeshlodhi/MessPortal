@@ -10,6 +10,5 @@ COPY . .
 
 COPY .env .env
 
-EXPOSE 5173
-
-CMD ["npm", "run", "dev", "--", "--host"]
+EXPOSE 5174
+CMD ["npm", "run", "dev", "--", "--host", "--port", "5174"]

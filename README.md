@@ -30,6 +30,10 @@ This project is a **Mess Portal** built using the **MERN stack** (MongoDB, Expre
 - [Admin Panel](https://adminpanel-zvp2.onrender.com/login) 
 - [Students Portal](https://studentspanel.onrender.com/login)
 
+## SETUP
+- *Update the .env content for yourself in the docker-compose.yml file*
+- *docker compose up --build*
+
 ## Installation
 
 Follow these steps to set up the project locally:

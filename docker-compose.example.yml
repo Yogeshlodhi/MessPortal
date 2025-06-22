@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  studentspanel:
+    build:
+      context: ./StudentsPanel
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./StudentsPanel:/app
+      - /app/node_modules  
+      - ./StudentsPanel/.env:/app/.env
+    restart: always
+
+  adminpanel:
+    build:
+      context: ./AdminPanel
+    ports:
+      - "5174:5174"
+    depends_on:
+      - backend
+    volumes:
+      - ./AdminPanel:/app
+      - /app/node_modules
+      - ./AdminPanel/.env:/app/.env
+    restart: always
+  
+  backend:
+    build:
+      context: ./Backend
+    container_name: backend 
+    command: ["node", "index.js"]
+    ports:
+      - "4000:4000"
+    
+    environment:
+      - CLOUDINARY_API_KEY="your_cloudinary_api_key_here"
+      - CLOUDINARY_API_SECRET="your_cloudinary_api_secret_here"
+      - CLOUDINARY_CLOUD_NAME="your_cloudinary_cloud_name_here" 
+      - COOKIE_EXPIRES_TIME=7
+      - DB_AUTH_PASSWORD="your_db_auth_password_here"
+      - DB_AUTH_USER="your_db_auth_user_here"
+      - DB_NAME="your_db_name_here"
+      - DB_URL="your_db_url_here" 
+      - JWT_EXPIRES_TIME=24h
+      - JWT_SECRET="your_jwt_secret_here"
+      - NODE_ENV=production
+      - NODE_PORT=4000
+
+    volumes:
+      - ./Backend:/app 
+      - /app/node_modules
+    depends_on:
+      - mongo
+    restart: always
+  
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+  
+volumes:
+  mongo_data:

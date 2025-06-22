@@ -118,7 +118,8 @@ const MessLeaves = () => {
                       onClick={() => {
                         leaveAction({ leaveId: leave._id, status: 'Rejected' });
                       }}
-                    >
+                      _hover={{ background: '#d80000', color: 'white' }}
+                      >
                       <CloseIcon />
                       Reject
                     </Button>
@@ -130,6 +131,7 @@ const MessLeaves = () => {
                       onClick={() => {
                         leaveAction({ leaveId: leave._id, status: 'Approved' });
                       }}
+                      _hover={{ background: '#006060', color: 'white' }}
                     >
                       <DoneIcon />
                       Approve

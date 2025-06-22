@@ -59,7 +59,6 @@ const AuthenticatedRoutes = () => {
         <Header />
         <Box
           overflow={'scroll'}
-          scrollBehavior={'smooth'}
           height={'100%'}
           padding={isMobile ? '1rem' : '1rem'}
           paddingTop={isMobile ? '1rem' : '2rem'}

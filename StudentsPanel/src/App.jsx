@@ -20,42 +20,7 @@ import { reset } from './Features/Auth/authSlice';
 
 
 const App = () => {
-  const { student, isLogout, isLogoutError, logoutMessage, isLogoutSucess } = useSelector((state) => state.auth);
-  const toast = useToast();
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   if (isLogoutSucess) {
-  //     toast({
-  //       title: logoutMessage,
-  //       status: 'success',
-  //       isClosable: true,
-  //       duration: 3000
-  //     })
-  //   }
-  //   return () => {
-  //     dispatch(reset());
-  //   }
-  // }, [isLogoutSucess, dispatch, toast])
-
-  // useEffect(() => {
-  //   if (isLogoutError) {
-  //     toast({
-  //       title: logoutMessage,
-  //       status: 'error',
-  //       isClosable: true,
-  //       duration: 3000
-  //     })
-  //   }
-  //   return () => {
-  //     dispatch(reset());
-  //   }
-  // }, [isLogoutError, dispatch, toast])
-
-  // if(isLogout){
-  //   return <Spinner message={'Please Wait..'}/>
-  // }
-
+  const { student } = useSelector((state) => state.auth);
 
   return (
     <Router>
@@ -96,9 +61,7 @@ const AuthenticatedRoutes = () => {
         <Header />
         <Box
           overflow={'scroll'}
-          scrollBehavior={'smooth'}
           height={'100%'}
-          // height={'90%'}
           padding={isMobile ? '1rem' : '1rem'}
           paddingTop={isMobile ? '1rem' : '2rem'}
         >

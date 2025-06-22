@@ -9,17 +9,17 @@ const register = async (data) => {
 }
 
 const addAdmin = async (data) => {
-    const response = await axios.post(`${API_URL}addAdmin`, data, {withCredentials: true});
+    const response = await axios.post(`${API_URL}/addAdmin`, data, {withCredentials: true});
     return response.data;
 }
 
 const login = async (data) => {
-    const response = await axios.post(`${API_URL}login`, data, {withCredentials: true});
+    const response = await axios.post(`${API_URL}/login`, data, {withCredentials: true});
     return response.data;
 }
 
 const logout = async () => {
-    const response = await axios.get(`${API_URL}logout`, {withCredentials: true});
+    const response = await axios.get(`${API_URL}/logout`, {withCredentials: true});
     localStorage.removeItem('admin');
     return response.data;
 }
