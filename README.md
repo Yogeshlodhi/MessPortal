@@ -32,7 +32,9 @@ This project is a **Mess Portal** built using the **MERN stack** (MongoDB, Expre
 
 ## SETUP
 - *Update the .env content for yourself in the docker-compose.yml file*
-- *docker compose up --build*
+- ```bash
+    docker compose up --build
+    ```
 
 ## Installation
 
