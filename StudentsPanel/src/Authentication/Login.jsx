@@ -1,13 +1,12 @@
 import {
   Box, Button, Container, FormControl, FormLabel, Heading, Input,
-  InputGroup, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, useToast
+  InputGroup, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, useToast
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, reset } from '../Features/Auth/authSlice';
 import Spinner from '../Components/Spinner';
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
 
 function Login() {
   const navigate = useNavigate();
@@ -94,7 +93,7 @@ function Login() {
           justifyContent="space-between"
           gap={5}
         >
-          <Text>Don't have an account?</Text>
+          <Text>Don&apos;t have an account?</Text>
           <Link to="/register" style={{ color: '#25659F' }}>Register Now</Link>
         </Box>
       </Box>
@@ -111,6 +110,7 @@ function Login() {
           textAlign="center"
         >
           <Heading color="#25659F" mb="2rem">Welcome Back!</Heading>
+          <button onClick={() => {throw new Error("This is your first error!");}}>Break the world</button>;
           <Box className="inputs">
             <FormControl mt={6} isRequired>
               <FormLabel>Institute Email Id</FormLabel>
