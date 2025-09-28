@@ -1,0 +1,13 @@
+@use 'common/variables';
+@use 'common/general';
+
+body {
+  overflow-y: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+// For enabling tooltip for disable button
+.MuiButtonBase-root:disabled {
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
+}
