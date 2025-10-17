@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model
+model User {
+  id             Int      @id @default(autoincrement())
+  first_name     String
+  last_name      String?
+  email_id       String   @unique
+  password       String
+  contact_number String
+  role           Role     @default(STUDENT)
+  // name      String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+
+  // Relations
+  student Student?
+  admin   Admin?
+
+  @@map("users")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+// User Model
+
+model Student {
+  id                  Int     @id @default(autoincrement())
+  userId              Int     @unique
+  user                User    @relation(fields: [userId], references: [id])
+  batch               String
+  roll_number         String
+  bank_account_number String?
+  ifsc_code           String?
+  avatar_public_id    String?
+  avatar_url          String?
+}
+
+model Admin {
+  id         Int       @id @default(autoincrement())
+  userId     Int       @unique
+  user       User      @relation(fields: [userId], references: [id])
+  department String
+  admin_type AdminType
+}
+
+enum AdminType {
+  WARDEN
+  MESS_SECRETARY
+  MESS_OWNER
+  OTHER
+}
