@@ -73,6 +73,8 @@ const StudentLogin = () => {
                 {...field}
                 id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
+                style={{height: '40px'}}
+                // className='d-f ai-c jc-c'
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton

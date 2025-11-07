@@ -382,6 +382,7 @@ export const muiTheme = createTheme({
         root: {
           "& .MuiInputBase-root": {
             borderRadius: "8px",
+            height: '40px'
           },
         },
       },

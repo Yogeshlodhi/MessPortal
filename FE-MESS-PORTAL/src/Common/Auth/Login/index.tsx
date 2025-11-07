@@ -15,10 +15,10 @@ const Login = ({ userType }: ILoginProps) => {
     setOpenInfoModal(true);
   };
   return (
-    <Box>
-      <Box>
+    <Box className='p-8'>
+      <Box className='d-f ai-c jc-sb'>
         <Typography>Mess</Typography>
-        <Box>
+        <Box className='d-f ai-c jc-sb gap-20'>
           <Typography>Don&apos;t have an account?</Typography>
           <Link href="/register">Register Now</Link>
         </Box>
