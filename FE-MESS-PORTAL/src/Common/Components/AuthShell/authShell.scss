@@ -1,0 +1,203 @@
+@use 'Assets/scss/variables' as *;
+
+.authShell {
+  display: flex;
+  min-height: 100vh;
+  background: $bg-default;
+
+  // ─── Branded hero panel (left) ──────────────────────────────
+  &__brand {
+    position: relative;
+    flex: 1 1 50%;
+    display: none;
+    overflow: hidden;
+    padding: 56px;
+    color: #fff;
+    background: linear-gradient(150deg, $primary 0%, $primary-dark 55%, $secondary 100%);
+
+    // soft decorative glow
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(#fff, 0.08);
+    }
+    &::before {
+      width: 420px;
+      height: 420px;
+      top: -120px;
+      right: -120px;
+    }
+    &::after {
+      width: 280px;
+      height: 280px;
+      bottom: -100px;
+      left: -60px;
+      background: rgba(#fff, 0.06);
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &--admin .authShell__brand {
+    background: linear-gradient(150deg, $secondary 0%, #1e293b 50%, $primary-dark 100%);
+  }
+
+  &__brandInner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 460px;
+    margin: auto;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 32px;
+    font-weight: 700;
+
+    span {
+      font-size: 22px;
+      letter-spacing: 0.2px;
+    }
+  }
+
+  &__tagline {
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &__features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  &__feature {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: rgba(#fff, 0.92);
+  }
+
+  &__featureIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: rgba(#fff, 0.14);
+  }
+
+  // ─── Form side (right) ──────────────────────────────────────
+  &__content {
+    flex: 1 1 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  &__card {
+    width: 100%;
+    max-width: 440px;
+    padding: 40px;
+    background: $bg-paper;
+    border: 1px solid $divider;
+    border-radius: 20px;
+    box-shadow: 0 24px 60px -28px rgba($secondary, 0.35);
+
+    @media (max-width: $breakpoint-mobile) {
+      padding: 28px 22px;
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: $primary;
+    background: rgba($primary, 0.1);
+  }
+
+  &--admin .authShell__eyebrow {
+    color: $secondary;
+    background: rgba($secondary, 0.1);
+  }
+}
+
+// ─── Shared form layout used by every auth screen ─────────────
+.authForm {
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+
+  &__subtitle {
+    color: $text-secondary;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__submit {
+    margin-top: 12px;
+    height: 48px;
+    border-radius: 12px;
+    font-weight: 700;
+  }
+
+  &__guest {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed $divider;
+    color: $text-secondary;
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    text-align: center;
+    color: $text-secondary;
+  }
+
+  &__link {
+    color: $primary;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

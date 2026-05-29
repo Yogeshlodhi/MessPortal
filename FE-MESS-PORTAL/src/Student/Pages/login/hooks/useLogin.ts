@@ -10,7 +10,12 @@ import { ROUTE } from 'Common/constants/routes.constants';
 
 import type { ILoginFormValues } from '../constants/login.interfaces';
 import { LOGIN_DEFAULT_VALUES, LOGIN_SCHEMA } from '../helpers/login.schema';
-import { LOGIN_SUCCESS_MESSAGE } from '../constants/login.general';
+import {
+  LOGIN_GUEST_EMAIL,
+  LOGIN_GUEST_FILLED_MESSAGE,
+  LOGIN_GUEST_PASSWORD,
+  LOGIN_SUCCESS_MESSAGE,
+} from '../constants/login.general';
 
 export const useLogin = () => {
   const dispatch = useAppDispatch();
@@ -20,12 +25,19 @@ export const useLogin = () => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<ILoginFormValues>({
     resolver: yupResolver(LOGIN_SCHEMA),
     defaultValues: LOGIN_DEFAULT_VALUES,
     mode: 'onTouched',
   });
+
+  const fillGuestCredentials = () => {
+    setValue('emailId', LOGIN_GUEST_EMAIL, { shouldValidate: true });
+    setValue('password', LOGIN_GUEST_PASSWORD, { shouldValidate: true });
+    dispatch(showSnackbar({ severity: SNACKBAR_SEVERITY.INFO, message: LOGIN_GUEST_FILLED_MESSAGE }));
+  };
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -48,5 +60,5 @@ export const useLogin = () => {
     }
   });
 
-  return { control, errors, isLoading, onSubmit };
+  return { control, errors, isLoading, onSubmit, fillGuestCredentials };
 };

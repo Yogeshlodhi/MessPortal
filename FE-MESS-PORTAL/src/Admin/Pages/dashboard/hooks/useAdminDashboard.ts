@@ -1,19 +1,34 @@
 import { useGetComplaintsQuery } from 'Redux/Slices/Common/ComplaintApi';
-import { useGetFeedbacksQuery, useGetTodayFeedbacksQuery } from 'Redux/Slices/Common/FeedbackApi';
-import { useGetAllLeavesQuery, useGetTodayLeavesQuery } from 'Redux/Slices/Common/LeaveApi';
-import { useGetAllStudentsQuery } from 'Redux/Slices/Common/StudentApi';
+import { useGetTodayFeedbacksQuery } from 'Redux/Slices/Common/FeedbackApi';
+import { useGetTodayLeavesQuery } from 'Redux/Slices/Common/LeaveApi';
+import { useGetAdminStatsQuery } from 'Redux/Slices/Common/StudentApi';
 
+import { ADMIN_RECENT_COMPLAINTS_LIMIT } from '../constants/dashboard.general';
 import type { IAdminDashboardStats } from '../constants/dashboard.interfaces';
 
+const EMPTY_STATS: IAdminDashboardStats = {
+  totalStudents: 0,
+  totalLeaves: 0,
+  totalFeedbacks: 0,
+  totalComplaints: 0,
+  feedbacksToday: 0,
+  leavesToday: 0,
+};
+
 export const useAdminDashboard = () => {
-  const students = useGetAllStudentsQuery();
-  const allLeaves = useGetAllLeavesQuery();
-  const allFeedbacks = useGetFeedbacksQuery();
-  const complaints = useGetComplaintsQuery();
+  // Counts come from a single cheap aggregation instead of downloading every
+  // collection; the panels below fetch only the small slices they render.
+  const statsQuery = useGetAdminStatsQuery();
   const todayFeedbacks = useGetTodayFeedbacksQuery();
   const todayLeaves = useGetTodayLeavesQuery();
+  const recentComplaints = useGetComplaintsQuery({
+    page: 1,
+    limit: ADMIN_RECENT_COMPLAINTS_LIMIT,
+    sortBy: 'createdAt',
+    order: 'desc',
+  });
 
-  const queries = [students, allLeaves, allFeedbacks, complaints, todayFeedbacks, todayLeaves];
+  const queries = [statsQuery, todayFeedbacks, todayLeaves, recentComplaints];
 
   const isLoading = queries.some((query) => query.isLoading);
   // Treat the dashboard as failed only when every source fails; otherwise show
@@ -26,20 +41,14 @@ export const useAdminDashboard = () => {
     });
   };
 
-  const stats: IAdminDashboardStats = {
-    totalStudents: students.data?.length ?? 0,
-    totalLeaves: allLeaves.data?.length ?? 0,
-    totalFeedbacks: allFeedbacks.data?.length ?? 0,
-    totalComplaints: complaints.data?.length ?? 0,
-    feedbacksToday: todayFeedbacks.data?.length ?? 0,
-    leavesToday: todayLeaves.data?.length ?? 0,
-  };
+  const stats: IAdminDashboardStats = statsQuery.data ?? EMPTY_STATS;
 
   return {
     stats,
     todayFeedbacks: todayFeedbacks.data ?? [],
     todayLeaves: todayLeaves.data ?? [],
-    complaints: complaints.data ?? [],
+    complaints: recentComplaints.data?.items ?? [],
+    complaintsTotal: recentComplaints.data?.pagination.total ?? 0,
     isLoading,
     isError,
     refetch,

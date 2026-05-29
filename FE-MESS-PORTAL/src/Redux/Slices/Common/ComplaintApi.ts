@@ -1,8 +1,16 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { customBaseQuery } from 'Axios/AxiosInterceptor';
 import { onQueryStartedErrorToast } from 'Utils/Common/rtkQueryErrorHandler';
-import type { IApiEnvelope } from 'Common/types/api.types';
+import { buildListParams } from 'Utils/Common/listParams';
+import {
+  EMPTY_PAGINATION,
+  type IApiEnvelope,
+  type IListQuery,
+  type IPaginatedEnvelope,
+  type IPaginatedResult,
+} from 'Common/types/api.types';
 import type {
+  ComplaintStatus,
   IComplaint,
   IComplaintActionPayload,
   IComplaintPayload,
@@ -10,6 +18,7 @@ import type {
 import { buildMultipartBody } from 'Utils/Common/multipart';
 
 type RaiseComplaintArg = IComplaintPayload & { attachment?: File | null };
+export type IComplaintListQuery = IListQuery & { status?: ComplaintStatus };
 
 export const ComplaintApi = createApi({
   reducerPath: 'complaintApi',
@@ -33,9 +42,16 @@ export const ComplaintApi = createApi({
       invalidatesTags: ['Complaint'],
       onQueryStarted: onQueryStartedErrorToast,
     }),
-    getComplaints: builder.query<IComplaint[], void>({
-      query: () => ({ method: 'GET', url: '/admin/getComplaints' }),
-      transformResponse: (response: IApiEnvelope<IComplaint[]>) => response.data ?? [],
+    getComplaints: builder.query<IPaginatedResult<IComplaint>, IComplaintListQuery | void>({
+      query: (params) => ({
+        method: 'GET',
+        url: '/admin/getComplaints',
+        params: buildListParams(params ?? {}),
+      }),
+      transformResponse: (response: IPaginatedEnvelope<IComplaint>) => ({
+        items: response.data ?? [],
+        pagination: response.pagination ?? EMPTY_PAGINATION,
+      }),
       providesTags: ['Complaint'],
     }),
     getComplaint: builder.query<IComplaint, string>({
