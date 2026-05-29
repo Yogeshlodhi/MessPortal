@@ -1,69 +1,38 @@
-version: '3.8'
-
+# Template root compose (new FE-MESS-PORTAL + BE-MESS-PORTAL).
+# Copy to docker-compose.yml, or just create BE-MESS-PORTAL/.env from its
+# .env.example and run `docker compose up --build`. Inline env values below are
+# placeholders to show what the backend expects.
 services:
-  studentspanel:
+  frontend:
     build:
-      context: ./StudentsPanel
+      context: ./FE-MESS-PORTAL
+      args:
+        VITE_API_BASE_URL: http://localhost:4000/api
+    container_name: mess-portal-frontend
     ports:
-      - "5173:5173"
+      - "8080:80"
     depends_on:
       - backend
-    volumes:
-      - ./StudentsPanel:/app
-      - /app/node_modules  
-      - ./StudentsPanel/.env:/app/.env
-    restart: always
+    restart: unless-stopped
 
-  adminpanel:
-    build:
-      context: ./AdminPanel
-    ports:
-      - "5174:5174"
-    depends_on:
-      - backend
-    volumes:
-      - ./AdminPanel:/app
-      - /app/node_modules
-      - ./AdminPanel/.env:/app/.env
-    restart: always
-  
   backend:
     build:
-      context: ./Backend
-    container_name: backend 
-    command: ["node", "index.js"]
-    ports:
-      - "4000:4000"
-    
+      context: ./BE-MESS-PORTAL
+    container_name: mess-portal-backend
     environment:
-      - CLOUDINARY_API_KEY="your_cloudinary_api_key_here"
-      - CLOUDINARY_API_SECRET="your_cloudinary_api_secret_here"
-      - CLOUDINARY_CLOUD_NAME="your_cloudinary_cloud_name_here" 
-      - COOKIE_EXPIRES_TIME=7
-      - DB_AUTH_PASSWORD="your_db_auth_password_here"
-      - DB_AUTH_USER="your_db_auth_user_here"
-      - DB_NAME="your_db_name_here"
-      - DB_URL="your_db_url_here" 
-      - JWT_EXPIRES_TIME=24h
-      - JWT_SECRET="your_jwt_secret_here"
       - NODE_ENV=production
       - NODE_PORT=4000
-
-    volumes:
-      - ./Backend:/app 
-      - /app/node_modules
-    depends_on:
-      - mongo
-    restart: always
-  
-  mongo:
-    image: mongo:6
-    container_name: mongo
+      - CORS_ORIGINS=http://localhost:8080
+      - DB_AUTH_USER=your_db_user
+      - DB_AUTH_PASSWORD=your_db_password
+      - DB_URL=yourcluster.xxxxx.mongodb.net
+      - DB_NAME=MessDB
+      - JWT_SECRET=replace_with_a_long_random_secret
+      - JWT_EXPIRES_TIME=24h
+      - COOKIE_EXPIRES_TIME=7
+      - CLOUDINARY_CLOUD_NAME=your_cloud_name
+      - CLOUDINARY_API_KEY=your_api_key
+      - CLOUDINARY_API_SECRET=your_api_secret
     ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    restart: always
-  
-volumes:
-  mongo_data:
+      - "4000:4000"
+    restart: unless-stopped

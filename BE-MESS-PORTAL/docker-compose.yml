@@ -1,0 +1,17 @@
+# Standalone compose for the backend API.
+# Reads configuration from BE-MESS-PORTAL/.env (see .env.example).
+# Exposes the API on http://localhost:4000.
+services:
+  backend:
+    build:
+      context: .
+    image: mess-portal-backend
+    container_name: mess-portal-backend
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - NODE_PORT=4000
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
