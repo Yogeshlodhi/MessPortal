@@ -10,12 +10,13 @@ import type { IStudentListRow } from 'Common/types/domain.types';
 interface IRenderStudentRowsArgs {
   students: ReadonlyArray<IStudentListRow>;
   onView: (student: IStudentListRow) => void;
+  startIndex?: number;
 }
 
-export const renderStudentRows = ({ students, onView }: IRenderStudentRowsArgs) =>
+export const renderStudentRows = ({ students, onView, startIndex = 0 }: IRenderStudentRowsArgs) =>
   _map(students, (student, index) => (
     <TableRow key={student._id} hover>
-      <TableCell>{index + 1}</TableCell>
+      <TableCell>{startIndex + index + 1}</TableCell>
       <TableCell>{student.studentRoll}</TableCell>
       <TableCell>{student.studentName}</TableCell>
       <TableCell>{student.emailId}</TableCell>

@@ -163,6 +163,15 @@ export interface IStudentListRow {
   avatar?: { public_id?: string; url?: string };
 }
 
+export interface IAdminDashboardStats {
+  totalStudents: number;
+  totalLeaves: number;
+  totalFeedbacks: number;
+  totalComplaints: number;
+  feedbacksToday: number;
+  leavesToday: number;
+}
+
 export interface IAddAdminPayload {
   emailId: string;
   firstName: string;

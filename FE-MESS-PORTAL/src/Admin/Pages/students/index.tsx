@@ -7,7 +7,9 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
@@ -31,23 +33,48 @@ import {
 
 import './students.scss';
 
+const SORTABLE_COLUMNS: ReadonlyArray<{ field: string; label: string }> = [
+  { field: 'studentRoll', label: 'Roll' },
+  { field: 'studentName', label: 'Name' },
+  { field: 'emailId', label: 'Email' },
+];
+
 const Students = () => {
   const {
-    filtered,
+    students,
     total,
+    page,
+    setPage,
+    limit,
+    setLimit,
     search,
     setSearch,
+    isSearching,
+    sortBy,
+    order,
+    handleSort,
     selected,
     openProfile,
     closeProfile,
     isLoading,
     error,
     refetch,
+    fetchAllForExport,
+    isExporting,
   } = useStudents();
+
+  const handleExport = async () => {
+    try {
+      const rows = await fetchAllForExport();
+      exportStudentsToCsv(rows);
+    } catch {
+      // network/error toast handled by the global interceptor
+    }
+  };
 
   if (isLoading) return <LoadingSkeleton count={6} height={48} />;
   if (error) return <ApiError refetch={refetch} />;
-  if (total === 0) return <HcEmptyState renderText='No students yet' />;
+  if (total === 0 && !isSearching) return <HcEmptyState renderText='No students yet' />;
 
   return (
     <Box className='studentsWrapper'>
@@ -58,7 +85,8 @@ const Students = () => {
         <Button
           variant='outlined'
           startIcon={<FileDownloadOutlinedIcon />}
-          onClick={() => exportStudentsToCsv(filtered)}
+          onClick={handleExport}
+          disabled={isExporting || total === 0}
         >
           {STUDENTS_EXPORT_LABEL}
         </Button>
@@ -84,9 +112,21 @@ const Students = () => {
           <TableHead>
             <TableRow>
               <TableCell className='studentsWrapper__head'>#</TableCell>
-              <TableCell className='studentsWrapper__head'>Roll</TableCell>
-              <TableCell className='studentsWrapper__head'>Name</TableCell>
-              <TableCell className='studentsWrapper__head'>Email</TableCell>
+              {SORTABLE_COLUMNS.map((column) => (
+                <TableCell
+                  key={column.field}
+                  className='studentsWrapper__head'
+                  sortDirection={sortBy === column.field ? order : false}
+                >
+                  <TableSortLabel
+                    active={sortBy === column.field}
+                    direction={sortBy === column.field ? order : 'asc'}
+                    onClick={() => handleSort(column.field)}
+                  >
+                    {column.label}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
               <TableCell className='studentsWrapper__head'>Phone</TableCell>
               <TableCell className='studentsWrapper__head' align='right'>
                 Profile
@@ -94,8 +134,8 @@ const Students = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filtered.length > 0 ? (
-              renderStudentRows({ students: filtered, onView: openProfile })
+            {students.length > 0 ? (
+              renderStudentRows({ students, onView: openProfile, startIndex: page * limit })
             ) : (
               <TableRow>
                 <TableCell colSpan={6} align='center' className='studentsWrapper__noMatch'>
@@ -105,6 +145,15 @@ const Students = () => {
             )}
           </TableBody>
         </Table>
+        <TablePagination
+          component='div'
+          count={total}
+          page={page}
+          onPageChange={(_event, nextPage) => setPage(nextPage)}
+          rowsPerPage={limit}
+          onRowsPerPageChange={(event) => setLimit(parseInt(event.target.value, 10))}
+          rowsPerPageOptions={[10, 25, 50, 100]}
+        />
       </TableContainer>
 
       <StudentProfileDialog student={selected} onClose={closeProfile} />

@@ -10,7 +10,12 @@ import { ROUTE } from 'Common/constants/routes.constants';
 
 import type { IAdminLoginFormValues } from '../constants/login.interfaces';
 import { ADMIN_LOGIN_DEFAULT_VALUES, ADMIN_LOGIN_SCHEMA } from '../helpers/login.schema';
-import { ADMIN_LOGIN_SUCCESS_MESSAGE } from '../constants/login.general';
+import {
+  ADMIN_LOGIN_GUEST_EMAIL,
+  ADMIN_LOGIN_GUEST_FILLED_MESSAGE,
+  ADMIN_LOGIN_GUEST_PASSWORD,
+  ADMIN_LOGIN_SUCCESS_MESSAGE,
+} from '../constants/login.general';
 
 export const useAdminLogin = () => {
   const dispatch = useAppDispatch();
@@ -20,12 +25,21 @@ export const useAdminLogin = () => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<IAdminLoginFormValues>({
     resolver: yupResolver(ADMIN_LOGIN_SCHEMA),
     defaultValues: ADMIN_LOGIN_DEFAULT_VALUES,
     mode: 'onTouched',
   });
+
+  const fillGuestCredentials = () => {
+    setValue('emailId', ADMIN_LOGIN_GUEST_EMAIL, { shouldValidate: true });
+    setValue('password', ADMIN_LOGIN_GUEST_PASSWORD, { shouldValidate: true });
+    dispatch(
+      showSnackbar({ severity: SNACKBAR_SEVERITY.INFO, message: ADMIN_LOGIN_GUEST_FILLED_MESSAGE }),
+    );
+  };
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -48,5 +62,5 @@ export const useAdminLogin = () => {
     }
   });
 
-  return { control, errors, isLoading, onSubmit };
+  return { control, errors, isLoading, onSubmit, fillGuestCredentials };
 };

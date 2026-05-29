@@ -36,9 +36,10 @@ import './dashboard.scss';
 
 const Dashboard = () => {
   const user = useAppSelector((state) => state.auth.user);
-  const { stats, todayFeedbacks, todayLeaves, complaints, isLoading, isError, refetch } =
+  const { stats, todayFeedbacks, todayLeaves, complaints, complaintsTotal, isLoading, isError, refetch } =
     useAdminDashboard();
 
+  // The recent-complaints panel is already limited server-side.
   const recentComplaints = complaints.slice(0, ADMIN_RECENT_COMPLAINTS_LIMIT);
 
   return (
@@ -124,13 +125,13 @@ const Dashboard = () => {
                 <Typography variant='headingS' component='h2'>
                   {ADMIN_COMPLAINTS_TITLE}
                 </Typography>
-                {complaints.length > 0 && (
+                {complaintsTotal > 0 && (
                   <Link
                     component={RouterLink}
                     to='/admin/complaints'
                     className='adminDashboardWrapper__viewAll'
                   >
-                    {ADMIN_VIEW_ALL_LABEL} ({complaints.length})
+                    {ADMIN_VIEW_ALL_LABEL} ({complaintsTotal})
                   </Link>
                 )}
               </Box>
