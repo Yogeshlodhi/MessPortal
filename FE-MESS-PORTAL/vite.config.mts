@@ -2,7 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'node:path';
 
+// Base public path. Defaults to "/" (local dev, Docker/nginx at root).
+// The GitHub Pages workflow sets VITE_BASE_PATH=/MessPortal/ so assets resolve
+// under https://<user>.github.io/MessPortal/.
 export default defineConfig(({ mode }) => ({
+  base: process.env.VITE_BASE_PATH || '/',
   plugins: [react()],
   resolve: {
     alias: {

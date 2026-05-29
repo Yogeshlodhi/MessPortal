@@ -97,4 +97,8 @@ const routes: RouteObject[] = [
   },
 ];
 
-export const router = createBrowserRouter(routes);
+// Vite injects BASE_URL from `base` in vite.config (e.g. "/MessPortal/" on
+// GitHub Pages, "/" elsewhere). React Router needs it without a trailing slash.
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
+
+export const router = createBrowserRouter(routes, { basename });

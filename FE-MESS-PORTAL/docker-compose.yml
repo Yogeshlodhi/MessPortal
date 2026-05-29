@@ -1,0 +1,14 @@
+# Standalone compose for the frontend only.
+# Builds the static bundle and serves it via nginx on http://localhost:8080.
+# Point it at your backend with VITE_API_BASE_URL (build-time).
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        # Defaults to the deployed Render backend; override for local BE.
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-https://messportal-71ri.onrender.com/api}
+    image: mess-portal-frontend
+    ports:
+      - "8080:80"
+    restart: unless-stopped

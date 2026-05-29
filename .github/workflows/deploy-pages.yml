@@ -1,0 +1,65 @@
+name: Deploy Frontend to GitHub Pages
+
+# Builds FE-MESS-PORTAL and publishes the static output to GitHub Pages.
+# Only runs for the dedicated deploy branch, so `main` is never touched.
+on:
+  push:
+    branches:
+      - deploy/gh-pages
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+# Permissions required by actions/deploy-pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; cancel superseded runs.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: FE-MESS-PORTAL
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: FE-MESS-PORTAL/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        # VITE_BASE_PATH makes assets resolve under the /MessPortal/ sub-path.
+        # VITE_API_BASE_URL is baked into the static bundle (override via repo variable).
+        env:
+          VITE_BASE_PATH: /MessPortal/
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL || 'https://messportal-71ri.onrender.com/api' }}
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # vite.config.mts sets build.outDir to "build"
+          path: FE-MESS-PORTAL/build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
