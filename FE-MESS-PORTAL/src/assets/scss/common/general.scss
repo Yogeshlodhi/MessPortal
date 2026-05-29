@@ -1,0 +1,67 @@
+@use '../variables' as *;
+
+.d-f { display: flex; }
+.d-b { display: block; }
+.d-ib { display: inline-block; }
+.d-g { display: grid; }
+.d-n { display: none; }
+
+.ai-c { align-items: center; }
+.ai-fs { align-items: flex-start; }
+.ai-fe { align-items: flex-end; }
+.ai-s { align-items: stretch; }
+
+.jc-c { justify-content: center; }
+.jc-fs { justify-content: flex-start; }
+.jc-fe { justify-content: flex-end; }
+.jc-sb { justify-content: space-between; }
+.jc-sa { justify-content: space-around; }
+
+.flex-dir-row { flex-direction: row; }
+.flex-dir-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+
+.gap-4 { gap: 4px; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.gap-24 { gap: 24px; }
+.gap-32 { gap: 32px; }
+
+@each $size in (4, 8, 12, 16, 20, 24, 32, 40, 48) {
+  .m-#{$size} { margin: #{$size}px; }
+  .mt-#{$size} { margin-top: #{$size}px; }
+  .mr-#{$size} { margin-right: #{$size}px; }
+  .mb-#{$size} { margin-bottom: #{$size}px; }
+  .ml-#{$size} { margin-left: #{$size}px; }
+  .mx-#{$size} { margin-left: #{$size}px; margin-right: #{$size}px; }
+  .my-#{$size} { margin-top: #{$size}px; margin-bottom: #{$size}px; }
+  .p-#{$size} { padding: #{$size}px; }
+  .pt-#{$size} { padding-top: #{$size}px; }
+  .pr-#{$size} { padding-right: #{$size}px; }
+  .pb-#{$size} { padding-bottom: #{$size}px; }
+  .pl-#{$size} { padding-left: #{$size}px; }
+  .px-#{$size} { padding-left: #{$size}px; padding-right: #{$size}px; }
+  .py-#{$size} { padding-top: #{$size}px; padding-bottom: #{$size}px; }
+}
+
+.w-100 { width: 100%; }
+.w-50 { width: 50%; }
+.h-100 { height: 100%; }
+.h-100vh { height: 100vh; }
+.min-h-100vh { min-height: 100vh; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.cursor-pointer { cursor: pointer; }
+.cursor-not-allowed { cursor: not-allowed; }
+
+@media (max-width: $breakpoint-mobile) {
+  .mobile-display-block { display: block; }
+  .mobile-display-none { display: none; }
+  .mob-mt-16 { margin-top: 16px; }
+  .mob-mt-24 { margin-top: 24px; }
+  .mob-flex-col { flex-direction: column; }
+}

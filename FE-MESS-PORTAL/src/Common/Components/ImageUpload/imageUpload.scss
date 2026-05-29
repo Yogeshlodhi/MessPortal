@@ -1,0 +1,110 @@
+@use 'Assets/scss/variables' as *;
+
+.imageUploadWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &__label {
+    color: $text-primary;
+  }
+
+  &__dropzone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    padding: 16px;
+    cursor: pointer;
+    border: 2px dashed $divider;
+    border-radius: 12px;
+    background-color: $bg-default;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      border-color: $primary;
+      background-color: rgba($primary, 0.04);
+      outline: none;
+    }
+
+    &--dragging {
+      border-color: $primary;
+      background-color: rgba($primary, 0.08);
+    }
+
+    &--error {
+      border-color: $error;
+    }
+  }
+
+  &__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: $text-secondary;
+    text-align: center;
+  }
+
+  &__uploadIcon {
+    font-size: 40px;
+    color: $primary;
+  }
+
+  &__hint {
+    color: $text-secondary;
+  }
+
+  &__preview {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  &__previewImg {
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+
+  &__previewInfo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    color: $text-secondary;
+  }
+
+  &__fileName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__remove {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    color: $bg-paper;
+    background-color: $error;
+
+    &:hover {
+      background-color: darken($error, 8%);
+    }
+  }
+
+  &__helper {
+    color: $text-secondary;
+
+    &--error {
+      color: $error;
+    }
+  }
+}

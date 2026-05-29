@@ -1,0 +1,148 @@
+@use 'Assets/scss/variables' as *;
+
+.adminDashboardWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__titleRow {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__role {
+    color: $primary;
+    font-weight: 600;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  &__statCard {
+    height: 100%;
+  }
+
+  &__statContent {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  &__statIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+
+    &--primary {
+      color: $primary;
+      background-color: rgba($primary, 0.12);
+    }
+
+    &--info {
+      color: $info;
+      background-color: rgba($info, 0.12);
+    }
+
+    &--success {
+      color: $success;
+      background-color: rgba($success, 0.12);
+    }
+
+    &--error {
+      color: $error;
+      background-color: rgba($error, 0.12);
+    }
+
+    &--warning {
+      color: $warning;
+      background-color: rgba($warning, 0.12);
+    }
+  }
+
+  &__statText {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__statValue {
+    line-height: 1.1;
+  }
+
+  &__statLabel {
+    color: $text-secondary;
+  }
+
+  &__columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @media (min-width: $breakpoint-tablet) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__panel {
+    height: 100%;
+  }
+
+  &__panelContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__panelHead {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__viewAll {
+    margin-left: auto;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    background-color: $bg-default;
+    border: 1px solid $divider;
+    border-radius: 10px;
+  }
+
+  &__itemHead {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__muted {
+    color: $text-secondary;
+  }
+
+  &__empty {
+    color: $text-secondary;
+    padding: 8px 0;
+  }
+}

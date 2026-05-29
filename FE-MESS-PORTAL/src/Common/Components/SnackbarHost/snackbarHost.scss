@@ -1,0 +1,12 @@
+.snackbarHostWrapper {
+  &__alert {
+    min-width: 280px;
+    max-width: 420px;
+  }
+
+  &__txnId {
+    display: block;
+    margin-top: 4px;
+    opacity: 0.8;
+  }
+}

@@ -1,0 +1,47 @@
+@use 'Assets/scss/variables' as *;
+
+.headerWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: $header-height;
+  padding: 0 24px;
+  background-color: $bg-paper;
+  border-bottom: 1px solid $divider;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__menuButton {
+    display: none;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    background-color: $primary;
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .headerWrapper {
+    padding: 0 16px;
+
+    &__menuButton {
+      display: inline-flex;
+    }
+  }
+}

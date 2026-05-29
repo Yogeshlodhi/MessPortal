@@ -1,0 +1,96 @@
+@use 'Assets/scss/variables' as *;
+
+.studentMessInfoWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    background-color: $bg-default;
+    border-radius: 10px;
+  }
+
+  &__fieldLabel {
+    color: $text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__unit {
+    color: $text-secondary;
+  }
+
+  &__contractInfo {
+    grid-column: 1 / -1;
+  }
+
+  &__contactGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+
+  &__contactCard {
+    height: 100%;
+  }
+
+  &__contactContent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__contactHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__contactAvatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: $primary;
+    background-color: rgba($primary, 0.1);
+  }
+
+  &__contactRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $text-secondary;
+  }
+
+  &__contactIcon {
+    flex-shrink: 0;
+    color: $primary;
+  }
+
+  &__contactValue {
+    color: $text-primary;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__noContacts {
+    color: $text-secondary;
+  }
+}

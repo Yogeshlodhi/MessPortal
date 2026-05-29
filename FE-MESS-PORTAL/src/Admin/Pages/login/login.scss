@@ -1,0 +1,48 @@
+@use 'Assets/scss/variables' as *;
+
+.adminLoginWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba($secondary, 0.08) 0%, rgba($primary, 0.04) 100%);
+
+  &__card {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 24px;
+  }
+
+  &__subtitle {
+    color: $text-secondary;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__submit {
+    margin-top: 8px;
+    height: 44px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  &__link {
+    color: $primary;
+    font-weight: 600;
+  }
+}

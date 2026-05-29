@@ -1,0 +1,62 @@
+@use 'Assets/scss/variables' as *;
+
+.leaveApplicationWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 760px;
+
+  &__rules {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 12px 16px;
+    background-color: rgba($primary, 0.05);
+    border-left: 4px solid $primary;
+    border-radius: 8px;
+  }
+
+  &__rulesTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $primary;
+  }
+
+  &__rule {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: $text-secondary;
+  }
+
+  &__ruleIcon {
+    flex-shrink: 0;
+    color: $primary;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  &__dates {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+
+    @media (min-width: $breakpoint-mobile) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__submit {
+    align-self: flex-start;
+    margin-top: 8px;
+    height: 44px;
+    min-width: 160px;
+  }
+}

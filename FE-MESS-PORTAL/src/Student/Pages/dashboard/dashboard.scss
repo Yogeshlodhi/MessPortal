@@ -1,0 +1,45 @@
+@use 'Assets/scss/variables' as *;
+
+.dashboardWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__placeholder {
+    color: $text-secondary;
+    max-width: 720px;
+  }
+
+  &__sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  &__tableContainer {
+    border: 1px solid $divider;
+    border-radius: 12px;
+    overflow-x: auto;
+  }
+
+  &__head {
+    background-color: rgba($primary, 0.08);
+    border-bottom: 2px solid rgba($primary, 0.2);
+    white-space: nowrap;
+    color: $primary;
+  }
+
+  &__refund {
+    color: $text-primary;
+  }
+
+  &__refund--approved {
+    color: $success;
+  }
+
+  &__refundEmpty {
+    color: $text-secondary;
+    opacity: 0.5;
+  }
+}
