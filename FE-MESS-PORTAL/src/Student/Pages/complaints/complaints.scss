@@ -1,0 +1,19 @@
+.complaintsWrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 680px;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  &__submit {
+    align-self: flex-start;
+    margin-top: 4px;
+    height: 44px;
+    min-width: 160px;
+  }
+}

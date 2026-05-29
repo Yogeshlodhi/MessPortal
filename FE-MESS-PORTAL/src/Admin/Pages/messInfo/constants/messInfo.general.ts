@@ -1,0 +1,9 @@
+export const MESS_INFO_TITLE = 'Mess Information';
+export const MESS_INFO_CREATE_LABEL = 'Create';
+export const MESS_INFO_EDIT_LABEL = 'Edit';
+export const MESS_INFO_SAVE_LABEL = 'Save';
+export const MESS_INFO_CANCEL_LABEL = 'Cancel';
+export const MESS_INFO_ADD_CONTACT_LABEL = 'Add Contact';
+export const MESS_INFO_SUCCESS_CREATE = 'Mess information created';
+export const MESS_INFO_SUCCESS_UPDATE = 'Mess information updated';
+export const MESS_INFO_SUCCESS_CONTACT = 'Contact added';

@@ -1,0 +1,21 @@
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
+  setupFilesAfterEach: ['<rootDir>/jest.setup.ts'],
+  moduleNameMapper: {
+    '\\.(scss|css)$': 'identity-obj-proxy',
+    '^Common/(.*)$': '<rootDir>/src/Common/$1',
+    '^Student/(.*)$': '<rootDir>/src/Student/$1',
+    '^Admin/(.*)$': '<rootDir>/src/Admin/$1',
+    '^Redux/(.*)$': '<rootDir>/src/Redux/$1',
+    '^Routes/(.*)$': '<rootDir>/src/Routes/$1',
+    '^Layout/(.*)$': '<rootDir>/src/Layout/$1',
+    '^Rbac/(.*)$': '<rootDir>/src/Rbac/$1',
+    '^Utils/(.*)$': '<rootDir>/src/Utils/$1',
+    '^Axios/(.*)$': '<rootDir>/src/Axios/$1',
+    '^Assets/(.*)$': '<rootDir>/src/assets/$1',
+  },
+  testMatch: ['<rootDir>/src/__tests__/**/*.test.{ts,tsx}'],
+  transform: { '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: 'tsconfig.json' }] },
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts', '!src/main.tsx'],
+};

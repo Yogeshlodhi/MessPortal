@@ -1,0 +1,72 @@
+@use 'Assets/scss/variables' as *;
+
+.adminLeavesWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+
+    @media (min-width: $breakpoint-tablet) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    background-color: $bg-paper;
+    border: 1px solid $divider;
+    border-radius: 12px;
+  }
+
+  &__cardHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  &__headLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+  }
+
+  &__metaItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: $text-secondary;
+  }
+
+  &__reason {
+    color: $text-primary;
+    white-space: pre-wrap;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid $divider;
+  }
+
+  &__actionedBy {
+    color: $text-secondary;
+  }
+}

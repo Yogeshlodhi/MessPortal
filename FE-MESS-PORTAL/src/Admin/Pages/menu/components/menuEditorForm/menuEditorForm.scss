@@ -1,0 +1,12 @@
+.menuEditorFormWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+}

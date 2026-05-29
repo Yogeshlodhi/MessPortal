@@ -1,0 +1,13 @@
+export const REGISTER_TITLE = 'Create your account';
+export const REGISTER_SUBTITLE = 'Register with your institute email to start using the mess portal.';
+export const REGISTER_NAME_LABEL = 'Full Name';
+export const REGISTER_EMAIL_LABEL = 'Institute Email';
+export const REGISTER_EMAIL_PLACEHOLDER = 'name_2101cs01@iitp.ac.in';
+export const REGISTER_ROLL_LABEL = 'Roll Number';
+export const REGISTER_ROLL_PLACEHOLDER = '2101CS01';
+export const REGISTER_PHONE_LABEL = 'Phone Number';
+export const REGISTER_PASSWORD_LABEL = 'Password';
+export const REGISTER_SUBMIT_LABEL = 'Create Account';
+export const REGISTER_LOGIN_LABEL = 'Already have an account?';
+export const REGISTER_LOGIN_LINK_LABEL = 'Sign In';
+export const REGISTER_SUCCESS_MESSAGE = 'Account created successfully';

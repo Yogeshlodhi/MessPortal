@@ -81,7 +81,7 @@ const getProfile = (req, res) => {
     getProfileService(userId)
         .then((data) => {
             return res
-                .status(statusCode.found)
+                .status(statusCode.ok)
                 .send({ message: 'Student Profile Found', data: data })
         })
         .catch((err) => {

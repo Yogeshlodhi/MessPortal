@@ -1,0 +1,57 @@
+@use 'Assets/scss/variables' as *;
+
+.feedbackWrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 880px;
+
+  &__form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 16px;
+
+    @media (min-width: $breakpoint-tablet) {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__side {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__rating {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 0;
+  }
+
+  &__ratingRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__ratingValue {
+    color: $text-secondary;
+  }
+
+  &__footer {
+    grid-column: 1 / -1;
+  }
+
+  &__submit {
+    align-self: flex-start;
+    height: 44px;
+    min-width: 160px;
+  }
+}

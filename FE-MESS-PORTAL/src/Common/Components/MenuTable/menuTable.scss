@@ -1,0 +1,102 @@
+@use 'Assets/scss/variables' as *;
+
+.menuTableWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__toolbar {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__container {
+    overflow-x: auto;
+    border: 1px solid $divider;
+    border-radius: 12px;
+  }
+
+  &__head {
+    background-color: rgba($primary, 0.08);
+    border-bottom: 2px solid rgba($primary, 0.2);
+    white-space: nowrap;
+  }
+
+  &__headContent {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: $primary;
+  }
+
+  &__dayCell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__todayRow {
+    background-color: rgba($primary, 0.05);
+
+    td:first-of-type {
+      box-shadow: inset 3px 0 0 0 $primary;
+    }
+  }
+
+  &__todayChip {
+    height: 20px;
+    font-size: 11px;
+  }
+
+  &__empty {
+    color: $text-secondary;
+    opacity: 0.5;
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    background-color: $bg-paper;
+    border: 1px solid $divider;
+    border-radius: 12px;
+
+    &--remarks {
+      border-left: 4px solid $primary;
+    }
+  }
+
+  &__cardTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__timings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  &__timingItem {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    background-color: $bg-default;
+    border-radius: 8px;
+
+    span {
+      color: $text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+  }
+}

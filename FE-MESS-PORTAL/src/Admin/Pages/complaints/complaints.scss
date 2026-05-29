@@ -1,0 +1,48 @@
+@use 'Assets/scss/variables' as *;
+
+.adminComplaintsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  &__card {
+    height: 100%;
+  }
+
+  &__cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  &__description {
+    margin-top: 8px;
+    color: $text-secondary;
+    white-space: pre-wrap;
+  }
+
+  &__meta {
+    margin-top: 8px;
+    color: $text-secondary;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  &__deleteRow {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+}

@@ -1,0 +1,33 @@
+@use 'Assets/scss/variables' as *;
+
+.studentsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  &__table {
+    border: 1px solid $divider;
+    border-radius: 12px;
+    overflow-x: auto;
+  }
+
+  &__head {
+    background-color: rgba($primary, 0.08);
+    border-bottom: 2px solid rgba($primary, 0.2);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  &__noMatch {
+    color: $text-secondary;
+    padding: 24px 0;
+  }
+}

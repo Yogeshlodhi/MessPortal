@@ -1,0 +1,50 @@
+@use 'Assets/scss/variables' as *;
+
+.studentProfileDialog {
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  &__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    padding: 8px 0;
+  }
+
+  &__avatar {
+    width: 120px;
+    height: 120px;
+    font-size: 44px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: $primary;
+    border-radius: 16px;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    min-width: 220px;
+  }
+
+  &__row {
+    display: flex;
+    gap: 8px;
+
+    span:first-of-type {
+      flex-shrink: 0;
+      color: $text-secondary;
+    }
+
+    span:last-of-type {
+      overflow-wrap: anywhere;
+    }
+  }
+}
