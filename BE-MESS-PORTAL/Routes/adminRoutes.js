@@ -22,11 +22,11 @@ import {
   getTodaysLeaves,
   getTodaysFeedbacks,
   addContact,
-  logout,
   addAdmin,
   updateMessInfo,
   getStats,
 } from '../Controllers/adminController.js';
+import { logout } from '../Controllers/authController.js';
 import { authenticateUser, authorizeRoles } from '../Middleware/userPermission.js';
 import { authLimiter } from '../Middleware/rateLimiter.js';
 

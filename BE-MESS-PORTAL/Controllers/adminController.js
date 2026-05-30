@@ -29,17 +29,14 @@ import { statusCode } from '../Utils/http.js';
 import asyncHandler from '../Utils/asyncHandler.js';
 import ApiError from '../Utils/ApiError.js';
 import { parseListQuery } from '../Utils/pagination.js';
-import { authCookieOptions, clearCookieOptions } from '../Utils/cookie.js';
+import { issueAuthTokens } from '../Services/tokenService.js';
 
 /* ───────────────────────────── Admin auth ───────────────────────────── */
 
 const registerAdmin = asyncHandler(async (req, res) => {
   const admin = await registerAdminService(req.body);
-  const token = admin.getJwtToken();
-  res
-    .status(statusCode.created)
-    .cookie('token', token, authCookieOptions())
-    .json({ message: 'Admin Registered', data: admin });
+  await issueAuthTokens(res, { userId: admin._id, role: 'Admin' });
+  res.status(statusCode.created).json({ message: 'Admin Registered', data: admin });
 });
 
 const addAdmin = asyncHandler(async (req, res) => {
@@ -53,19 +50,9 @@ const loginAdmin = asyncHandler(async (req, res) => {
     throw ApiError.badRequest('Please provide email and password');
   }
   const admin = await loginAdminService(req.body);
-  const token = admin.getJwtToken();
-  res
-    .status(statusCode.ok)
-    .cookie('token', token, authCookieOptions())
-    .json({ message: 'Admin Logged In', data: admin });
+  await issueAuthTokens(res, { userId: admin._id, role: 'Admin' });
+  res.status(statusCode.ok).json({ message: 'Admin Logged In', data: admin });
 });
-
-const logout = (req, res) => {
-  res
-    .status(statusCode.ok)
-    .cookie('token', '', { ...clearCookieOptions(), expires: new Date(0) })
-    .json({ message: 'Logged Out', success: true });
-};
 
 /* ──────────────────────────── Mess info ─────────────────────────────── */
 
@@ -219,7 +206,6 @@ export {
   registerAdmin,
   loginAdmin,
   addAdmin,
-  logout,
   getStats,
   getAllStudents,
   getAllLeaves,

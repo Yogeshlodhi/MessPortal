@@ -111,10 +111,10 @@ DB_AUTH_PASSWORD=<your_db_password>
 DB_URL=<yourcluster.xxxxx.mongodb.net>
 DB_NAME=<your_db_name>
 
-# Auth
+# Auth (access + refresh token rotation)
 JWT_SECRET=<a_long_random_secret>
-JWT_EXPIRES_TIME=24h
-COOKIE_EXPIRES_TIME=7           # days
+ACCESS_TOKEN_EXPIRES=15m        # short-lived access JWT (e.g. 15m, 1h)
+REFRESH_TOKEN_EXPIRES_DAYS=7    # long-lived rotating refresh token
 
 # Cloudinary (image uploads)
 CLOUDINARY_CLOUD_NAME=<your_cloud_name>
@@ -131,7 +131,7 @@ VITE_API_BASE_URL=http://localhost:4000/api   # backend API base
 
 ## API Overview
 
-Base URL: `/api`. Auth is via an httpOnly `token` cookie set on login.
+Base URL: `/api`. Auth is via short-lived `accessToken` + rotating `refreshToken` httpOnly cookies set on login (see [Authentication](#authentication)).
 
 ### Student (`/api/student`)
 | Method | Path | Auth | Description |
@@ -169,10 +169,12 @@ Base URL: `/api`. Auth is via an httpOnly `token` cookie set on login.
 
 ## Authentication
 
-The API uses **stateless JWTs delivered in an httpOnly cookie**:
+The API uses **short-lived access tokens + rotating refresh tokens**, both delivered as `httpOnly` cookies (`Secure; SameSite=None` in production, `Lax` in dev). Being httpOnly, neither is readable by JavaScript, which protects against token theft via XSS.
 
-- On login the server signs a JWT (`JWT_SECRET`) and sets it as an `httpOnly`, `Secure`, `SameSite=None` cookie in production (`SameSite=Lax` in dev). Being httpOnly, it is inaccessible to JavaScript, which protects against token theft via XSS.
-- Each protected request verifies the cookie and loads the user (`isAuthenticatedUser` for students, `authenticateUser` + `authorizeRoles` for admin roles).
+- **Login / register** issues two cookies: a short-lived `accessToken` JWT (`ACCESS_TOKEN_EXPIRES`, default 15m) and a long-lived opaque `refreshToken` (`REFRESH_TOKEN_EXPIRES_DAYS`, default 7d). Only the **SHA-256 hash** of the refresh token is stored server-side (`RefreshTokens` collection, auto-expired by a TTL index).
+- **Protected requests** verify the access JWT and load the user (`isAuthenticatedUser` for students, `authenticateUser` + `authorizeRoles` for admin roles).
+- **`POST /api/refresh`** (role-agnostic) rotates the pair: the presented refresh token is single-use — it's revoked and replaced on every refresh. If an already-rotated token is replayed (a theft signal), the **entire token family is revoked**. The frontend's Axios interceptor calls this automatically on a 401 and replays the original request, so sessions stay alive without the user noticing.
+- **Logout** revokes the refresh token server-side and clears both cookies (true server-side logout).
 - Passwords are hashed with **bcrypt** (12 rounds).
 
 ## Contributing

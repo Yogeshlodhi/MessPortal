@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { SALT_ROUNDS } from '../Utils/createToken.js';
 
 const studentSchema = new Schema(
@@ -91,12 +90,6 @@ studentSchema.pre('save', async function (next) {
 
 studentSchema.methods.comparePassword = function (candidate) {
   return bcrypt.compare(candidate, this.password);
-};
-
-studentSchema.methods.getJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_TIME,
-  });
 };
 
 const studentModel = mongoose.model('Students', studentSchema, 'Student');
