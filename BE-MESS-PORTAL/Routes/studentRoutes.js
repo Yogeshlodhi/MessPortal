@@ -8,8 +8,8 @@ import {
   getAnnouncements,
   getMenu,
   updateProfile,
-  logout,
 } from '../Controllers/studentController.js';
+import { logout } from '../Controllers/authController.js';
 import { getAllLeaves } from '../Controllers/leaveController.js';
 import { getMessInfo } from '../Controllers/adminController.js';
 import { isAuthenticatedUser } from '../Utils/auth.js';

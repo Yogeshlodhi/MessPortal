@@ -12,6 +12,7 @@ import connectDB from './config/db.js';
 import userRoutes from './Routes/studentRoutes.js';
 import adminRoutes from './Routes/adminRoutes.js';
 import leaveRoutes from './Routes/leaveRoutes.js';
+import { refreshTokens } from './Controllers/authController.js';
 import { errorHandler, notFound } from './Middleware/errorMiddleware.js';
 import { apiLimiter } from './Middleware/rateLimiter.js';
 
@@ -61,6 +62,8 @@ cloudinary.config({
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok', env: ENV }));
 
 app.use('/api', apiLimiter);
+// Role-agnostic token refresh (the refresh-token row carries the role).
+app.post('/api/refresh', refreshTokens);
 app.use('/api/student', userRoutes);
 app.use('/api/student/leaveApplication', leaveRoutes);
 app.use('/api/admin', adminRoutes);

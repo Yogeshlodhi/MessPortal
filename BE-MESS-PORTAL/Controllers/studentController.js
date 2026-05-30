@@ -12,7 +12,7 @@ import {
 import { statusCode } from '../Utils/http.js';
 import asyncHandler from '../Utils/asyncHandler.js';
 import ApiError from '../Utils/ApiError.js';
-import { authCookieOptions, clearCookieOptions } from '../Utils/cookie.js';
+import { issueAuthTokens } from '../Services/tokenService.js';
 
 const registerStudent = asyncHandler(async (req, res) => {
   const { emailId, studentName } = req.body;
@@ -21,11 +21,8 @@ const registerStudent = asyncHandler(async (req, res) => {
   }
 
   const student = await studentRegister(req.body);
-  const token = student.getJwtToken();
-  res
-    .status(statusCode.created)
-    .cookie('token', token, authCookieOptions())
-    .json({ message: 'Student Registered', data: student });
+  await issueAuthTokens(res, { userId: student._id, role: 'Student' });
+  res.status(statusCode.created).json({ message: 'Student Registered', data: student });
 });
 
 const loginStudent = asyncHandler(async (req, res) => {
@@ -35,19 +32,9 @@ const loginStudent = asyncHandler(async (req, res) => {
   }
 
   const student = await studentLogin(req.body);
-  const token = student.getJwtToken();
-  res
-    .status(statusCode.ok)
-    .cookie('token', token, authCookieOptions())
-    .json({ message: 'Student Logged In', data: student });
+  await issueAuthTokens(res, { userId: student._id, role: 'Student' });
+  res.status(statusCode.ok).json({ message: 'Student Logged In', data: student });
 });
-
-const logout = (req, res) => {
-  res
-    .status(statusCode.ok)
-    .cookie('token', '', { ...clearCookieOptions(), expires: new Date(0) })
-    .json({ message: 'Logged Out', success: true });
-};
 
 const getProfile = asyncHandler(async (req, res) => {
   const data = await getProfileService(req.user._id);
@@ -97,5 +84,4 @@ export {
   getMenu,
   updateProfile,
   getMessInfo,
-  logout,
 };

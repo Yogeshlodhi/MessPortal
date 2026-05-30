@@ -1,22 +1,23 @@
-import jwt from 'jsonwebtoken';
 import adminModel from '../Models/adminModel.js';
 import ApiError from '../Utils/ApiError.js';
 import asyncHandler from '../Utils/asyncHandler.js';
+import { verifyAccessToken } from '../Utils/tokens.js';
+import { ACCESS_COOKIE } from '../Utils/cookie.js';
 
 /**
- * Authenticates an admin from the `token` cookie and attaches the minimal set
- * of fields (`_id`, `firstName`, `adminType`) needed downstream as a lean
- * object on `req.user`.
+ * Authenticates an admin from the short-lived `accessToken` cookie and attaches
+ * the minimal set of fields (`_id`, `firstName`, `adminType`) needed downstream
+ * as a lean object on `req.user`.
  */
 const authenticateUser = asyncHandler(async (req, res, next) => {
-  const { token } = req.cookies;
+  const token = req.cookies?.[ACCESS_COOKIE];
   if (!token) {
     throw ApiError.unauthorized('Please log in as an authorized user to access this resource');
   }
 
   let decoded;
   try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
+    decoded = verifyAccessToken(token);
   } catch {
     throw ApiError.unauthorized('Authentication failed. Please login again.');
   }
