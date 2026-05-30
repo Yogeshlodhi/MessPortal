@@ -1,11 +1,11 @@
 name: Deploy Frontend to GitHub Pages
 
 # Builds FE-MESS-PORTAL and publishes the static output to GitHub Pages.
-# Only runs for the dedicated deploy branch, so `main` is never touched.
+# Runs on every push to `main` (the default branch is now the deploy source).
 on:
   push:
     branches:
-      - deploy/gh-pages
+      - main
   workflow_dispatch: {} # allow manual runs from the Actions tab
 
 # Permissions required by actions/deploy-pages.
